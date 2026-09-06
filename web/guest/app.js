@@ -273,9 +273,15 @@
   $("join-btn").onclick = join;
   $("leave").onclick = leave;
   $("code").addEventListener("input", () => { $("code").value = normalizeCode($("code").value).slice(0, 8); updateOpenApp($("code").value); });
-  // 點進格子就全選：直接打字會覆蓋原本的內容，不用先刪
+  // 點進格子就全選：直接打字會覆蓋原本的內容，不用先刪。
+  // 滑鼠／手指放開時瀏覽器會把游標移到點的位置而取消選取，所以在剛取得焦點的那一次放開要擋掉。
   for (const id of ["code", "name"]) {
-    $(id).addEventListener("focus", () => setTimeout(() => $(id).select(), 0));
+    const el = $(id);
+    let justFocused = false;
+    el.addEventListener("focus", () => { justFocused = true; el.select(); setTimeout(() => { el.select(); }, 0); });
+    el.addEventListener("mouseup", (e) => { if (justFocused) { e.preventDefault(); justFocused = false; } });
+    el.addEventListener("touchend", () => { justFocused = false; }, { passive: true });
+    el.addEventListener("blur", () => { justFocused = false; });
   }
   $("code").addEventListener("keydown", (e) => { if (e.key === "Enter") $("name").focus(); });
   $("name").addEventListener("keydown", (e) => { if (e.key === "Enter") join(); });
