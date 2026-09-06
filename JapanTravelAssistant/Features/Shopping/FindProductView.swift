@@ -11,6 +11,9 @@ struct FindProductView: View {
     @State private var isLoadingImage = false
     @State private var questions: [Phrase] = []
     @State private var error: UserFacingError?
+    @State private var showAIUnavailable = false
+    @State private var isAnalyzing = false
+    @State private var analysis: ProductAnalysis?
 
     /// 找商品時最常用的問題（來自 phrases.json 的購物分類）。
     private let questionIds = ["shop-have-this", "shop-where", "shop-stock", "shop-size", "shop-color", "shop-price"]
@@ -32,6 +35,31 @@ struct FindProductView: View {
 
                     PhotosPicker(selection: $pickerItem, matching: .images) {
                         ChangePhotoLabel()
+                    }
+
+                    SecondaryButton(title: isAnalyzing ? "AI 辨識中…" : "AI 幫我認這個商品", systemImage: "wand.and.stars", isEnabled: !isAnalyzing) {
+                        Task { await analyze(image) }
+                    }
+                    if showAIUnavailable {
+                        AIUnavailableBanner()
+                    }
+                    if let analysis {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(analysis.chineseName ?? analysis.productName ?? "看不出是什麼商品")
+                                .font(.app(.cardTitle))
+                            if let name = analysis.productName, analysis.chineseName != nil {
+                                Text(name).font(.app(.japanese)).foregroundStyle(AppColors.secondaryText)
+                            }
+                            if let price = analysis.price, let text = PriceFormatter.string(price) {
+                                Text("參考價格 \(text)").font(.app(.body))
+                            }
+                            if let notes = analysis.notes?.nilIfBlank {
+                                Text(notes).font(.app(.caption)).foregroundStyle(AppColors.secondaryText)
+                            }
+                        }
+                        .padding(AccessibilityMetrics.screenPadding)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AccessibilityMetrics.cornerRadius, style: .continuous))
                     }
 
                     Text("接下來，選一個想問店員的問題：")
@@ -68,6 +96,22 @@ struct FindProductView: View {
         .onChange(of: pickerItem) { _, newItem in
             guard let newItem else { return }
             Task { await loadImage(from: newItem) }
+        }
+    }
+
+    private func analyze(_ image: UIImage) async {
+        guard dependencies.ai.isEnabled else {
+            withAnimation { showAIUnavailable = true }
+            return
+        }
+        showAIUnavailable = false
+        isAnalyzing = true
+        defer { isAnalyzing = false }
+        do {
+            analysis = try await dependencies.ai.analyzeProduct(image: image)
+            error = nil
+        } catch {
+            self.error = UserFacingError.from(error)
         }
     }
 

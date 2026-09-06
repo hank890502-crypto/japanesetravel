@@ -6,9 +6,12 @@ struct JapanTravelAssistantApp: App {
     @State private var router = AppRouter()
     @State private var menuDraftStore = MenuDraftStore()
     @State private var sessionStore = DiningSessionStore()
+    @State private var settingsStore: SettingsStore
 
     init() {
-        dependencies = AppDependencies.live(config: DebugLaunchOptions.forcesInMemory() ? .empty : AppConfig.fromBundle())
+        let deps = AppDependencies.live(config: DebugLaunchOptions.forcesInMemory() ? .empty : AppConfig.fromBundle())
+        dependencies = deps
+        _settingsStore = State(initialValue: SettingsStore(aiRouter: deps.aiRouter))
         let router = AppRouter()
         router.path = DebugLaunchOptions.initialPath()
         _router = State(initialValue: router)
@@ -26,6 +29,7 @@ struct JapanTravelAssistantApp: App {
                 .environment(router)
                 .environment(menuDraftStore)
                 .environment(sessionStore)
+                .environment(settingsStore)
                 .task { await DebugLaunchOptions.seedRoomIfRequested(dependencies: dependencies, sessionStore: sessionStore, router: router) }
                 .onOpenURL { url in
                     router.handle(url)

@@ -5,6 +5,7 @@ import SwiftUI
 struct MenuReviewView: View {
     @Environment(AppRouter.self) private var router
     @Environment(MenuDraftStore.self) private var store
+    @Environment(\.dependencies) private var dependencies
 
     @State private var editingItem: MenuItemDraft?
     @State private var showSourceImages = false
@@ -14,6 +15,9 @@ struct MenuReviewView: View {
     @State private var translationError: UserFacingError?
     @State private var didAutoTranslate = false
     @State private var collapsedSections: Set<String> = []
+    @State private var showAIUnavailable = false
+    @State private var isAIAnalyzing = false
+    @State private var aiSummary: String?
 
     private var items: [MenuItemDraft] { store.draft?.items ?? [] }
     private var otherLines: [MenuItemDraft] { store.draft?.otherLines ?? [] }
@@ -46,6 +50,20 @@ struct MenuReviewView: View {
                 if !items.isEmpty {
                     SecondaryButton(title: "用 ChatGPT 翻得更好", systemImage: AppIcon.sparkles) {
                         router.push(.chatGPTImport)
+                    }
+                }
+
+                if !items.isEmpty || !otherLines.isEmpty {
+                    SecondaryButton(title: isAIAnalyzing ? "AI 整理中…" : "AI 幫我整理菜單", systemImage: "wand.and.stars", isEnabled: !isAIAnalyzing) {
+                        Task { await runAI() }
+                    }
+                    if showAIUnavailable {
+                        AIUnavailableBanner()
+                    }
+                    if let aiSummary {
+                        Label(aiSummary, systemImage: AppIcon.check)
+                            .font(.app(.body))
+                            .foregroundStyle(AppColors.success)
                     }
                 }
 
@@ -188,6 +206,34 @@ struct MenuReviewView: View {
         .buttonStyle(CardPressStyle())
         .accessibilityLabel("\(item.japaneseName)，\(item.chineseName.nilIfBlank ?? "沒有中文")，\(PriceFormatter.string(item.price) ?? "沒有價格")")
         .accessibilityHint("點一下修改")
+    }
+
+    // MARK: - AI
+
+    /// 把目前的菜與其他文字交給 AI 重新整理（中文、分類、選項、拼音），結果合併進草稿。
+    private func runAI() async {
+        guard dependencies.ai.isEnabled else {
+            withAnimation { showAIUnavailable = true }
+            return
+        }
+        showAIUnavailable = false
+        aiSummary = nil
+        translationError = nil
+        isAIAnalyzing = true
+        defer { isAIAnalyzing = false }
+        let blocks = (items.map { $0.ocrText ?? "\($0.japaneseName) \($0.priceText)" } + otherLines.map { $0.ocrText ?? $0.japaneseName })
+            .map { RecognizedTextBlock(text: $0, confidence: 1, boundingBox: .zero) }
+        do {
+            let analysis = try await dependencies.ai.analyzeMenu(textBlocks: blocks, image: store.sourceImages.first)
+            let summary = store.merge(imported: analysis.importedItems)
+            if let name = analysis.restaurantName?.nilIfBlank, var draft = store.draft, draft.restaurantName.isEmpty {
+                draft.restaurantName = name
+                store.draft = draft
+            }
+            aiSummary = "AI 整理完成：更新 \(summary.updated) 道、新增 \(summary.added) 道（\(dependencies.ai.providerName)）"
+        } catch {
+            translationError = UserFacingError.from(error)
+        }
     }
 
     // MARK: - 翻譯

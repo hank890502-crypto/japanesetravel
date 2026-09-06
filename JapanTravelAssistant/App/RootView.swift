@@ -54,6 +54,8 @@ struct RouteDestinationView: View {
             PlacesView()
         case .emergency:
             EmergencyView()
+        case .settings:
+            SettingsView()
         }
     }
 }
@@ -63,5 +65,6 @@ struct RouteDestinationView: View {
         .environment(AppRouter())
         .environment(MenuDraftStore(directory: nil))
         .environment(DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(SettingsStore(defaults: UserDefaults(suiteName: "preview")!))
         .environment(\.dependencies, .preview)
 }

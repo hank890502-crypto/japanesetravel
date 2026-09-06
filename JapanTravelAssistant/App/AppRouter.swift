@@ -16,6 +16,7 @@ enum Route: Hashable {
     case shoppingFindProduct
     case places
     case emergency
+    case settings
 }
 
 /// 導覽狀態：一條 NavigationStack 的路徑 + 全螢幕的「給店員看」。

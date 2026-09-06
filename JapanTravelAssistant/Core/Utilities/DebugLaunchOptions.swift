@@ -78,6 +78,7 @@ enum DebugLaunchOptions {
         case "joinRoom": return [.understandHub, .restaurantHub, .joinRoom(code: "A8F3K2")]
         case "findProduct": return [.understandHub, .shoppingFindProduct]
         case "places": return [.places]
+        case "settings": return [.settings]
         case let value where value.hasPrefix("phrases:"):
             let raw = String(value.dropFirst("phrases:".count))
             if let category = PhraseCategory(rawValue: raw) { return [.communicationCategories, .phraseList(category)] }

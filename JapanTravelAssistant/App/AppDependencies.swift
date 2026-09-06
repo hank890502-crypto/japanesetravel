@@ -7,6 +7,8 @@ struct AppDependencies {
     let ocr: any OCRService
     let menuRecognizer: any MenuRecognitionService
     let ai: any AIService
+    /// 可切換供應商的 AI 路由（SettingsStore 會更新它）。preview 為 nil。
+    let aiRouter: AIServiceRouter?
     let speech: any SpeechService
     let phrases: any PhraseProvider
     let navigation: any NavigationService
@@ -19,6 +21,7 @@ struct AppDependencies {
     @MainActor
     static func live(config: AppConfig) -> AppDependencies {
         let localUserId = LocalUserIdentity.userId()
+        let aiRouter = AIServiceRouter()
 
         // 有 Supabase 設定 → 真正的多人同步；沒有 → 只在這台手機上運作（仍可完整測試流程）
         if let url = config.supabaseURL, let key = config.supabaseAnonKey {
@@ -27,7 +30,8 @@ struct AppDependencies {
                 config: config,
                 ocr: VisionOCRService(),
                 menuRecognizer: LiveMenuRecognitionService(),
-                ai: DisabledAIService(),
+                ai: aiRouter,
+                aiRouter: aiRouter,
                 speech: AVSpeechService(),
                 phrases: BundledPhraseProvider(),
                 navigation: LiveNavigationService(),
@@ -41,7 +45,8 @@ struct AppDependencies {
             config: config,
             ocr: VisionOCRService(),
             menuRecognizer: LiveMenuRecognitionService(),
-            ai: DisabledAIService(),
+            ai: aiRouter,
+            aiRouter: aiRouter,
             speech: AVSpeechService(),
             phrases: BundledPhraseProvider(),
             navigation: LiveNavigationService(),
@@ -58,6 +63,7 @@ struct AppDependencies {
         ocr: MockOCRService(delay: .zero),
         menuRecognizer: MockMenuRecognitionService(),
         ai: MockAIService(),
+        aiRouter: nil,
         speech: NoopSpeechService(),
         phrases: BundledPhraseProvider(),
         navigation: MockNavigationService(),

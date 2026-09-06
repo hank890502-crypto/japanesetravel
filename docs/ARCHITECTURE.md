@@ -366,3 +366,11 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 - App 設定 `WEB_GUEST_URL`（選填）：有值時 `DeepLinkParser.shareURL` 回傳 `https://…/?code=XXXX`，QR Code 與分享都用它；
   沒有值時維持 `jptravel://join?code=`。`DeepLinkParser.parse` 同時接受 `jptravel://`、`https://…?code=`、`https://…/room/CODE`。
 - 之後有付費開發者帳號：加 Associated Domains + AASA，https 連結會直接開 App（程式不用改）。
+
+## 附錄 G：M5 AI Adapter
+
+- `AIService` protocol 不變；實作有 `DisabledAIService`（預設）、`MockAIService`（假資料）、`RemoteAIService`（自己的伺服器，HTTP JSON，規格見 `docs/AI_BACKEND.md`）。
+- `AIServiceRouter` 依 `SettingsStore` 的選擇即時轉發；`remoteBackend` 沒有有效網址時等同未啟用。App 內永遠沒有 AI 金鑰。
+- 設定頁（首頁右上「設定」）：AI 幫手、預設地圖 App、多人點餐與網頁版狀態。
+- 接入點：檢查菜單「AI 幫我整理菜單」（結果走 `MenuDraftStore.merge`）、找商品「AI 幫我認這個商品」。未啟用時顯示 `AIUnavailableBanner`（「AI 分析目前尚未啟用」+ 前往設定）。
+- 伺服器範本：`supabase/functions/ai/index.ts`（Supabase Edge Function，預設 OpenAI，金鑰用 `supabase secrets set`）。

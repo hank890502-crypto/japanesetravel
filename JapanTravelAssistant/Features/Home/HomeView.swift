@@ -7,14 +7,30 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("日本旅遊助手")
-                        .font(.app(.screenTitle))
-                        .foregroundStyle(AppColors.primaryText)
-                        .accessibilityAddTraits(.isHeader)
-                    Text("請問你現在想做什麼？")
-                        .font(.app(.body))
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("日本旅遊助手")
+                            .font(.app(.screenTitle))
+                            .foregroundStyle(AppColors.primaryText)
+                            .accessibilityAddTraits(.isHeader)
+                        Text("請問你現在想做什麼？")
+                            .font(.app(.body))
+                            .foregroundStyle(AppColors.secondaryText)
+                    }
+                    Spacer()
+                    Button {
+                        router.push(.settings)
+                    } label: {
+                        VStack(spacing: 2) {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(.title2, weight: .semibold))
+                            Text("設定")
+                                .font(.system(.caption, weight: .semibold))
+                        }
                         .foregroundStyle(AppColors.secondaryText)
+                        .frame(width: AccessibilityMetrics.minimumTapTarget, height: AccessibilityMetrics.minimumTapTarget)
+                    }
+                    .accessibilityLabel("設定")
                 }
                 .padding(.bottom, 8)
 
