@@ -16,6 +16,7 @@
   label { display:block; color:var(--muted); margin:14px 0 6px; }
   input { width:100%; font-size:26px; padding:14px 16px; border:2px solid var(--line); border-radius:16px; background:#fff; }
   input.code { font-family:ui-monospace,Menlo,monospace; font-weight:700; text-align:center; letter-spacing:.2em; text-transform:uppercase; }
+  input::placeholder { color:#b3b3b8; font-weight:400; letter-spacing:normal; text-transform:none; }
   .btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:60px; border:0; border-radius:16px; font-size:22px; font-weight:700; cursor:pointer; margin:12px 0; }
   .btn.primary { background:var(--accent); color:#fff; }
   .btn.secondary { background:#fff; color:var(--accent); border:2px solid var(--accent); }
@@ -66,7 +67,7 @@
     <div id="join-error" class="error hidden"></div>
     <div class="card">
       <label for="code">房間代碼</label>
-      <input id="code" class="code" maxlength="8" autocomplete="off" autocapitalize="characters" placeholder="例如 A8F3K2">
+      <input id="code" class="code" maxlength="8" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="請家人給你 6 個字的代碼">
       <label for="name">我的稱呼（家人看到的名字）</label>
       <input id="name" placeholder="例如：媽媽、小美">
       <button id="join-btn" class="btn primary">加入</button>

@@ -273,6 +273,12 @@
   $("join-btn").onclick = join;
   $("leave").onclick = leave;
   $("code").addEventListener("input", () => { $("code").value = normalizeCode($("code").value).slice(0, 8); updateOpenApp($("code").value); });
+  // 點進格子就全選：直接打字會覆蓋原本的內容，不用先刪
+  for (const id of ["code", "name"]) {
+    $(id).addEventListener("focus", () => setTimeout(() => $(id).select(), 0));
+  }
+  $("code").addEventListener("keydown", (e) => { if (e.key === "Enter") $("name").focus(); });
+  $("name").addEventListener("keydown", (e) => { if (e.key === "Enter") join(); });
   const initialCode = codeFromURL();
   $("code").value = initialCode; updateOpenApp(initialCode);
   $("name").value = localStorage.getItem("displayName") || "";
