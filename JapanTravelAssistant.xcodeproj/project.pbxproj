@@ -1,0 +1,1186 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0779BF48619F1000C8AF578C /* NavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7366603AF389A343D52D60 /* NavigationService.swift */; };
+		0C5D781CAABB735954156797 /* MenuDraftStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E653F049EA58635E3024AA2 /* MenuDraftStore.swift */; };
+		0C5FDC9C00565D16C627B4BD /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838B7DFC27E3EE7FD3020D06 /* QRCodeScannerView.swift */; };
+		0E32B221282DBE165578B7E0 /* MenuReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F34931DFD237E16DF86F0C41 /* MenuReviewView.swift */; };
+		0E921B0ACA9EB49512E81942 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 603C64AED0707FCB76BDEC77 /* Supabase */; };
+		1031ADB1C531354A2AFC01EC /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C67F1AE562159736C8C76A /* SupabaseService.swift */; };
+		109997B5DB8A065B6F0C48BE /* RecognizedTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA69B5A617CA1DC8603ACF7 /* RecognizedTextBlock.swift */; };
+		10B5911BB2E50997D7E02CF2 /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF8ED6F0140E8130E36CA18A /* CameraPicker.swift */; };
+		1925A27BB6D4BF50AC9E3261 /* CategoryChipBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF8B1815523E1845B1173FF /* CategoryChipBar.swift */; };
+		1B94AAF7D5F3A38664B0EBD3 /* MenuImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26AFA8EB29EEFA88B271FF9 /* MenuImportTests.swift */; };
+		1C3572D492FFB10E6856A2BF /* MenuImportParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B809B8542FB9253CEA8F425A /* MenuImportParser.swift */; };
+		2176BCFC7219CC7C5ADC0169 /* ErrorBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC40BE35D2FC58DEF6C082EB /* ErrorBanner.swift */; };
+		2207C75B671CE2943D37605F /* SupabaseOrderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33953805E84BF6C875C11E93 /* SupabaseOrderRepository.swift */; };
+		237562E009A6A3FD78489FD7 /* SupabaseIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBE4AE329DB9DC83968655B /* SupabaseIntegrationTests.swift */; };
+		2C70EEDAB6946C6FEE58B692 /* UnderstandHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93D76772CCE6388DDD10AF /* UnderstandHubView.swift */; };
+		31DDACF6D8FBEC00FD20CC46 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAB0A79B758D01E7897F32F2 /* HomeView.swift */; };
+		335EDF3ADB5519B16C09C78F /* OCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1763087E54EA3C85349821F5 /* OCRService.swift */; };
+		3612096C3B36506B084A92DA /* AVSpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAB6B044FF3CDFD235846E7 /* AVSpeechService.swift */; };
+		36DDB7F33E1B42E631787373 /* ScanRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91E68D167F67BA43740FD2A /* ScanRecord.swift */; };
+		3E0BBA9023D31AAB8D60F8A4 /* FindProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36DA77D9C2C7E7ABEE1660F /* FindProductView.swift */; };
+		3F93FE32E50C5296F92DD020 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DD1B992CCC765F06C313DA /* Place.swift */; };
+		41621EE75FFAE326E5764A4F /* QuantityStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044FE3A5A5781CF620B8CFF2 /* QuantityStepper.swift */; };
+		431821E798B7CFE1E8F6A77D /* MenuTranscriptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F97F7F15BC0951FA35297CC3 /* MenuTranscriptParser.swift */; };
+		43B0FBD9A3F1256D653B5786 /* MenuDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206BB03E25188A660D384677 /* MenuDraft.swift */; };
+		462968206EDDAA0CCBD6312D /* MenuCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B442B7A9FB186D83CFF56C00 /* MenuCandidate.swift */; };
+		46F3D4D52355E9197E9CDD7F /* MenuRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174413F07B959A8E5D21ACCD /* MenuRepository.swift */; };
+		4862DACF678FB83FD0A1FE5E /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B2F75795DAD6E090328B74 /* Menu.swift */; };
+		4ABD092FE658F03FF762172B /* ObserverRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1DC77937153D1B27EA6737 /* ObserverRegistry.swift */; };
+		4CDC1A649E06EBC23A03BD95 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5FD2BF09280E6181CAC97A /* AppConfig.swift */; };
+		519C2A04B0B35D99C05FECA3 /* JoinRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C677898BB5ADBC22024ACED /* JoinRoomView.swift */; };
+		520B9B5EAF05ADCC13C0F0DE /* MenuItemOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41D96CE4F5E704A33CDEEC3 /* MenuItemOption.swift */; };
+		576E7ED3FE89DAB332A5CFC4 /* ChatGPTMenuPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5535459288277C4E7A5F54F /* ChatGPTMenuPrompt.swift */; };
+		58715542F4656700EA7B87CE /* SupabaseRealtimeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B818A1876CCCBABFE49FFAC4 /* SupabaseRealtimeObserver.swift */; };
+		5984EB000DDFA0F9E30E860A /* PriceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BACCB8103E8241EE66FBE3 /* PriceParser.swift */; };
+		5ECCFBA368573A06867A32E3 /* DiningRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8674DAA2815120B3889EF015 /* DiningRoom.swift */; };
+		62DF184FC003FFF9F34CD802 /* MenuRecognitionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA140AAD082B583B0380CF4 /* MenuRecognitionService.swift */; };
+		6685753D3289CE08DBCE559A /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB8EAECF30BF3F89DA102C8 /* Trip.swift */; };
+		6A756BB2C76E1652E289BE7E /* MenuItemEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD16AE26DDDD97719C6CB74 /* MenuItemEditorView.swift */; };
+		6BD59D99C718DB1D2AE8A9F3 /* StaffDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C6B54CD0CA8BACB2BB24C52 /* StaffDisplayView.swift */; };
+		6CF8BC7B852D1FE9ADC0217B /* PhraseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77429A8C17CCEB07BA3069F /* PhraseListView.swift */; };
+		7093C9E00312A3988407675B /* AppTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8ECA24C8ABEF0953AD8CF0 /* AppTypography.swift */; };
+		70E0F40CE490033CB9D31F86 /* DocumentCameraScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = D292E372F6E4EFFC609BD041 /* DocumentCameraScanner.swift */; };
+		75863E92F33A3CCEF1E448B8 /* MenuGlossary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55562A42CB7E428345CB7477 /* MenuGlossary.swift */; };
+		777256EE2F02C46EC07C0315 /* MenuScanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1946ED93B9D6FF3AC8E466E5 /* MenuScanViewModel.swift */; };
+		7AFE8F3B77ABD9DDA49AEAD9 /* menu-glossary.json in Resources */ = {isa = PBXBuildFile; fileRef = C923A839D0767EA15E280D19 /* menu-glossary.json */; };
+		7B3ACD6227D338D35C7CFFC3 /* MenuScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37B0CD635571FBE5F1BD3B6 /* MenuScanView.swift */; };
+		7FF3BFAABCCF9CBEC18C5DF4 /* AccessibilityMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05ADDCCFD7A6D3DFAC40AF4 /* AccessibilityMetrics.swift */; };
+		826944F176CEC57B3BBDE597 /* ElderlyNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEAE97AA308D976D4F10E0CF /* ElderlyNavigationBar.swift */; };
+		84C75DBB15AE38C55DA0B5A2 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA46EFA281ABE720D52A99EE /* String+Extensions.swift */; };
+		85011928ED93AB5AB5E85B38 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65DC3A045CB92DFC879167A /* RootView.swift */; };
+		85A0013989C8BB10434AFAA1 /* SupabaseRoomRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63865A676C8F22EBA5CCC9F5 /* SupabaseRoomRepository.swift */; };
+		86F58E79E13D4E59E5544B7D /* PhraseProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73082F1998ABC9F5019413 /* PhraseProvider.swift */; };
+		8AFAD66742C16497A9DCEA98 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254FF7DE26C91194FDA9B75E /* UIImage+Extensions.swift */; };
+		8B976A955195296EF710AA25 /* PriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ECD7BD3D8DC36FBAB515E7 /* PriceFormatter.swift */; };
+		8C085ECD043B09346FE6D87C /* MenuItemCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E9ED07F4D15F4ED997C80F /* MenuItemCard.swift */; };
+		90DE9C1FFB6C0199A3394F94 /* InMemoryMenuRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98C719ABE9F7FF88173B6BF /* InMemoryMenuRepository.swift */; };
+		91D55530AF20B6BE70738082 /* AppleTranslation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA89397F597015C8077CAC9A /* AppleTranslation.swift */; };
+		9476200FE13DCD5B8EC624FE /* PhraseProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686FC88DB39877E3CD0E4A41 /* PhraseProviderTests.swift */; };
+		96C6519BC423F460F244D927 /* KanjiNumberParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155AD4A0897F5B7BD5ACE67 /* KanjiNumberParser.swift */; };
+		97C0F5F0659C319FA9372C53 /* RoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E0A583F1AAD8DFC185B59 /* RoomViewModel.swift */; };
+		98952A67F95B886CF6F84E34 /* AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223CCE967AF66DCFAABFE84E /* AppIcon.swift */; };
+		9AF7EBF8147DA696D75049BF /* JapaneseReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A1F4F6C1A7CE2B179B6F59 /* JapaneseReading.swift */; };
+		9C7414E809C3ECAF5E33B4FA /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BD17AC559AB6467B87D096 /* AppDependencies.swift */; };
+		9C7CB9AAE3DF78448FD47404 /* OrderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F6B23DAF84B90031F41EF8B /* OrderRepository.swift */; };
+		9D1072C02B1A46A3D4E45629 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1317FC645C69A22008A3EFF /* PrimaryButton.swift */; };
+		9D27986B28961F890A94DDD4 /* LargeActionCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F81DF91A6518040FF56E3AE /* LargeActionCard.swift */; };
+		9DD0649FAD554661F2AE297A /* MenuTranscriptParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B5F4D3403300EE757342D8 /* MenuTranscriptParserTests.swift */; };
+		9F300A7534E3C4BAAD98C5F3 /* MenuOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3CB0ECB589E4EB52095474 /* MenuOptionTests.swift */; };
+		A0D192E99108801B7AA98656 /* LocalUserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA77DF71A5E9BCF3444BF19 /* LocalUserIdentity.swift */; };
+		A1A3BE531575D37B7DC2451D /* JapanesePhraseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591F394288E579487FF4F834 /* JapanesePhraseCard.swift */; };
+		A3BF6FA23961D75A76F1801F /* VisionOCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99414DF9905DEFBC9149321 /* VisionOCRService.swift */; };
+		A40FD289DCF08669D8F1D915 /* MenuSectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387F1C7CCB9FCA906A8F3FE2 /* MenuSectionTests.swift */; };
+		A9DD01A4A04E7D8909760745 /* JapanTravelAssistantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C3C14EC2B21E724FC53B13 /* JapanTravelAssistantApp.swift */; };
+		AA559F56CF33334A0E09D052 /* RoomCodeGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7DED5B3F04AE8B0BCAD57 /* RoomCodeGeneratorTests.swift */; };
+		AB550ECBA0E1DF1AB97C09D3 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2016FCAB21976AECEB5DF5CB /* AIService.swift */; };
+		AD23CB7EA6F8716539F083DE /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2803FDECA72495DCABF7A2 /* SpeechService.swift */; };
+		B174B3AB13389C66DB455486 /* OptionPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A24FCF8E7928D56CEFF1E5 /* OptionPickerSheet.swift */; };
+		B1D471CE5083FA827C759D51 /* RoomViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8224688604247F8E38AC94 /* RoomViewModelTests.swift */; };
+		B306ECB5081871250FBDDCAB /* MenuScanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DA11253EB14182D67C5D06 /* MenuScanTests.swift */; };
+		B3516F8FF6C922A71A1ACC0B /* LiveTextOCRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34896DFAB516943F012D88F9 /* LiveTextOCRService.swift */; };
+		B3CF4207B76E29A408BE398B /* OrderSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA161F2B3F2ABFFD892EF32 /* OrderSummaryView.swift */; };
+		B62AA756F391AFB3AD6876B5 /* CommunicationCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99C572776D818DAD43C6C5B /* CommunicationCategoriesView.swift */; };
+		B6D87AFE1272A35869554960 /* MenuLayoutAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD0A24DE9D17667C09874F9 /* MenuLayoutAnalyzer.swift */; };
+		B756BC40BEFF4B7323AFE51C /* phrases.json in Resources */ = {isa = PBXBuildFile; fileRef = C10715638D4BEDDA430DEF0E /* phrases.json */; };
+		B7E77B3AC2D484FF51407FA1 /* DeepLinkParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E563D2D948CE78BA645AAA7 /* DeepLinkParserTests.swift */; };
+		C0179BB973A09A1C82E3A66D /* RoomMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C127F075BBF85B34136F0C /* RoomMember.swift */; };
+		C0AD5C7CFAB58D754916FD16 /* RoomRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8145D22EF2AFC66A91A216 /* RoomRepository.swift */; };
+		C85DEA81F5DABDDBD5BCF6A7 /* MenuSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45146C970885C69559C819DB /* MenuSelection.swift */; };
+		C9A5BC6168C26711A71A1F0B /* OrderSummaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C20F1116C4A8C1718A72503 /* OrderSummaryTests.swift */; };
+		CC3EA39C1922B902B2A2CB28 /* PriceParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8A800272E404834FF4EC9E /* PriceParserTests.swift */; };
+		CF2EC93D34EC3CCE2EC6C143 /* JapaneseReadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC33F6F68F52109A9244A5A0 /* JapaneseReadingTests.swift */; };
+		CF657716D1517B229581CE01 /* ChatGPTImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BADCF0DFE1F2B6F42707F95 /* ChatGPTImportView.swift */; };
+		D04AA532AF349180ACBD6FAC /* EmergencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9D14944D9FDB4F9C65B6DF /* EmergencyView.swift */; };
+		D2F1598E635088A029A2DF1E /* DeepLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAC08D9C9D12DF4AFC1868E /* DeepLinkParser.swift */; };
+		D37E9A214DD21D5B068C706D /* ImportSectionRobustnessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9516AE937FE40ED5B9CE851 /* ImportSectionRobustnessTests.swift */; };
+		DC76C9E05FBF9A23E7AFA786 /* RoomCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E237DEBC5DFCA4D224D9BD2 /* RoomCodeGenerator.swift */; };
+		DCC2389D6551D07EE5F1F4AD /* QRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C129A110D3BEB68435C2C75 /* QRCodeGenerator.swift */; };
+		DD53CC9BF17830B8FC3D05B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3AC59D0479EA57D8AADDA33 /* Assets.xcassets */; };
+		E0754FD948516A80B00BC193 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED62761ECDC7BB2C9D10280B /* AppColors.swift */; };
+		E72A91C96DB20AEF7A3CAC1E /* DebugLaunchOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D1A22C76412089D46BEB78 /* DebugLaunchOptions.swift */; };
+		EA496EE3EA3787022D78D602 /* RestaurantHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77AC96DDA7658E1696FAAB8 /* RestaurantHubView.swift */; };
+		EC9D54C91D52554E53256CBB /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FAF35353FC21E37AAE0226 /* RoomView.swift */; };
+		EE20DC729B24CD9E4E6D660E /* PlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7B8640DA5A8D9A6399AB42 /* PlacesView.swift */; };
+		EE7089EC86E72FF3DFF140AC /* RoomQRCodeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056975EF441FC61C63EB1BB1 /* RoomQRCodeSheet.swift */; };
+		F37FCE43AF7A17C90B5C53AE /* RoomMemberAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA2ACD33C07FB7398DD8E45 /* RoomMemberAvatar.swift */; };
+		F4362A987F2C56529BD53263 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2187E6DC2D74A0FF4B4274 /* DebugSettings.swift */; };
+		F802260D9FE3FD6F9211CF1E /* SupabaseMenuRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D4E6A290818DD82DDE0FCA5 /* SupabaseMenuRepository.swift */; };
+		F8CD1586D81CB6E9D12A5AA8 /* DiningSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE78E18B1C09FB2E924A2C39 /* DiningSessionStore.swift */; };
+		F900B287A17CE3CF14A380B4 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BB6CFA622E199F3A8B022DF /* AppRouter.swift */; };
+		FA5236E364A98F790664D324 /* CreateRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9677859B293655B505A45D /* CreateRoomView.swift */; };
+		FAD34A86E71BCB51C1DF4816 /* InMemoryOrderRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E9FCBECEEEBF31D99E3140B /* InMemoryOrderRepository.swift */; };
+		FAE2A48C6D9F62FB9FB91DE1 /* Phrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77B01923276CC7A8F835712 /* Phrase.swift */; };
+		FAE6EAEE0DA9234B94DD044A /* InMemoryRoomRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C3A00A9352DF0ABE22091C /* InMemoryRoomRepository.swift */; };
+		FB315A57BE17072D1C1B5A78 /* UserFacingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD3403571A899182924C7C3 /* UserFacingError.swift */; };
+		FCED49E331345FB1D96BFDBF /* ComingSoonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057DF2F7E3B7526A5E1E8F0A /* ComingSoonView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		154E595A87C98681F27C5517 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1D5131368151F7E9E3CC0EAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 156F5AFFBD08558DCF9D5001;
+			remoteInfo = JapanTravelAssistant;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		01A24FCF8E7928D56CEFF1E5 /* OptionPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionPickerSheet.swift; sourceTree = "<group>"; };
+		044FE3A5A5781CF620B8CFF2 /* QuantityStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityStepper.swift; sourceTree = "<group>"; };
+		056975EF441FC61C63EB1BB1 /* RoomQRCodeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomQRCodeSheet.swift; sourceTree = "<group>"; };
+		057DF2F7E3B7526A5E1E8F0A /* ComingSoonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingSoonView.swift; sourceTree = "<group>"; };
+		0A2803FDECA72495DCABF7A2 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
+		0AD0A24DE9D17667C09874F9 /* MenuLayoutAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuLayoutAnalyzer.swift; sourceTree = "<group>"; };
+		0E8A800272E404834FF4EC9E /* PriceParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceParserTests.swift; sourceTree = "<group>"; };
+		0E9FCBECEEEBF31D99E3140B /* InMemoryOrderRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryOrderRepository.swift; sourceTree = "<group>"; };
+		0F81DF91A6518040FF56E3AE /* LargeActionCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeActionCard.swift; sourceTree = "<group>"; };
+		1150047710163FADA166FD41 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		12BD17AC559AB6467B87D096 /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
+		13E9ED07F4D15F4ED997C80F /* MenuItemCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemCard.swift; sourceTree = "<group>"; };
+		174413F07B959A8E5D21ACCD /* MenuRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuRepository.swift; sourceTree = "<group>"; };
+		1763087E54EA3C85349821F5 /* OCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRService.swift; sourceTree = "<group>"; };
+		1946ED93B9D6FF3AC8E466E5 /* MenuScanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScanViewModel.swift; sourceTree = "<group>"; };
+		2016FCAB21976AECEB5DF5CB /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIService.swift; sourceTree = "<group>"; };
+		206BB03E25188A660D384677 /* MenuDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDraft.swift; sourceTree = "<group>"; };
+		223CCE967AF66DCFAABFE84E /* AppIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcon.swift; sourceTree = "<group>"; };
+		254FF7DE26C91194FDA9B75E /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
+		2A9E0A583F1AAD8DFC185B59 /* RoomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewModel.swift; sourceTree = "<group>"; };
+		2E653F049EA58635E3024AA2 /* MenuDraftStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuDraftStore.swift; sourceTree = "<group>"; };
+		33953805E84BF6C875C11E93 /* SupabaseOrderRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseOrderRepository.swift; sourceTree = "<group>"; };
+		34896DFAB516943F012D88F9 /* LiveTextOCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextOCRService.swift; sourceTree = "<group>"; };
+		36DA11253EB14182D67C5D06 /* MenuScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScanTests.swift; sourceTree = "<group>"; };
+		387F1C7CCB9FCA906A8F3FE2 /* MenuSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSectionTests.swift; sourceTree = "<group>"; };
+		3BADCF0DFE1F2B6F42707F95 /* ChatGPTImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTImportView.swift; sourceTree = "<group>"; };
+		3D8145D22EF2AFC66A91A216 /* RoomRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRepository.swift; sourceTree = "<group>"; };
+		3E237DEBC5DFCA4D224D9BD2 /* RoomCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCodeGenerator.swift; sourceTree = "<group>"; };
+		3FBE4AE329DB9DC83968655B /* SupabaseIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseIntegrationTests.swift; sourceTree = "<group>"; };
+		43DD1B992CCC765F06C313DA /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		44F50B5B3426E610662E8779 /* JapanTravelAssistantTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = JapanTravelAssistantTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		45146C970885C69559C819DB /* MenuSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSelection.swift; sourceTree = "<group>"; };
+		48C3A00A9352DF0ABE22091C /* InMemoryRoomRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryRoomRepository.swift; sourceTree = "<group>"; };
+		49ECD7BD3D8DC36FBAB515E7 /* PriceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatter.swift; sourceTree = "<group>"; };
+		4BB6CFA622E199F3A8B022DF /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		4E98E362393899A89A1D6D8D /* JapanTravelAssistant.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = JapanTravelAssistant.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		55562A42CB7E428345CB7477 /* MenuGlossary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuGlossary.swift; sourceTree = "<group>"; };
+		591F394288E579487FF4F834 /* JapanesePhraseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapanesePhraseCard.swift; sourceTree = "<group>"; };
+		5A7B8640DA5A8D9A6399AB42 /* PlacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesView.swift; sourceTree = "<group>"; };
+		5AAC08D9C9D12DF4AFC1868E /* DeepLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkParser.swift; sourceTree = "<group>"; };
+		5BA2ACD33C07FB7398DD8E45 /* RoomMemberAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberAvatar.swift; sourceTree = "<group>"; };
+		62FAF35353FC21E37AAE0226 /* RoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
+		63865A676C8F22EBA5CCC9F5 /* SupabaseRoomRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseRoomRepository.swift; sourceTree = "<group>"; };
+		64BACCB8103E8241EE66FBE3 /* PriceParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceParser.swift; sourceTree = "<group>"; };
+		686FC88DB39877E3CD0E4A41 /* PhraseProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseProviderTests.swift; sourceTree = "<group>"; };
+		6B2187E6DC2D74A0FF4B4274 /* DebugSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
+		6C20F1116C4A8C1718A72503 /* OrderSummaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSummaryTests.swift; sourceTree = "<group>"; };
+		6C73082F1998ABC9F5019413 /* PhraseProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseProvider.swift; sourceTree = "<group>"; };
+		6CA69B5A617CA1DC8603ACF7 /* RecognizedTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizedTextBlock.swift; sourceTree = "<group>"; };
+		6F6B23DAF84B90031F41EF8B /* OrderRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderRepository.swift; sourceTree = "<group>"; };
+		7AD3403571A899182924C7C3 /* UserFacingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFacingError.swift; sourceTree = "<group>"; };
+		7C129A110D3BEB68435C2C75 /* QRCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeGenerator.swift; sourceTree = "<group>"; };
+		838B7DFC27E3EE7FD3020D06 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
+		8674DAA2815120B3889EF015 /* DiningRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningRoom.swift; sourceTree = "<group>"; };
+		8FB8EAECF30BF3F89DA102C8 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		9C677898BB5ADBC22024ACED /* JoinRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinRoomView.swift; sourceTree = "<group>"; };
+		9C6B54CD0CA8BACB2BB24C52 /* StaffDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffDisplayView.swift; sourceTree = "<group>"; };
+		9D4E6A290818DD82DDE0FCA5 /* SupabaseMenuRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseMenuRepository.swift; sourceTree = "<group>"; };
+		9E563D2D948CE78BA645AAA7 /* DeepLinkParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkParserTests.swift; sourceTree = "<group>"; };
+		A0B2F75795DAD6E090328B74 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		A6A1F4F6C1A7CE2B179B6F59 /* JapaneseReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseReading.swift; sourceTree = "<group>"; };
+		A77429A8C17CCEB07BA3069F /* PhraseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseListView.swift; sourceTree = "<group>"; };
+		A99414DF9905DEFBC9149321 /* VisionOCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionOCRService.swift; sourceTree = "<group>"; };
+		A99C572776D818DAD43C6C5B /* CommunicationCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationCategoriesView.swift; sourceTree = "<group>"; };
+		AA46EFA281ABE720D52A99EE /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		AD8224688604247F8E38AC94 /* RoomViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomViewModelTests.swift; sourceTree = "<group>"; };
+		AE78E18B1C09FB2E924A2C39 /* DiningSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningSessionStore.swift; sourceTree = "<group>"; };
+		B155AD4A0897F5B7BD5ACE67 /* KanjiNumberParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanjiNumberParser.swift; sourceTree = "<group>"; };
+		B36DA77D9C2C7E7ABEE1660F /* FindProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindProductView.swift; sourceTree = "<group>"; };
+		B442B7A9FB186D83CFF56C00 /* MenuCandidate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCandidate.swift; sourceTree = "<group>"; };
+		B809B8542FB9253CEA8F425A /* MenuImportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuImportParser.swift; sourceTree = "<group>"; };
+		B818A1876CCCBABFE49FFAC4 /* SupabaseRealtimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseRealtimeObserver.swift; sourceTree = "<group>"; };
+		BDA161F2B3F2ABFFD892EF32 /* OrderSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSummaryView.swift; sourceTree = "<group>"; };
+		C05ADDCCFD7A6D3DFAC40AF4 /* AccessibilityMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityMetrics.swift; sourceTree = "<group>"; };
+		C10715638D4BEDDA430DEF0E /* phrases.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = phrases.json; sourceTree = "<group>"; };
+		C4D1A22C76412089D46BEB78 /* DebugLaunchOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLaunchOptions.swift; sourceTree = "<group>"; };
+		C7B5F4D3403300EE757342D8 /* MenuTranscriptParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTranscriptParserTests.swift; sourceTree = "<group>"; };
+		C923A839D0767EA15E280D19 /* menu-glossary.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "menu-glossary.json"; sourceTree = "<group>"; };
+		CAA140AAD082B583B0380CF4 /* MenuRecognitionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuRecognitionService.swift; sourceTree = "<group>"; };
+		CB8ECA24C8ABEF0953AD8CF0 /* AppTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTypography.swift; sourceTree = "<group>"; };
+		CB9677859B293655B505A45D /* CreateRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomView.swift; sourceTree = "<group>"; };
+		CDC7DED5B3F04AE8B0BCAD57 /* RoomCodeGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCodeGeneratorTests.swift; sourceTree = "<group>"; };
+		CFAB6B044FF3CDFD235846E7 /* AVSpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVSpeechService.swift; sourceTree = "<group>"; };
+		D26AFA8EB29EEFA88B271FF9 /* MenuImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuImportTests.swift; sourceTree = "<group>"; };
+		D292E372F6E4EFFC609BD041 /* DocumentCameraScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentCameraScanner.swift; sourceTree = "<group>"; };
+		D65DC3A045CB92DFC879167A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		D77B01923276CC7A8F835712 /* Phrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phrase.swift; sourceTree = "<group>"; };
+		D9C8D1A2BCB0F7EA721C8CC3 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		DC33F6F68F52109A9244A5A0 /* JapaneseReadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapaneseReadingTests.swift; sourceTree = "<group>"; };
+		DC40BE35D2FC58DEF6C082EB /* ErrorBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorBanner.swift; sourceTree = "<group>"; };
+		DE93D76772CCE6388DDD10AF /* UnderstandHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderstandHubView.swift; sourceTree = "<group>"; };
+		E0C67F1AE562159736C8C76A /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		E37B0CD635571FBE5F1BD3B6 /* MenuScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScanView.swift; sourceTree = "<group>"; };
+		E3AC59D0479EA57D8AADDA33 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E4C3C14EC2B21E724FC53B13 /* JapanTravelAssistantApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapanTravelAssistantApp.swift; sourceTree = "<group>"; };
+		E5535459288277C4E7A5F54F /* ChatGPTMenuPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTMenuPrompt.swift; sourceTree = "<group>"; };
+		E77AC96DDA7658E1696FAAB8 /* RestaurantHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantHubView.swift; sourceTree = "<group>"; };
+		E91E68D167F67BA43740FD2A /* ScanRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRecord.swift; sourceTree = "<group>"; };
+		E98C719ABE9F7FF88173B6BF /* InMemoryMenuRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryMenuRepository.swift; sourceTree = "<group>"; };
+		EAB0A79B758D01E7897F32F2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		EB7366603AF389A343D52D60 /* NavigationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationService.swift; sourceTree = "<group>"; };
+		ECA77DF71A5E9BCF3444BF19 /* LocalUserIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalUserIdentity.swift; sourceTree = "<group>"; };
+		ED62761ECDC7BB2C9D10280B /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		EF8ED6F0140E8130E36CA18A /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
+		F0C127F075BBF85B34136F0C /* RoomMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMember.swift; sourceTree = "<group>"; };
+		F1317FC645C69A22008A3EFF /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		F34931DFD237E16DF86F0C41 /* MenuReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuReviewView.swift; sourceTree = "<group>"; };
+		F41D96CE4F5E704A33CDEEC3 /* MenuItemOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemOption.swift; sourceTree = "<group>"; };
+		F9516AE937FE40ED5B9CE851 /* ImportSectionRobustnessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSectionRobustnessTests.swift; sourceTree = "<group>"; };
+		F97F7F15BC0951FA35297CC3 /* MenuTranscriptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTranscriptParser.swift; sourceTree = "<group>"; };
+		FA89397F597015C8077CAC9A /* AppleTranslation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleTranslation.swift; sourceTree = "<group>"; };
+		FD3CB0ECB589E4EB52095474 /* MenuOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuOptionTests.swift; sourceTree = "<group>"; };
+		FD5FD2BF09280E6181CAC97A /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		FE1DC77937153D1B27EA6737 /* ObserverRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserverRegistry.swift; sourceTree = "<group>"; };
+		FE9D14944D9FDB4F9C65B6DF /* EmergencyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmergencyView.swift; sourceTree = "<group>"; };
+		FEAE97AA308D976D4F10E0CF /* ElderlyNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElderlyNavigationBar.swift; sourceTree = "<group>"; };
+		FEF8B1815523E1845B1173FF /* CategoryChipBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChipBar.swift; sourceTree = "<group>"; };
+		FFD16AE26DDDD97719C6CB74 /* MenuItemEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemEditorView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0CE37F8ADC5438AB18AA49BF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E921B0ACA9EB49512E81942 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		093305DF3C3F198967FF9D25 /* Supabase */ = {
+			isa = PBXGroup;
+			children = (
+				B818A1876CCCBABFE49FFAC4 /* SupabaseRealtimeObserver.swift */,
+				E0C67F1AE562159736C8C76A /* SupabaseService.swift */,
+			);
+			path = Supabase;
+			sourceTree = "<group>";
+		};
+		143253251D2BA94C96554A86 /* Translation */ = {
+			isa = PBXGroup;
+			children = (
+				FA89397F597015C8077CAC9A /* AppleTranslation.swift */,
+			);
+			path = Translation;
+			sourceTree = "<group>";
+		};
+		1D03D5CF08564BB8EA7B2C2A /* Glossary */ = {
+			isa = PBXGroup;
+			children = (
+				C923A839D0767EA15E280D19 /* menu-glossary.json */,
+			);
+			path = Glossary;
+			sourceTree = "<group>";
+		};
+		23D2A58933A71EB46C47F843 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				12BD17AC559AB6467B87D096 /* AppDependencies.swift */,
+				4BB6CFA622E199F3A8B022DF /* AppRouter.swift */,
+				E4C3C14EC2B21E724FC53B13 /* JapanTravelAssistantApp.swift */,
+				D65DC3A045CB92DFC879167A /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		265B5AF7F9618EE878DDC0D2 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				34BAB1EBD37B868ADDC50EF8 /* CameraScanner */,
+				3BBBF0F34FB21356EB0E2337 /* Communication */,
+				C9B2A31453C84818E716553F /* DiningRoom */,
+				6126E6E96D3DCF562FAB9128 /* Emergency */,
+				7BF23B1476BF4F0DCA657FC4 /* Home */,
+				C4EE79AE0C0DAEFC9D805613 /* Menu */,
+				3D9E3E93A99EBA74B3C45D5A /* Navigation */,
+				29FB1728F30D7183FF6B4744 /* Shopping */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		29FB1728F30D7183FF6B4744 /* Shopping */ = {
+			isa = PBXGroup;
+			children = (
+				B36DA77D9C2C7E7ABEE1660F /* FindProductView.swift */,
+			);
+			path = Shopping;
+			sourceTree = "<group>";
+		};
+		34BAB1EBD37B868ADDC50EF8 /* CameraScanner */ = {
+			isa = PBXGroup;
+			children = (
+				EF8ED6F0140E8130E36CA18A /* CameraPicker.swift */,
+				D292E372F6E4EFFC609BD041 /* DocumentCameraScanner.swift */,
+				E37B0CD635571FBE5F1BD3B6 /* MenuScanView.swift */,
+				1946ED93B9D6FF3AC8E466E5 /* MenuScanViewModel.swift */,
+				DE93D76772CCE6388DDD10AF /* UnderstandHubView.swift */,
+			);
+			path = CameraScanner;
+			sourceTree = "<group>";
+		};
+		3BBBF0F34FB21356EB0E2337 /* Communication */ = {
+			isa = PBXGroup;
+			children = (
+				A99C572776D818DAD43C6C5B /* CommunicationCategoriesView.swift */,
+				A77429A8C17CCEB07BA3069F /* PhraseListView.swift */,
+			);
+			path = Communication;
+			sourceTree = "<group>";
+		};
+		3D9E3E93A99EBA74B3C45D5A /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				5A7B8640DA5A8D9A6399AB42 /* PlacesView.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		3EB4A253667208199E663775 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				78D7014869BBE8E9A61346CA /* MenuRepository */,
+				50621436444CADEB1F895526 /* OrderRepository */,
+				9F965D0D8E7B8379F2118025 /* RoomRepository */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		3FED41CE53BC10EA2EE3068B /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				2016FCAB21976AECEB5DF5CB /* AIService.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		4DA6876AF12CE6F971C47895 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				AE78E18B1C09FB2E924A2C39 /* DiningSessionStore.swift */,
+				ECA77DF71A5E9BCF3444BF19 /* LocalUserIdentity.swift */,
+				2E653F049EA58635E3024AA2 /* MenuDraftStore.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		50621436444CADEB1F895526 /* OrderRepository */ = {
+			isa = PBXGroup;
+			children = (
+				0E9FCBECEEEBF31D99E3140B /* InMemoryOrderRepository.swift */,
+				6F6B23DAF84B90031F41EF8B /* OrderRepository.swift */,
+				33953805E84BF6C875C11E93 /* SupabaseOrderRepository.swift */,
+			);
+			path = OrderRepository;
+			sourceTree = "<group>";
+		};
+		5B96409925D0A562C1238DEA /* Accessibility */ = {
+			isa = PBXGroup;
+			children = (
+				C05ADDCCFD7A6D3DFAC40AF4 /* AccessibilityMetrics.swift */,
+			);
+			path = Accessibility;
+			sourceTree = "<group>";
+		};
+		5FD23913368DADAEB2A9F5FA /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				FD5FD2BF09280E6181CAC97A /* AppConfig.swift */,
+				E5535459288277C4E7A5F54F /* ChatGPTMenuPrompt.swift */,
+				C4D1A22C76412089D46BEB78 /* DebugLaunchOptions.swift */,
+				6B2187E6DC2D74A0FF4B4274 /* DebugSettings.swift */,
+				5AAC08D9C9D12DF4AFC1868E /* DeepLinkParser.swift */,
+				A6A1F4F6C1A7CE2B179B6F59 /* JapaneseReading.swift */,
+				B155AD4A0897F5B7BD5ACE67 /* KanjiNumberParser.swift */,
+				55562A42CB7E428345CB7477 /* MenuGlossary.swift */,
+				B809B8542FB9253CEA8F425A /* MenuImportParser.swift */,
+				0AD0A24DE9D17667C09874F9 /* MenuLayoutAnalyzer.swift */,
+				F97F7F15BC0951FA35297CC3 /* MenuTranscriptParser.swift */,
+				FE1DC77937153D1B27EA6737 /* ObserverRegistry.swift */,
+				49ECD7BD3D8DC36FBAB515E7 /* PriceFormatter.swift */,
+				64BACCB8103E8241EE66FBE3 /* PriceParser.swift */,
+				7C129A110D3BEB68435C2C75 /* QRCodeGenerator.swift */,
+				3E237DEBC5DFCA4D224D9BD2 /* RoomCodeGenerator.swift */,
+				7AD3403571A899182924C7C3 /* UserFacingError.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		6126E6E96D3DCF562FAB9128 /* Emergency */ = {
+			isa = PBXGroup;
+			children = (
+				FE9D14944D9FDB4F9C65B6DF /* EmergencyView.swift */,
+			);
+			path = Emergency;
+			sourceTree = "<group>";
+		};
+		64FC138E49AE3E23C3351238 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				EB7366603AF389A343D52D60 /* NavigationService.swift */,
+			);
+			path = Maps;
+			sourceTree = "<group>";
+		};
+		6BA1E046FEC73453C9E7EC52 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4E98E362393899A89A1D6D8D /* JapanTravelAssistant.app */,
+				44F50B5B3426E610662E8779 /* JapanTravelAssistantTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		78D7014869BBE8E9A61346CA /* MenuRepository */ = {
+			isa = PBXGroup;
+			children = (
+				E98C719ABE9F7FF88173B6BF /* InMemoryMenuRepository.swift */,
+				174413F07B959A8E5D21ACCD /* MenuRepository.swift */,
+				9D4E6A290818DD82DDE0FCA5 /* SupabaseMenuRepository.swift */,
+			);
+			path = MenuRepository;
+			sourceTree = "<group>";
+		};
+		7BF23B1476BF4F0DCA657FC4 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				EAB0A79B758D01E7897F32F2 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		7D81B8AB99562D5C58206558 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				1150047710163FADA166FD41 /* Debug.xcconfig */,
+				D9C8D1A2BCB0F7EA721C8CC3 /* Release.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		8107DA81B1B6AA5D3572E3DD /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A237CFCEB5B61DCDB39BF721 /* Extensions */,
+				A7040D0945477572DD62BA6D /* Models */,
+				4DA6876AF12CE6F971C47895 /* Persistence */,
+				5FD23913368DADAEB2A9F5FA /* Utilities */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8C0D0ABB4FD6AE21845996E7 /* JapanTravelAssistantTests */ = {
+			isa = PBXGroup;
+			children = (
+				9E563D2D948CE78BA645AAA7 /* DeepLinkParserTests.swift */,
+				F9516AE937FE40ED5B9CE851 /* ImportSectionRobustnessTests.swift */,
+				DC33F6F68F52109A9244A5A0 /* JapaneseReadingTests.swift */,
+				D26AFA8EB29EEFA88B271FF9 /* MenuImportTests.swift */,
+				FD3CB0ECB589E4EB52095474 /* MenuOptionTests.swift */,
+				36DA11253EB14182D67C5D06 /* MenuScanTests.swift */,
+				387F1C7CCB9FCA906A8F3FE2 /* MenuSectionTests.swift */,
+				C7B5F4D3403300EE757342D8 /* MenuTranscriptParserTests.swift */,
+				6C20F1116C4A8C1718A72503 /* OrderSummaryTests.swift */,
+				686FC88DB39877E3CD0E4A41 /* PhraseProviderTests.swift */,
+				0E8A800272E404834FF4EC9E /* PriceParserTests.swift */,
+				CDC7DED5B3F04AE8B0BCAD57 /* RoomCodeGeneratorTests.swift */,
+				AD8224688604247F8E38AC94 /* RoomViewModelTests.swift */,
+				3FBE4AE329DB9DC83968655B /* SupabaseIntegrationTests.swift */,
+			);
+			path = JapanTravelAssistantTests;
+			sourceTree = "<group>";
+		};
+		944743098C3257D0FBDE00C5 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FEF8B1815523E1845B1173FF /* CategoryChipBar.swift */,
+				057DF2F7E3B7526A5E1E8F0A /* ComingSoonView.swift */,
+				FEAE97AA308D976D4F10E0CF /* ElderlyNavigationBar.swift */,
+				DC40BE35D2FC58DEF6C082EB /* ErrorBanner.swift */,
+				591F394288E579487FF4F834 /* JapanesePhraseCard.swift */,
+				0F81DF91A6518040FF56E3AE /* LargeActionCard.swift */,
+				13E9ED07F4D15F4ED997C80F /* MenuItemCard.swift */,
+				F1317FC645C69A22008A3EFF /* PrimaryButton.swift */,
+				044FE3A5A5781CF620B8CFF2 /* QuantityStepper.swift */,
+				5BA2ACD33C07FB7398DD8E45 /* RoomMemberAvatar.swift */,
+				9C6B54CD0CA8BACB2BB24C52 /* StaffDisplayView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		9F965D0D8E7B8379F2118025 /* RoomRepository */ = {
+			isa = PBXGroup;
+			children = (
+				48C3A00A9352DF0ABE22091C /* InMemoryRoomRepository.swift */,
+				3D8145D22EF2AFC66A91A216 /* RoomRepository.swift */,
+				63865A676C8F22EBA5CCC9F5 /* SupabaseRoomRepository.swift */,
+			);
+			path = RoomRepository;
+			sourceTree = "<group>";
+		};
+		A237CFCEB5B61DCDB39BF721 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				AA46EFA281ABE720D52A99EE /* String+Extensions.swift */,
+				254FF7DE26C91194FDA9B75E /* UIImage+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A61CAA3D366CA300DF0BB341 /* Typography */ = {
+			isa = PBXGroup;
+			children = (
+				CB8ECA24C8ABEF0953AD8CF0 /* AppTypography.swift */,
+			);
+			path = Typography;
+			sourceTree = "<group>";
+		};
+		A7040D0945477572DD62BA6D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8674DAA2815120B3889EF015 /* DiningRoom.swift */,
+				A0B2F75795DAD6E090328B74 /* Menu.swift */,
+				B442B7A9FB186D83CFF56C00 /* MenuCandidate.swift */,
+				206BB03E25188A660D384677 /* MenuDraft.swift */,
+				F41D96CE4F5E704A33CDEEC3 /* MenuItemOption.swift */,
+				45146C970885C69559C819DB /* MenuSelection.swift */,
+				D77B01923276CC7A8F835712 /* Phrase.swift */,
+				43DD1B992CCC765F06C313DA /* Place.swift */,
+				6CA69B5A617CA1DC8603ACF7 /* RecognizedTextBlock.swift */,
+				F0C127F075BBF85B34136F0C /* RoomMember.swift */,
+				E91E68D167F67BA43740FD2A /* ScanRecord.swift */,
+				8FB8EAECF30BF3F89DA102C8 /* Trip.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B4D5FBFC76987E4B1CBE91DD /* Phrases */ = {
+			isa = PBXGroup;
+			children = (
+				6C73082F1998ABC9F5019413 /* PhraseProvider.swift */,
+			);
+			path = Phrases;
+			sourceTree = "<group>";
+		};
+		B9E08EAA180BA8D478A665BB /* Speech */ = {
+			isa = PBXGroup;
+			children = (
+				CFAB6B044FF3CDFD235846E7 /* AVSpeechService.swift */,
+				0A2803FDECA72495DCABF7A2 /* SpeechService.swift */,
+			);
+			path = Speech;
+			sourceTree = "<group>";
+		};
+		C02D935B14CE398E8AA4524D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1D03D5CF08564BB8EA7B2C2A /* Glossary */,
+				FDEA89C0AD5DE0BD9A0B11DA /* Phrases */,
+				E3AC59D0479EA57D8AADDA33 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C06528D7160A12369F1C61A3 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				223CCE967AF66DCFAABFE84E /* AppIcon.swift */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
+		C4EE79AE0C0DAEFC9D805613 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				3BADCF0DFE1F2B6F42707F95 /* ChatGPTImportView.swift */,
+				FFD16AE26DDDD97719C6CB74 /* MenuItemEditorView.swift */,
+				F34931DFD237E16DF86F0C41 /* MenuReviewView.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		C752A58ADF3B50DB6776B928 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3FED41CE53BC10EA2EE3068B /* AI */,
+				64FC138E49AE3E23C3351238 /* Maps */,
+				F7CAAAA1D1C322EE4F9D1340 /* OCR */,
+				B4D5FBFC76987E4B1CBE91DD /* Phrases */,
+				B9E08EAA180BA8D478A665BB /* Speech */,
+				093305DF3C3F198967FF9D25 /* Supabase */,
+				143253251D2BA94C96554A86 /* Translation */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		C9B2A31453C84818E716553F /* DiningRoom */ = {
+			isa = PBXGroup;
+			children = (
+				CB9677859B293655B505A45D /* CreateRoomView.swift */,
+				9C677898BB5ADBC22024ACED /* JoinRoomView.swift */,
+				01A24FCF8E7928D56CEFF1E5 /* OptionPickerSheet.swift */,
+				BDA161F2B3F2ABFFD892EF32 /* OrderSummaryView.swift */,
+				838B7DFC27E3EE7FD3020D06 /* QRCodeScannerView.swift */,
+				E77AC96DDA7658E1696FAAB8 /* RestaurantHubView.swift */,
+				056975EF441FC61C63EB1BB1 /* RoomQRCodeSheet.swift */,
+				62FAF35353FC21E37AAE0226 /* RoomView.swift */,
+				2A9E0A583F1AAD8DFC185B59 /* RoomViewModel.swift */,
+			);
+			path = DiningRoom;
+			sourceTree = "<group>";
+		};
+		ED2CAA401B3DDD212F309369 = {
+			isa = PBXGroup;
+			children = (
+				7D81B8AB99562D5C58206558 /* Config */,
+				F96C6B43D405E8AF0E10F483 /* JapanTravelAssistant */,
+				8C0D0ABB4FD6AE21845996E7 /* JapanTravelAssistantTests */,
+				6BA1E046FEC73453C9E7EC52 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F7CAAAA1D1C322EE4F9D1340 /* OCR */ = {
+			isa = PBXGroup;
+			children = (
+				34896DFAB516943F012D88F9 /* LiveTextOCRService.swift */,
+				CAA140AAD082B583B0380CF4 /* MenuRecognitionService.swift */,
+				1763087E54EA3C85349821F5 /* OCRService.swift */,
+				A99414DF9905DEFBC9149321 /* VisionOCRService.swift */,
+			);
+			path = OCR;
+			sourceTree = "<group>";
+		};
+		F96C6B43D405E8AF0E10F483 /* JapanTravelAssistant */ = {
+			isa = PBXGroup;
+			children = (
+				23D2A58933A71EB46C47F843 /* App */,
+				8107DA81B1B6AA5D3572E3DD /* Core */,
+				FA8849336AEBDC66AA603044 /* DesignSystem */,
+				265B5AF7F9618EE878DDC0D2 /* Features */,
+				3EB4A253667208199E663775 /* Repositories */,
+				C02D935B14CE398E8AA4524D /* Resources */,
+				C752A58ADF3B50DB6776B928 /* Services */,
+			);
+			path = JapanTravelAssistant;
+			sourceTree = "<group>";
+		};
+		FA8849336AEBDC66AA603044 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				5B96409925D0A562C1238DEA /* Accessibility */,
+				944743098C3257D0FBDE00C5 /* Components */,
+				C06528D7160A12369F1C61A3 /* Icons */,
+				A61CAA3D366CA300DF0BB341 /* Typography */,
+				ED62761ECDC7BB2C9D10280B /* AppColors.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		FDEA89C0AD5DE0BD9A0B11DA /* Phrases */ = {
+			isa = PBXGroup;
+			children = (
+				C10715638D4BEDDA430DEF0E /* phrases.json */,
+			);
+			path = Phrases;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		156F5AFFBD08558DCF9D5001 /* JapanTravelAssistant */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ED2B488013717A05B2E0B5CA /* Build configuration list for PBXNativeTarget "JapanTravelAssistant" */;
+			buildPhases = (
+				E216CBFC4D93656AA0AE9B5D /* Sources */,
+				597708CF57252B9150C94CDD /* Resources */,
+				0CE37F8ADC5438AB18AA49BF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JapanTravelAssistant;
+			packageProductDependencies = (
+				603C64AED0707FCB76BDEC77 /* Supabase */,
+			);
+			productName = JapanTravelAssistant;
+			productReference = 4E98E362393899A89A1D6D8D /* JapanTravelAssistant.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4348BD7B6D03F51B88C031A6 /* JapanTravelAssistantTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E61B4A37A5F4B9A41637294B /* Build configuration list for PBXNativeTarget "JapanTravelAssistantTests" */;
+			buildPhases = (
+				EB4DA931809A1EB70153BC44 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				39AB39D35AC76A91C02B5A7E /* PBXTargetDependency */,
+			);
+			name = JapanTravelAssistantTests;
+			packageProductDependencies = (
+			);
+			productName = JapanTravelAssistantTests;
+			productReference = 44F50B5B3426E610662E8779 /* JapanTravelAssistantTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1D5131368151F7E9E3CC0EAA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					156F5AFFBD08558DCF9D5001 = {
+						ProvisioningStyle = Automatic;
+					};
+					4348BD7B6D03F51B88C031A6 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = FFC6C8547EF0FB6ECCB9BE00 /* Build configuration list for PBXProject "JapanTravelAssistant" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = ED2CAA401B3DDD212F309369;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BF5734B25894FF8CF520DD45 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6BA1E046FEC73453C9E7EC52 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				156F5AFFBD08558DCF9D5001 /* JapanTravelAssistant */,
+				4348BD7B6D03F51B88C031A6 /* JapanTravelAssistantTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		597708CF57252B9150C94CDD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD53CC9BF17830B8FC3D05B0 /* Assets.xcassets in Resources */,
+				7AFE8F3B77ABD9DDA49AEAD9 /* menu-glossary.json in Resources */,
+				B756BC40BEFF4B7323AFE51C /* phrases.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E216CBFC4D93656AA0AE9B5D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB550ECBA0E1DF1AB97C09D3 /* AIService.swift in Sources */,
+				3612096C3B36506B084A92DA /* AVSpeechService.swift in Sources */,
+				7FF3BFAABCCF9CBEC18C5DF4 /* AccessibilityMetrics.swift in Sources */,
+				E0754FD948516A80B00BC193 /* AppColors.swift in Sources */,
+				4CDC1A649E06EBC23A03BD95 /* AppConfig.swift in Sources */,
+				9C7414E809C3ECAF5E33B4FA /* AppDependencies.swift in Sources */,
+				98952A67F95B886CF6F84E34 /* AppIcon.swift in Sources */,
+				F900B287A17CE3CF14A380B4 /* AppRouter.swift in Sources */,
+				7093C9E00312A3988407675B /* AppTypography.swift in Sources */,
+				91D55530AF20B6BE70738082 /* AppleTranslation.swift in Sources */,
+				10B5911BB2E50997D7E02CF2 /* CameraPicker.swift in Sources */,
+				1925A27BB6D4BF50AC9E3261 /* CategoryChipBar.swift in Sources */,
+				CF657716D1517B229581CE01 /* ChatGPTImportView.swift in Sources */,
+				576E7ED3FE89DAB332A5CFC4 /* ChatGPTMenuPrompt.swift in Sources */,
+				FCED49E331345FB1D96BFDBF /* ComingSoonView.swift in Sources */,
+				B62AA756F391AFB3AD6876B5 /* CommunicationCategoriesView.swift in Sources */,
+				FA5236E364A98F790664D324 /* CreateRoomView.swift in Sources */,
+				E72A91C96DB20AEF7A3CAC1E /* DebugLaunchOptions.swift in Sources */,
+				F4362A987F2C56529BD53263 /* DebugSettings.swift in Sources */,
+				D2F1598E635088A029A2DF1E /* DeepLinkParser.swift in Sources */,
+				5ECCFBA368573A06867A32E3 /* DiningRoom.swift in Sources */,
+				F8CD1586D81CB6E9D12A5AA8 /* DiningSessionStore.swift in Sources */,
+				70E0F40CE490033CB9D31F86 /* DocumentCameraScanner.swift in Sources */,
+				826944F176CEC57B3BBDE597 /* ElderlyNavigationBar.swift in Sources */,
+				D04AA532AF349180ACBD6FAC /* EmergencyView.swift in Sources */,
+				2176BCFC7219CC7C5ADC0169 /* ErrorBanner.swift in Sources */,
+				3E0BBA9023D31AAB8D60F8A4 /* FindProductView.swift in Sources */,
+				31DDACF6D8FBEC00FD20CC46 /* HomeView.swift in Sources */,
+				90DE9C1FFB6C0199A3394F94 /* InMemoryMenuRepository.swift in Sources */,
+				FAD34A86E71BCB51C1DF4816 /* InMemoryOrderRepository.swift in Sources */,
+				FAE6EAEE0DA9234B94DD044A /* InMemoryRoomRepository.swift in Sources */,
+				A9DD01A4A04E7D8909760745 /* JapanTravelAssistantApp.swift in Sources */,
+				A1A3BE531575D37B7DC2451D /* JapanesePhraseCard.swift in Sources */,
+				9AF7EBF8147DA696D75049BF /* JapaneseReading.swift in Sources */,
+				519C2A04B0B35D99C05FECA3 /* JoinRoomView.swift in Sources */,
+				96C6519BC423F460F244D927 /* KanjiNumberParser.swift in Sources */,
+				9D27986B28961F890A94DDD4 /* LargeActionCard.swift in Sources */,
+				B3516F8FF6C922A71A1ACC0B /* LiveTextOCRService.swift in Sources */,
+				A0D192E99108801B7AA98656 /* LocalUserIdentity.swift in Sources */,
+				4862DACF678FB83FD0A1FE5E /* Menu.swift in Sources */,
+				462968206EDDAA0CCBD6312D /* MenuCandidate.swift in Sources */,
+				43B0FBD9A3F1256D653B5786 /* MenuDraft.swift in Sources */,
+				0C5D781CAABB735954156797 /* MenuDraftStore.swift in Sources */,
+				75863E92F33A3CCEF1E448B8 /* MenuGlossary.swift in Sources */,
+				1C3572D492FFB10E6856A2BF /* MenuImportParser.swift in Sources */,
+				8C085ECD043B09346FE6D87C /* MenuItemCard.swift in Sources */,
+				6A756BB2C76E1652E289BE7E /* MenuItemEditorView.swift in Sources */,
+				520B9B5EAF05ADCC13C0F0DE /* MenuItemOption.swift in Sources */,
+				B6D87AFE1272A35869554960 /* MenuLayoutAnalyzer.swift in Sources */,
+				62DF184FC003FFF9F34CD802 /* MenuRecognitionService.swift in Sources */,
+				46F3D4D52355E9197E9CDD7F /* MenuRepository.swift in Sources */,
+				0E32B221282DBE165578B7E0 /* MenuReviewView.swift in Sources */,
+				7B3ACD6227D338D35C7CFFC3 /* MenuScanView.swift in Sources */,
+				777256EE2F02C46EC07C0315 /* MenuScanViewModel.swift in Sources */,
+				C85DEA81F5DABDDBD5BCF6A7 /* MenuSelection.swift in Sources */,
+				431821E798B7CFE1E8F6A77D /* MenuTranscriptParser.swift in Sources */,
+				0779BF48619F1000C8AF578C /* NavigationService.swift in Sources */,
+				335EDF3ADB5519B16C09C78F /* OCRService.swift in Sources */,
+				4ABD092FE658F03FF762172B /* ObserverRegistry.swift in Sources */,
+				B174B3AB13389C66DB455486 /* OptionPickerSheet.swift in Sources */,
+				9C7CB9AAE3DF78448FD47404 /* OrderRepository.swift in Sources */,
+				B3CF4207B76E29A408BE398B /* OrderSummaryView.swift in Sources */,
+				FAE2A48C6D9F62FB9FB91DE1 /* Phrase.swift in Sources */,
+				6CF8BC7B852D1FE9ADC0217B /* PhraseListView.swift in Sources */,
+				86F58E79E13D4E59E5544B7D /* PhraseProvider.swift in Sources */,
+				3F93FE32E50C5296F92DD020 /* Place.swift in Sources */,
+				EE20DC729B24CD9E4E6D660E /* PlacesView.swift in Sources */,
+				8B976A955195296EF710AA25 /* PriceFormatter.swift in Sources */,
+				5984EB000DDFA0F9E30E860A /* PriceParser.swift in Sources */,
+				9D1072C02B1A46A3D4E45629 /* PrimaryButton.swift in Sources */,
+				DCC2389D6551D07EE5F1F4AD /* QRCodeGenerator.swift in Sources */,
+				0C5FDC9C00565D16C627B4BD /* QRCodeScannerView.swift in Sources */,
+				41621EE75FFAE326E5764A4F /* QuantityStepper.swift in Sources */,
+				109997B5DB8A065B6F0C48BE /* RecognizedTextBlock.swift in Sources */,
+				EA496EE3EA3787022D78D602 /* RestaurantHubView.swift in Sources */,
+				DC76C9E05FBF9A23E7AFA786 /* RoomCodeGenerator.swift in Sources */,
+				C0179BB973A09A1C82E3A66D /* RoomMember.swift in Sources */,
+				F37FCE43AF7A17C90B5C53AE /* RoomMemberAvatar.swift in Sources */,
+				EE7089EC86E72FF3DFF140AC /* RoomQRCodeSheet.swift in Sources */,
+				C0AD5C7CFAB58D754916FD16 /* RoomRepository.swift in Sources */,
+				EC9D54C91D52554E53256CBB /* RoomView.swift in Sources */,
+				97C0F5F0659C319FA9372C53 /* RoomViewModel.swift in Sources */,
+				85011928ED93AB5AB5E85B38 /* RootView.swift in Sources */,
+				36DDB7F33E1B42E631787373 /* ScanRecord.swift in Sources */,
+				AD23CB7EA6F8716539F083DE /* SpeechService.swift in Sources */,
+				6BD59D99C718DB1D2AE8A9F3 /* StaffDisplayView.swift in Sources */,
+				84C75DBB15AE38C55DA0B5A2 /* String+Extensions.swift in Sources */,
+				F802260D9FE3FD6F9211CF1E /* SupabaseMenuRepository.swift in Sources */,
+				2207C75B671CE2943D37605F /* SupabaseOrderRepository.swift in Sources */,
+				58715542F4656700EA7B87CE /* SupabaseRealtimeObserver.swift in Sources */,
+				85A0013989C8BB10434AFAA1 /* SupabaseRoomRepository.swift in Sources */,
+				1031ADB1C531354A2AFC01EC /* SupabaseService.swift in Sources */,
+				6685753D3289CE08DBCE559A /* Trip.swift in Sources */,
+				8AFAD66742C16497A9DCEA98 /* UIImage+Extensions.swift in Sources */,
+				2C70EEDAB6946C6FEE58B692 /* UnderstandHubView.swift in Sources */,
+				FB315A57BE17072D1C1B5A78 /* UserFacingError.swift in Sources */,
+				A3BF6FA23961D75A76F1801F /* VisionOCRService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB4DA931809A1EB70153BC44 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B7E77B3AC2D484FF51407FA1 /* DeepLinkParserTests.swift in Sources */,
+				D37E9A214DD21D5B068C706D /* ImportSectionRobustnessTests.swift in Sources */,
+				CF2EC93D34EC3CCE2EC6C143 /* JapaneseReadingTests.swift in Sources */,
+				1B94AAF7D5F3A38664B0EBD3 /* MenuImportTests.swift in Sources */,
+				9F300A7534E3C4BAAD98C5F3 /* MenuOptionTests.swift in Sources */,
+				B306ECB5081871250FBDDCAB /* MenuScanTests.swift in Sources */,
+				A40FD289DCF08669D8F1D915 /* MenuSectionTests.swift in Sources */,
+				9DD0649FAD554661F2AE297A /* MenuTranscriptParserTests.swift in Sources */,
+				C9A5BC6168C26711A71A1F0B /* OrderSummaryTests.swift in Sources */,
+				9476200FE13DCD5B8EC624FE /* PhraseProviderTests.swift in Sources */,
+				CC3EA39C1922B902B2A2CB28 /* PriceParserTests.swift in Sources */,
+				AA559F56CF33334A0E09D052 /* RoomCodeGeneratorTests.swift in Sources */,
+				B1D471CE5083FA827C759D51 /* RoomViewModelTests.swift in Sources */,
+				237562E009A6A3FD78489FD7 /* SupabaseIntegrationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		39AB39D35AC76A91C02B5A7E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 156F5AFFBD08558DCF9D5001 /* JapanTravelAssistant */;
+			targetProxy = 154E595A87C98681F27C5517 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		022FFCB2A592901012FE33C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9C8D1A2BCB0F7EA721C8CC3 /* Release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		3D05023C36890FE4B40AE5C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = JapanTravelAssistant/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.linzihao.japantravelassistant;
+				PRODUCT_NAME = JapanTravelAssistant;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		844D0C11EA0B13377B0AC05B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1150047710163FADA166FD41 /* Debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CEBAA427FEFB73F5D7BFF17B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.linzihao.japantravelassistant.tests;
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JapanTravelAssistant.app/JapanTravelAssistant";
+			};
+			name = Release;
+		};
+		E33BBBEA8C6F5B426D712C00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = JapanTravelAssistant/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.linzihao.japantravelassistant;
+				PRODUCT_NAME = JapanTravelAssistant;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		EDA06F5BD25309399B1F5FC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.linzihao.japantravelassistant.tests;
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JapanTravelAssistant.app/JapanTravelAssistant";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E61B4A37A5F4B9A41637294B /* Build configuration list for PBXNativeTarget "JapanTravelAssistantTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EDA06F5BD25309399B1F5FC6 /* Debug */,
+				CEBAA427FEFB73F5D7BFF17B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		ED2B488013717A05B2E0B5CA /* Build configuration list for PBXNativeTarget "JapanTravelAssistant" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E33BBBEA8C6F5B426D712C00 /* Debug */,
+				3D05023C36890FE4B40AE5C5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FFC6C8547EF0FB6ECCB9BE00 /* Build configuration list for PBXProject "JapanTravelAssistant" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				844D0C11EA0B13377B0AC05B /* Debug */,
+				022FFCB2A592901012FE33C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BF5734B25894FF8CF520DD45 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.29.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		603C64AED0707FCB76BDEC77 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BF5734B25894FF8CF520DD45 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 1D5131368151F7E9E3CC0EAA /* Project object */;
+}

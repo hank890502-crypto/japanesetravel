@@ -1,0 +1,70 @@
+import Foundation
+
+/// 給使用者看的錯誤：一律白話中文。View 只顯示 title / message，不顯示技術細節。
+struct UserFacingError: LocalizedError, Hashable, Sendable {
+    var title: String
+    var message: String
+    var isRetryable: Bool
+
+    init(title: String, message: String, isRetryable: Bool = true) {
+        self.title = title
+        self.message = message
+        self.isRetryable = isRetryable
+    }
+
+    var errorDescription: String? { message }
+
+    // MARK: - 常用預設
+
+    static let networkUnavailable = UserFacingError(
+        title: "沒有網路",
+        message: "目前連不上網路，請確認手機的網路連線後再試一次。"
+    )
+
+    static let syncUnavailable = UserFacingError(
+        title: "無法同步",
+        message: "目前無法同步其他人的點餐內容，請確認網路連線。"
+    )
+
+    static let collaborationNotConfigured = UserFacingError(
+        title: "多人點餐尚未設定",
+        message: "這個版本還沒有連上多人點餐的伺服器，暫時只能自己一個人使用菜單。",
+        isRetryable: false
+    )
+
+    static let aiNotEnabled = UserFacingError(
+        title: "AI 分析目前尚未啟用",
+        message: "你仍然可以自己輸入或修改內容。",
+        isRetryable: false
+    )
+
+    static let roomNotFound = UserFacingError(
+        title: "找不到這個房間",
+        message: "請確認代碼有沒有打錯，或請家人再分享一次。"
+    )
+
+    static let cameraUnavailable = UserFacingError(
+        title: "無法使用相機",
+        message: "請到「設定」允許這個 App 使用相機，或改從相簿選照片。",
+        isRetryable: false
+    )
+
+    static let unknown = UserFacingError(
+        title: "發生了一點問題",
+        message: "請再試一次。如果還是不行，請關掉 App 重新打開。"
+    )
+
+    /// 任何 Error 轉成白話錯誤。已經是 UserFacingError 就原樣回傳。
+    static func from(_ error: Error) -> UserFacingError {
+        if let userFacing = error as? UserFacingError { return userFacing }
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotConnectToHost, .cannotFindHost:
+                return .networkUnavailable
+            default:
+                break
+            }
+        }
+        return .unknown
+    }
+}

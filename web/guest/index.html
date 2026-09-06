@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>一起點餐</title>
+<style>
+  :root { color-scheme: light; --accent:#0a7ad9; --bg:#f2f2f7; --card:#fff; --text:#111; --muted:#6b6b70; --line:#d9d9de; --red:#d0342c; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif; font-size:19px; line-height:1.4; }
+  main { max-width:720px; margin:0 auto; padding:20px 20px 140px; }
+  h1 { font-size:34px; margin:12px 0 8px; }
+  h2 { font-size:24px; margin:20px 0 8px; }
+  p.muted { color:var(--muted); margin:6px 0 14px; }
+  .card { background:var(--card); border-radius:20px; padding:18px 20px; margin:12px 0; }
+  label { display:block; color:var(--muted); margin:14px 0 6px; }
+  input { width:100%; font-size:26px; padding:14px 16px; border:2px solid var(--line); border-radius:16px; background:#fff; }
+  input.code { font-family:ui-monospace,Menlo,monospace; font-weight:700; text-align:center; letter-spacing:.2em; text-transform:uppercase; }
+  .btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:60px; border:0; border-radius:16px; font-size:22px; font-weight:700; cursor:pointer; margin:12px 0; }
+  .btn.primary { background:var(--accent); color:#fff; }
+  .btn.secondary { background:#fff; color:var(--accent); border:2px solid var(--accent); }
+  .btn.ghost { background:transparent; color:var(--muted); font-weight:500; font-size:18px; }
+  .btn:disabled { opacity:.5; }
+  .error { background:#fde8e6; border:1px solid #f0b3ae; border-radius:16px; padding:14px 16px; margin:12px 0; }
+  .error b { display:block; font-size:22px; }
+  .members { display:flex; gap:12px; overflow-x:auto; padding:4px 0 8px; }
+  .member { text-align:center; min-width:64px; font-size:14px; font-weight:600; }
+  .member .dot { width:52px; height:52px; border-radius:50%; margin:0 auto 4px; color:#fff; font-size:22px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .chips { position:sticky; top:0; background:var(--bg); display:flex; gap:10px; overflow-x:auto; padding:10px 0; z-index:2; }
+  .chip { flex:0 0 auto; min-height:56px; padding:6px 16px; border-radius:999px; border:1px solid var(--line); background:#fff; font-size:20px; font-weight:700; cursor:pointer; }
+  .chip small { display:block; font-size:13px; font-weight:600; opacity:.85; }
+  .chip.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .section-title { font-size:24px; font-weight:700; margin:16px 4px 4px; }
+  .section-title small { display:block; font-size:18px; color:var(--muted); font-weight:500; }
+  .item { display:flex; align-items:center; gap:12px; }
+  .item .info { flex:1; min-width:0; }
+  .item .ja { font-size:22px; font-weight:600; }
+  .item .zh { color:var(--muted); }
+  .item .price { font-weight:700; }
+  .item .opts { color:var(--accent); font-size:16px; }
+  .stepper { display:flex; align-items:center; gap:4px; }
+  .stepper button { width:52px; height:52px; border-radius:50%; border:0; background:rgba(10,122,217,.12); color:var(--accent); font-size:26px; font-weight:700; cursor:pointer; }
+  .stepper .n { min-width:44px; text-align:center; font-size:28px; font-weight:700; }
+  .add { min-width:96px; min-height:52px; border-radius:999px; border:0; background:var(--accent); color:#fff; font-size:20px; font-weight:700; cursor:pointer; }
+  .mine { background:rgba(10,122,217,.08); border-radius:16px; padding:10px 16px; margin-top:8px; display:flex; align-items:center; gap:12px; }
+  .mine .info { flex:1; }
+  .bar { position:fixed; left:0; right:0; bottom:0; background:rgba(255,255,255,.97); border-top:1px solid var(--line); padding:12px 20px calc(12px + env(safe-area-inset-bottom)); }
+  .bar .inner { max-width:720px; margin:0 auto; }
+  .bar .row { display:flex; justify-content:space-between; align-items:baseline; font-size:22px; font-weight:700; }
+  .bar .row.small { font-size:17px; color:var(--muted); font-weight:500; }
+  .modal { position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:flex-end; z-index:10; }
+  .modal .sheet { background:var(--bg); width:100%; max-height:85vh; overflow:auto; border-radius:24px 24px 0 0; padding:20px; }
+  .choice { display:flex; align-items:center; gap:12px; background:#fff; border-radius:16px; padding:14px 16px; margin:8px 0; border:2px solid transparent; cursor:pointer; }
+  .choice.on { border-color:var(--accent); }
+  .choice .name { flex:1; font-weight:600; }
+  .summary-line { display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .summary-line .who { color:var(--muted); font-size:16px; }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+<main id="app">
+  <section id="join">
+    <h1>一起點餐</h1>
+    <p class="muted">輸入家人給的房間代碼，就可以一起點。</p>
+    <div id="join-error" class="error hidden"></div>
+    <div class="card">
+      <label for="code">房間代碼</label>
+      <input id="code" class="code" maxlength="8" autocomplete="off" autocapitalize="characters" placeholder="例如 A8F3K2">
+      <label for="name">我的稱呼（家人看到的名字）</label>
+      <input id="name" placeholder="例如：媽媽、小美">
+      <button id="join-btn" class="btn primary">加入</button>
+    </div>
+    <a id="open-app" class="btn secondary" href="#">有裝 App？打開 App</a>
+    <p class="muted" style="font-size:16px">沒有 App 也沒關係，直接在這裡點就好。</p>
+  </section>
+
+  <section id="room" class="hidden">
+    <h1 id="room-name"></h1>
+    <p class="muted">點「+」就是我要一份。每個人各自點，房主會看到全部。</p>
+    <div id="room-error" class="error hidden"></div>
+    <div id="members" class="members"></div>
+    <div id="chips" class="chips"></div>
+    <div id="menu"></div>
+    <button id="leave" class="btn ghost">離開這個房間</button>
+  </section>
+
+  <section id="summary" class="hidden">
+    <button id="back" class="btn ghost" style="justify-content:flex-start">‹ 回到菜單</button>
+    <h1>本桌訂單</h1>
+    <div id="summary-list" class="card"></div>
+  </section>
+</main>
+
+<div id="bar" class="bar hidden"><div class="inner">
+  <div class="row"><span id="bar-total">總共 0 份</span><span id="bar-price"></span></div>
+  <div class="row small"><span id="bar-mine"></span><span id="bar-mine-price"></span></div>
+  <button id="show-summary" class="btn primary" style="margin:8px 0 0">本桌訂單</button>
+</div></div>
+
+<div id="modal" class="modal hidden"><div class="sheet">
+  <button id="modal-cancel" class="btn ghost" style="justify-content:flex-start">取消</button>
+  <h2 id="modal-title"></h2>
+  <div id="modal-groups"></div>
+  <button id="modal-add" class="btn primary">加一份</button>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

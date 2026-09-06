@@ -1,0 +1,28 @@
+# Secrets（絕對不進 Git）
+Config/Secrets.xcconfig
+*.p12
+*.mobileprovision
+
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+build/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.build/
+.swiftpm/
+
+# XcodeGen 產生的專案一起 commit（clone 下來直接用 Xcode 開）；改了 project.yml 記得重跑 xcodegen generate
+
+# macOS
+.DS_Store
+
+# Web Guest 的 config.js 含的是「公開」金鑰（publishable key），本來就會送到每個訪客的瀏覽器，所以可以進 Git。
+
+# 實拍菜單照片（個人照片，不上傳）；範例圖保留
+samples/*
+!samples/example-*.png

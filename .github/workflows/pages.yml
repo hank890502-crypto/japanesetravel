@@ -1,0 +1,30 @@
+# 把 web/guest 部署到 GitHub Pages。每次 push 到 main 都會自動更新。
+name: Deploy Web Guest to GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths: ["web/guest/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true   # 第一次自動啟用 GitHub Pages，不用手動到 Settings 開
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/guest
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,35 @@
+import Foundation
+
+/// SF Symbol 名稱集中管理，避免散落在各處打錯字。
+enum AppIcon {
+    static let talk = "bubble.left.and.bubble.right.fill"
+    static let understand = "camera.viewfinder"
+    static let go = "map.fill"
+    static let help = "sos"
+
+    static let back = "chevron.left"
+    static let close = "xmark"
+    static let forward = "chevron.right"
+    static let speak = "speaker.wave.2.fill"
+    static let showToStaff = "rectangle.portrait.and.arrow.forward"
+    static let phone = "phone.fill"
+    static let edit = "pencil.circle.fill"
+    static let add = "plus.circle.fill"
+    static let delete = "trash.fill"
+    static let check = "checkmark.circle.fill"
+    static let image = "photo.fill"
+    static let translate = "character.book.closed.fill"
+    static let copy = "doc.on.doc.fill"
+    static let paste = "doc.on.clipboard.fill"
+    static let sparkles = "sparkles"
+    static let openApp = "arrow.up.forward.app.fill"
+    static let camera = "camera.fill"
+    static let photoLibrary = "photo.on.rectangle"
+    static let qrCode = "qrcode"
+    static let joinRoom = "person.2.fill"
+    static let restaurant = "fork.knife"
+    static let shopping = "bag.fill"
+    static let warning = "exclamationmark.triangle.fill"
+    static let retry = "arrow.clockwise"
+    static let comingSoon = "hammer.fill"
+}

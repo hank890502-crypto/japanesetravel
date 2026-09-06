@@ -1,0 +1,14 @@
+// 所有 configuration 共用的設定
+IPHONEOS_DEPLOYMENT_TARGET = 17.0
+SWIFT_VERSION = 5.0
+SWIFT_STRICT_CONCURRENCY = complete
+TARGETED_DEVICE_FAMILY = 1,2
+
+// 預設空值：沒有 Secrets.xcconfig 時 App 仍可啟動（多人點餐功能顯示「尚未設定」）
+SUPABASE_URL =
+SUPABASE_ANON_KEY =
+// Web Guest 網頁網址（選填）。有填時 QR Code 與分享會用 https 連結，內建相機掃也能開。
+WEB_GUEST_URL =
+
+// 若存在 Secrets.xcconfig 則覆蓋上面兩個值（? 表示檔案不存在也不會報錯）
+#include? "Secrets.xcconfig"
