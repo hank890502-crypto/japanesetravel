@@ -41,6 +41,8 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>需要使用相機來拍攝菜單、商品和價牌。</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>用來讓「找地點」的結果優先顯示你附近的地方。不會記錄你的位置。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要讀取相簿，讓你選擇菜單或商品的照片。</string>
 	<key>SUPABASE_ANON_KEY</key>

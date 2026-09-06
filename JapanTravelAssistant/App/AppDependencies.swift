@@ -12,6 +12,8 @@ struct AppDependencies {
     let speech: any SpeechService
     let phrases: any PhraseProvider
     let navigation: any NavigationService
+    let placeSearch: any PlaceSearchService
+    let location: any CurrentLocationProvider
     let supabase: any SupabaseService
     let roomRepository: any RoomRepository
     let menuRepository: any MenuRepository
@@ -35,6 +37,8 @@ struct AppDependencies {
                 speech: AVSpeechService(),
                 phrases: BundledPhraseProvider(),
                 navigation: LiveNavigationService(),
+                placeSearch: LocalPlaceSearchService(),
+                location: LiveCurrentLocationProvider(),
                 supabase: supabase,
                 roomRepository: SupabaseRoomRepository(service: supabase),
                 menuRepository: SupabaseMenuRepository(service: supabase),
@@ -50,6 +54,8 @@ struct AppDependencies {
             speech: AVSpeechService(),
             phrases: BundledPhraseProvider(),
             navigation: LiveNavigationService(),
+            placeSearch: LocalPlaceSearchService(),
+            location: LiveCurrentLocationProvider(),
             supabase: UnconfiguredSupabaseService(),
             roomRepository: InMemoryRoomRepository(currentUserId: localUserId),
             menuRepository: InMemoryMenuRepository(),
@@ -67,6 +73,8 @@ struct AppDependencies {
         speech: NoopSpeechService(),
         phrases: BundledPhraseProvider(),
         navigation: MockNavigationService(),
+        placeSearch: MockPlaceSearchService(),
+        location: MockCurrentLocationProvider(),
         supabase: UnconfiguredSupabaseService(),
         roomRepository: InMemoryRoomRepository(),
         menuRepository: InMemoryMenuRepository(),

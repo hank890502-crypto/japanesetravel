@@ -52,6 +52,12 @@ struct RouteDestinationView: View {
             FindProductView()
         case .places:
             PlacesView()
+        case .placeDetail(let id):
+            PlaceDetailView(placeId: id)
+        case .placeSearch:
+            PlaceSearchView()
+        case .placeEditor(let id):
+            PlaceEditorView(placeId: id)
         case .emergency:
             EmergencyView()
         case .settings:
@@ -66,5 +72,6 @@ struct RouteDestinationView: View {
         .environment(MenuDraftStore(directory: nil))
         .environment(DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!))
         .environment(SettingsStore(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(PlaceStore(directory: nil))
         .environment(\.dependencies, .preview)
 }

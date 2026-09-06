@@ -7,6 +7,7 @@ struct JapanTravelAssistantApp: App {
     @State private var menuDraftStore = MenuDraftStore()
     @State private var sessionStore = DiningSessionStore()
     @State private var settingsStore: SettingsStore
+    @State private var placeStore = PlaceStore()
 
     init() {
         let deps = AppDependencies.live(config: DebugLaunchOptions.forcesInMemory() ? .empty : AppConfig.fromBundle())
@@ -30,6 +31,11 @@ struct JapanTravelAssistantApp: App {
                 .environment(menuDraftStore)
                 .environment(sessionStore)
                 .environment(settingsStore)
+                .environment(placeStore)
+                .task {
+                    DebugLaunchOptions.seedPlacesIfRequested(into: placeStore)
+                    DebugLaunchOptions.openPlaceDetailIfRequested(store: placeStore, router: router)
+                }
                 .task { await DebugLaunchOptions.seedRoomIfRequested(dependencies: dependencies, sessionStore: sessionStore, router: router) }
                 .onOpenURL { url in
                     router.handle(url)

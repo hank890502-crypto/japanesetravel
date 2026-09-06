@@ -3,6 +3,26 @@ import Foundation
 /// 只在 DEBUG 生效的啟動參數，讓自動化截圖／測試可以直接打開某個畫面。
 /// 用法：xcrun simctl launch <udid> com.linzihao.japantravelassistant -openRoute emergency
 enum DebugLaunchOptions {
+    /// -openRoute places：放幾個示範地點方便截圖。
+    @MainActor
+    static func seedPlacesIfRequested(into store: PlaceStore, arguments: [String] = CommandLine.arguments) {
+        #if DEBUG
+        guard let index = arguments.firstIndex(of: "-openRoute"), index + 1 < arguments.count, ["places", "placeDetail"].contains(arguments[index + 1]), store.places.isEmpty else { return }
+        store.add(Place(name: "酒津屋", address: "〒460-0008 愛知県名古屋市中区栄3丁目", latitude: 35.1681, longitude: 136.9086, category: .restaurant))
+        store.add(Place(name: "名古屋駅", address: "〒450-0002 愛知県名古屋市中村区名駅1丁目", latitude: 35.1709, longitude: 136.8815, category: .station))
+        store.add(Place(name: "我們的飯店", address: "〒450-0002 愛知県名古屋市中村区名駅4丁目", latitude: 35.1706, longitude: 136.8853, category: .hotel, phone: "+81-52-000-0000", note: "退房 11:00"))
+        #endif
+    }
+
+    /// -openRoute placeDetail：開第一個示範地點的頁面。
+    @MainActor
+    static func openPlaceDetailIfRequested(store: PlaceStore, router: AppRouter, arguments: [String] = CommandLine.arguments) {
+        #if DEBUG
+        guard let index = arguments.firstIndex(of: "-openRoute"), index + 1 < arguments.count, arguments[index + 1] == "placeDetail", let first = store.places.first else { return }
+        router.path = [.places, .placeDetail(first.id)]
+        #endif
+    }
+
     /// -openRoute room / orderSummary 需要單機的示範資料，不碰真正的 Supabase。
     static func forcesInMemory(arguments: [String] = CommandLine.arguments) -> Bool {
         #if DEBUG

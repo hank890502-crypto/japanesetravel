@@ -15,6 +15,9 @@ enum Route: Hashable {
     case joinRoom(code: String?)
     case shoppingFindProduct
     case places
+    case placeDetail(UUID)
+    case placeSearch
+    case placeEditor(UUID?)
     case emergency
     case settings
 }

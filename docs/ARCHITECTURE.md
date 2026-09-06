@@ -374,3 +374,11 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 - 設定頁（首頁右上「設定」）：AI 幫手、預設地圖 App、多人點餐與網頁版狀態。
 - 接入點：檢查菜單「AI 幫我整理菜單」（結果走 `MenuDraftStore.merge`）、找商品「AI 幫我認這個商品」。未啟用時顯示 `AIUnavailableBanner`（「AI 分析目前尚未啟用」+ 前往設定）。
 - 伺服器範本：`supabase/functions/ai/index.ts`（Supabase Edge Function，預設 OpenAI，金鑰用 `supabase secrets set`）。
+
+## 附錄 H：M6 我要去一個地方
+
+- `Place` 加上 `category`（飯店／車站／餐廳／商店／景點／其他）、`phone`、`note`；`PlaceStore` 存 Documents/places.json，最近使用的排最前。
+- `PlaceSearchService`：`LocalPlaceSearchService` 用 MapKit `MKLocalSearch`（免費、免金鑰），沒有定位時以日本全境搜尋；有定位時偏向附近。
+  地址組成日本習慣順序（〒郵遞區號 都道府縣 市區町村 町名番地）。`CurrentLocationProvider` 一次性取位置，沒權限就略過。
+- 畫面：`PlacesView`（列表 + 新增）、`PlaceSearchView`（搜尋 → 點一下存）、`PlaceEditorView`（自己輸入名稱／日文地址／類型／備註；改了地址會清掉舊座標，導航時重新以地址查）、
+  `PlaceDetailView`（帶我去＝設定的地圖 App、地址給司機看＝StaffDisplay「ここまでお願いします」、打電話、修改、刪除）。
