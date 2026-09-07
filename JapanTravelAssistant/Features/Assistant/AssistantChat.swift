@@ -40,6 +40,15 @@ final class AssistantChat {
     #endif
     private var _session: Any?
 
+    /// 模型偶爾還是會用 markdown，顯示前拿掉符號。
+    static func plainText(_ text: String) -> String {
+        text
+            .replacingOccurrences(of: #"\*\*|__|`"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"(?m)^\s*#{1,6}\s*"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"(?m)^\s*[-*•]\s+"#, with: "・", options: .regularExpression)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     func reset() {
         messages = []
         _session = nil
@@ -63,13 +72,13 @@ final class AssistantChat {
             }
             do {
                 let response = try await session!.respond(to: question)
-                messages.append(ChatMessage(role: .assistant, text: response.content.trimmingCharacters(in: .whitespacesAndNewlines)))
+                messages.append(ChatMessage(role: .assistant, text: Self.plainText(response.content)))
             } catch let error as LanguageModelSession.GenerationError {
                 if case .exceededContextWindowSize = error {
                     // 對話太長：重開一段，保留畫面上的紀錄
                     session = LanguageModelSession(instructions: AppleIntelligence.travelAssistantInstructions)
                     if let retry = try? await session!.respond(to: question) {
-                        messages.append(ChatMessage(role: .assistant, text: retry.content))
+                        messages.append(ChatMessage(role: .assistant, text: Self.plainText(retry.content)))
                         return
                     }
                 }

@@ -98,6 +98,7 @@
 		AA559F56CF33334A0E09D052 /* RoomCodeGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC7DED5B3F04AE8B0BCAD57 /* RoomCodeGeneratorTests.swift */; };
 		AB550ECBA0E1DF1AB97C09D3 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2016FCAB21976AECEB5DF5CB /* AIService.swift */; };
 		AD23CB7EA6F8716539F083DE /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2803FDECA72495DCABF7A2 /* SpeechService.swift */; };
+		AD420D0952E98DF217F97458 /* AppleIntelligenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD9046B41F13F56F7D315CD /* AppleIntelligenceTests.swift */; };
 		B086C373870CE0A8C906A4F9 /* PlaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53B6F3587E947696F7A726D6 /* PlaceStore.swift */; };
 		B174B3AB13389C66DB455486 /* OptionPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A24FCF8E7928D56CEFF1E5 /* OptionPickerSheet.swift */; };
 		B1D471CE5083FA827C759D51 /* RoomViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8224688604247F8E38AC94 /* RoomViewModelTests.swift */; };
@@ -225,6 +226,7 @@
 		7DA29FAB21DB9E9FCFA959A1 /* TripImportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripImportParser.swift; sourceTree = "<group>"; };
 		838B7DFC27E3EE7FD3020D06 /* QRCodeScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerView.swift; sourceTree = "<group>"; };
 		8674DAA2815120B3889EF015 /* DiningRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningRoom.swift; sourceTree = "<group>"; };
+		8CD9046B41F13F56F7D315CD /* AppleIntelligenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleIntelligenceTests.swift; sourceTree = "<group>"; };
 		8F317B39A42B094E8C891B20 /* PlaceEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceEditorView.swift; sourceTree = "<group>"; };
 		8F9575A2E6EE80FDCDDBF054 /* AssistantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantView.swift; sourceTree = "<group>"; };
 		8FB8EAECF30BF3F89DA102C8 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
@@ -568,6 +570,7 @@
 			isa = PBXGroup;
 			children = (
 				0F758B2641CCC4B89F9F16AE /* AIAdapterTests.swift */,
+				8CD9046B41F13F56F7D315CD /* AppleIntelligenceTests.swift */,
 				9E563D2D948CE78BA645AAA7 /* DeepLinkParserTests.swift */,
 				F9516AE937FE40ED5B9CE851 /* ImportSectionRobustnessTests.swift */,
 				DC33F6F68F52109A9244A5A0 /* JapaneseReadingTests.swift */,
@@ -1016,6 +1019,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A316299A15408BAF2EAA5B2 /* AIAdapterTests.swift in Sources */,
+				AD420D0952E98DF217F97458 /* AppleIntelligenceTests.swift in Sources */,
 				B7E77B3AC2D484FF51407FA1 /* DeepLinkParserTests.swift in Sources */,
 				D37E9A214DD21D5B068C706D /* ImportSectionRobustnessTests.swift in Sources */,
 				CF2EC93D34EC3CCE2EC6C143 /* JapaneseReadingTests.swift in Sources */,

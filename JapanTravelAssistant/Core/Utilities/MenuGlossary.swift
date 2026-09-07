@@ -22,6 +22,23 @@ final class MenuGlossary: Sendable {
         return MenuGlossary(entries: decoded)
     }()
 
+    /// 這段文字裡認得的詞（最長比對，依出現順序）。
+    func matches(in japanese: String) -> [(key: String, value: String)] {
+        let text = japanese.replacingOccurrences(of: " ", with: "")
+        var result: [(String, String)] = []
+        var index = text.startIndex
+        while index < text.endIndex {
+            let rest = text[index...]
+            if let key = keysByLength.first(where: { rest.hasPrefix($0) && $0.count >= 2 }), let value = entries[key] {
+                result.append((key, value))
+                index = text.index(index, offsetBy: key.count)
+            } else {
+                index = text.index(after: index)
+            }
+        }
+        return result
+    }
+
     /// 回傳中文；認得的字不到一半就回傳 nil。
     func translate(_ japanese: String, minimumCoverage: Double = 0.5) -> String? {
         let text = japanese.replacingOccurrences(of: " ", with: "")

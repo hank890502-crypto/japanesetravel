@@ -137,7 +137,7 @@ enum MenuTranscriptParser {
     }
 
     /// 常見的分類標題：不會是菜，直接進其他文字，也不會被併進品名。
-    private static let sectionHeaders: Set<String> = [
+    static let sectionHeaders: Set<String> = [
         "揚げ物", "揚物", "焼き物", "焼物", "煮物", "軽食", "単品", "一品", "一品料理", "その他",
         "ドリンク", "ソフトドリンク", "ワイン", "サワー", "焼酎", "日本酒", "ビール", "麺類", "麺", "ご飯もの", "ご飯",
         "デザート", "サラダ", "鍋", "串焼き", "串焼", "定食", "丼", "丼物",
@@ -147,7 +147,7 @@ enum MenuTranscriptParser {
         "寿司", "にぎり", "握り", "巻物", "天ぷら", "うどん", "そば", "ラーメン", "麺類", "甘味", "スイーツ", "お子様", "お子様メニュー",
     ]
 
-    private static func isSectionHeader(_ text: String) -> Bool {
+    static func isSectionHeader(_ text: String) -> Bool {
         sectionHeaders.contains(text.replacingOccurrences(of: " ", with: ""))
     }
 
