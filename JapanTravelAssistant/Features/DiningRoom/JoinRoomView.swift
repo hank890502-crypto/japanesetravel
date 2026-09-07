@@ -127,10 +127,15 @@ struct JoinRoomView: View {
             .padding(AccessibilityMetrics.screenPadding)
         }
         .scrollDismissesKeyboard(.interactively)
+        .keyboardDoneButton { focused = nil }
         .elderlyScreen(title: "加入家人的點餐")
         .onAppear {
             if let prefilledCode, code.isEmpty { code = RoomCodeGenerator.normalize(prefilledCode) }
             focused = code.isEmpty ? .code : .name
+            if DebugLaunchOptions.hasFlag("-openQRScanner") {
+                focused = nil
+                showScanner = true
+            }
         }
         .fullScreenCover(isPresented: $showScanner) {
             QRCodeScanSheet(

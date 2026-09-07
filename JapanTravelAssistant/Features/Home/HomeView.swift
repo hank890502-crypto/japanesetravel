@@ -3,6 +3,8 @@ import SwiftUI
 /// 首頁：只有四個大入口。不出現任何技術詞。
 struct HomeView: View {
     @Environment(AppRouter.self) private var router
+    /// 「我想問問題」要靠手機裡的 Apple 智慧；不能用的手機在卡片上直接說明，不要讓長輩點進去才失敗
+    private let assistantAvailable = AppleIntelligence.availability.isAvailable
 
     var body: some View {
         ScrollView {
@@ -35,11 +37,12 @@ struct HomeView: View {
                 .padding(.bottom, 8)
 
                 ForEach(HomeEntry.allCases) { entry in
+                    let unavailable = entry == .ask && !assistantAvailable
                     LargeActionCard(
                         title: entry.title,
-                        subtitle: entry.subtitle,
+                        subtitle: unavailable ? "這台手機無法使用，點進去看原因" : entry.subtitle,
                         systemImage: entry.systemImage,
-                        tint: entry.tint
+                        tint: unavailable ? AppColors.secondaryText : entry.tint
                     ) {
                         router.push(entry.route)
                     }

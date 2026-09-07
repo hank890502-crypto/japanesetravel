@@ -15,7 +15,6 @@ struct MenuReviewView: View {
     @State private var translationError: UserFacingError?
     @State private var didAutoTranslate = false
     @State private var collapsedSections: Set<String> = []
-    @State private var showAIUnavailable = false
     @State private var isAIAnalyzing = false
     @State private var aiSummary: String?
     @State private var aiError: UserFacingError?
@@ -66,7 +65,8 @@ struct MenuReviewView: View {
                     }
                 }
 
-                if !items.isEmpty || !otherLines.isEmpty {
+                // AI 沒啟用就不顯示這顆按鈕：長輩按了只會被導到自己做不了的設定頁
+                if (!items.isEmpty || !otherLines.isEmpty) && dependencies.ai.isEnabled {
                     SecondaryButton(title: isAIAnalyzing ? "AI 整理中…" : "AI 幫我整理菜單", systemImage: "wand.and.stars", isEnabled: !isAIAnalyzing) {
                         startAI()
                     }
@@ -76,9 +76,6 @@ struct MenuReviewView: View {
                         Button("取消", role: .cancel) {}
                     } message: {
                         Text("「補進」會保留你改過的名稱、中文、價格和選項，只補上空的欄位；「換成新的」會把目前這份整個換掉。")
-                    }
-                    if showAIUnavailable {
-                        AIUnavailableBanner()
                     }
                     if let aiError {
                         ErrorBanner(error: aiError) { Task { await runAI(apply: lastAIApplyMode) } }
@@ -126,6 +123,7 @@ struct MenuReviewView: View {
                 store.fillMissingReadings()
                 translate()
             }
+            if DebugLaunchOptions.hasFlag("-editFirstItem"), editingItem == nil { editingItem = items.first }
         }
         .appleTranslation(
             batch: translationBatch,
@@ -145,6 +143,7 @@ struct MenuReviewView: View {
                 item: item,
                 isNew: !items.contains { $0.id == item.id },
                 availableSections: store.draft?.sectionNames ?? [],
+                sectionChineseNames: store.draft?.sectionChineseNames ?? [:],
                 onSave: { updated in
                     var saved = updated
                     if saved.reading?.nilIfBlank == nil || items.first(where: { $0.id == saved.id })?.japaneseName != saved.japaneseName {
@@ -246,10 +245,7 @@ struct MenuReviewView: View {
 
     /// 按下「AI 幫我整理菜單」：已經有菜時先問要補進去還是換掉，不能無聲蓋掉使用者改好的內容。
     private func startAI() {
-        guard dependencies.ai.isEnabled else {
-            withAnimation { showAIUnavailable = true }
-            return
-        }
+        guard dependencies.ai.isEnabled else { return }
         if items.isEmpty {
             Task { await runAI(apply: .fillMissing) }
         } else {
@@ -259,12 +255,8 @@ struct MenuReviewView: View {
 
     /// 把目前的菜與其他文字交給 AI 重新整理（中文、分類、選項、拼音），依使用者選的方式放進草稿。
     private func runAI(apply mode: AIApplyMode) async {
-        guard dependencies.ai.isEnabled else {
-            withAnimation { showAIUnavailable = true }
-            return
-        }
+        guard dependencies.ai.isEnabled else { return }
         lastAIApplyMode = mode
-        showAIUnavailable = false
         aiSummary = nil
         aiError = nil
         isAIAnalyzing = true

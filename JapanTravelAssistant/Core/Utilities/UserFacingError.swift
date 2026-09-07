@@ -28,7 +28,7 @@ struct UserFacingError: LocalizedError, Hashable, Sendable {
 
     static let collaborationNotConfigured = UserFacingError(
         title: "多人點餐尚未設定",
-        message: "這個版本還沒有連上多人點餐的伺服器，暫時只能自己一個人使用菜單。",
+        message: "這台手機還沒有設定多人點餐，暫時只能自己一個人使用菜單。想和家人一起點，請幫你安裝 App 的人設定。",
         isRetryable: false
     )
 

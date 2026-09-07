@@ -47,7 +47,7 @@ targets:
         NSCameraUsageDescription: 需要使用相機來拍攝菜單、商品和價牌。
         NSPhotoLibraryUsageDescription: 需要讀取相簿，讓你選擇菜單或商品的照片。
         NSLocationWhenInUseUsageDescription: 用來在地圖上顯示你現在的位置，以及讓「找地點」優先顯示附近的地方。不會記錄你的位置。
-        LSApplicationQueriesSchemes: [comgooglemaps, yjcarnavi, chatgpt]
+        LSApplicationQueriesSchemes: [comgooglemaps, yjcarnavi, chatgpt, tel]
         CFBundleURLTypes:
           - CFBundleURLName: com.linzihao.japantravelassistant
             CFBundleURLSchemes: [jptravel]

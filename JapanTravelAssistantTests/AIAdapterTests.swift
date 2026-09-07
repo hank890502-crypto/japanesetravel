@@ -51,7 +51,7 @@ struct AIAdapterTests {
         settings.aiBackendURLText = "https://example.supabase.co/functions/v1/ai"
         #expect(settings.effectiveAIProvider == .remoteBackend)
         #expect(router.isEnabled)
-        #expect(router.providerName == "自己的伺服器")
+        #expect(router.providerName == AIProviderKind.remoteBackend.displayName)
 
         // 設定會存起來
         let reloaded = SettingsStore(defaults: defaults)

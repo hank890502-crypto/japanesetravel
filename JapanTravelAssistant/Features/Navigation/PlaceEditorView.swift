@@ -71,6 +71,7 @@ struct PlaceEditorView: View {
             .padding(AccessibilityMetrics.screenPadding)
         }
         .scrollDismissesKeyboard(.interactively)
+        .keyboardDoneButton { focused = nil }
         .elderlyScreen(title: isNew ? "自己輸入地點" : "修改地點")
         .onAppear {
             guard !loaded else { return }

@@ -19,7 +19,13 @@ struct ChatMessage: Identifiable, Hashable {
 final class AssistantChat {
     private(set) var messages: [ChatMessage] = []
     private(set) var isThinking = false
-    var availability: AppleIntelligence.Availability { AppleIntelligence.availability }
+    /// 測試用：固定可用／不可用，不看真正的裝置狀態。
+    private let availabilityOverride: AppleIntelligence.Availability?
+    var availability: AppleIntelligence.Availability { availabilityOverride ?? AppleIntelligence.availability }
+
+    init(availabilityOverride: AppleIntelligence.Availability? = nil) {
+        self.availabilityOverride = availabilityOverride
+    }
 
     /// 常見問題，讓長輩不用打字也能開始
     static let suggestions: [String] = [
@@ -54,19 +60,19 @@ final class AssistantChat {
         _session = nil
     }
 
-    func send(_ text: String) async {
+    /// 送出一個問題。回傳 false 表示這次沒有被接受（空白、正在想、或這台裝置不能用），
+    /// 畫面上什麼都不會多出來，呼叫端應該把文字留在輸入框。
+    @discardableResult
+    func send(_ text: String) async -> Bool {
         let question = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !question.isEmpty, !isThinking else { return }
+        // 不能用時不要再堆訊息：畫面會整頁改成說明卡
+        guard !question.isEmpty, !isThinking, availability.isAvailable else { return false }
         messages.append(ChatMessage(role: .user, text: question))
         isThinking = true
         defer { isThinking = false }
 
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
-            guard availability.isAvailable else {
-                messages.append(ChatMessage(role: .assistant, text: availability.reason ?? "目前無法使用 Apple 智慧。", isError: true))
-                return
-            }
             if session == nil {
                 session = LanguageModelSession(instructions: AppleIntelligence.travelAssistantInstructions)
             }
@@ -79,16 +85,18 @@ final class AssistantChat {
                     session = LanguageModelSession(instructions: AppleIntelligence.travelAssistantInstructions)
                     if let retry = try? await session!.respond(to: question) {
                         messages.append(ChatMessage(role: .assistant, text: Self.plainText(retry.content)))
-                        return
+                        return true
                     }
                 }
                 messages.append(ChatMessage(role: .assistant, text: AppleIntelligenceAIService.map(error).message, isError: true))
             } catch {
                 messages.append(ChatMessage(role: .assistant, text: "剛才沒有回應，請再問一次。", isError: true))
             }
-            return
+            return true
         }
         #endif
+        // 理論上到不了這裡（availability 已經擋掉），保險起見給一則白話回覆
         messages.append(ChatMessage(role: .assistant, text: availability.reason ?? "需要 iOS 26 以上才能使用 Apple 智慧。", isError: true))
+        return true
     }
 }

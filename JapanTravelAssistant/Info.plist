@@ -51,6 +51,7 @@
 		<string>comgooglemaps</string>
 		<string>yjcarnavi</string>
 		<string>chatgpt</string>
+		<string>tel</string>
 	</array>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<false/>
