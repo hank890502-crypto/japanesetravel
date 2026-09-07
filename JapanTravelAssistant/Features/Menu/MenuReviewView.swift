@@ -18,6 +18,19 @@ struct MenuReviewView: View {
     @State private var showAIUnavailable = false
     @State private var isAIAnalyzing = false
     @State private var aiSummary: String?
+    @State private var aiError: UserFacingError?
+    @State private var askAIApplyMode = false
+    @State private var lastAIApplyMode: AIApplyMode = .fillMissing
+    /// 「其他文字」按了「加入」正在編輯的那一行：按「儲存」才真的移進菜單，按「取消」就什麼都不動
+    @State private var promotingLineId: UUID?
+
+    /// AI 整理的結果要怎麼放進目前的菜單
+    private enum AIApplyMode {
+        /// 只填還沒填的欄位，使用者改過的都保留
+        case fillMissing
+        /// 整份換成 AI 整理的
+        case replace
+    }
 
     private var items: [MenuItemDraft] { store.draft?.items ?? [] }
     private var otherLines: [MenuItemDraft] { store.draft?.otherLines ?? [] }
@@ -55,10 +68,20 @@ struct MenuReviewView: View {
 
                 if !items.isEmpty || !otherLines.isEmpty {
                     SecondaryButton(title: isAIAnalyzing ? "AI 整理中…" : "AI 幫我整理菜單", systemImage: "wand.and.stars", isEnabled: !isAIAnalyzing) {
-                        Task { await runAI() }
+                        startAI()
+                    }
+                    .confirmationDialog("目前已經有 \(items.count) 道菜", isPresented: $askAIApplyMode, titleVisibility: .visible) {
+                        Button("補進目前的菜單（只填還沒填的）") { Task { await runAI(apply: .fillMissing) } }
+                        Button("換成 AI 整理的新菜單", role: .destructive) { Task { await runAI(apply: .replace) } }
+                        Button("取消", role: .cancel) {}
+                    } message: {
+                        Text("「補進」會保留你改過的名稱、中文、價格和選項，只補上空的欄位；「換成新的」會把目前這份整個換掉。")
                     }
                     if showAIUnavailable {
                         AIUnavailableBanner()
+                    }
+                    if let aiError {
+                        ErrorBanner(error: aiError) { Task { await runAI(apply: lastAIApplyMode) } }
                     }
                     if let aiSummary {
                         Label(aiSummary, systemImage: AppIcon.check)
@@ -127,15 +150,26 @@ struct MenuReviewView: View {
                     if saved.reading?.nilIfBlank == nil || items.first(where: { $0.id == saved.id })?.japaneseName != saved.japaneseName {
                         saved.reading = JapaneseReading.romaji(for: saved.japaneseName)
                     }
-                    store.upsert(saved)
+                    if promotingLineId == saved.id {
+                        store.promoteOtherLine(saved)
+                    } else {
+                        store.upsert(saved)
+                    }
+                    promotingLineId = nil
                     editingItem = nil
                 },
                 onDelete: {
                     store.remove(id: item.id)
+                    promotingLineId = nil
                     editingItem = nil
                 },
-                onCancel: { editingItem = nil }
+                onCancel: {
+                    promotingLineId = nil
+                    editingItem = nil
+                }
             )
+            // 往下滑不會關掉：改到一半的內容不會無聲消失，要離開請按「取消」或「儲存」
+            .interactiveDismissDisabled(true)
         }
         .sheet(isPresented: $showSourceImages) {
             SourceImagesSheet(images: store.sourceImages) { showSourceImages = false }
@@ -210,29 +244,51 @@ struct MenuReviewView: View {
 
     // MARK: - AI
 
-    /// 把目前的菜與其他文字交給 AI 重新整理（中文、分類、選項、拼音），結果合併進草稿。
-    private func runAI() async {
+    /// 按下「AI 幫我整理菜單」：已經有菜時先問要補進去還是換掉，不能無聲蓋掉使用者改好的內容。
+    private func startAI() {
         guard dependencies.ai.isEnabled else {
             withAnimation { showAIUnavailable = true }
             return
         }
+        if items.isEmpty {
+            Task { await runAI(apply: .fillMissing) }
+        } else {
+            askAIApplyMode = true
+        }
+    }
+
+    /// 把目前的菜與其他文字交給 AI 重新整理（中文、分類、選項、拼音），依使用者選的方式放進草稿。
+    private func runAI(apply mode: AIApplyMode) async {
+        guard dependencies.ai.isEnabled else {
+            withAnimation { showAIUnavailable = true }
+            return
+        }
+        lastAIApplyMode = mode
         showAIUnavailable = false
         aiSummary = nil
-        translationError = nil
+        aiError = nil
         isAIAnalyzing = true
         defer { isAIAnalyzing = false }
         let blocks = (items.map { $0.ocrText ?? "\($0.japaneseName) \($0.priceText)" } + otherLines.map { $0.ocrText ?? $0.japaneseName })
             .map { RecognizedTextBlock(text: $0, confidence: 1, boundingBox: .zero) }
         do {
             let analysis = try await dependencies.ai.analyzeMenu(textBlocks: blocks, image: store.sourceImages.first)
-            let summary = store.merge(imported: analysis.importedItems)
+            let summary: MenuDraftStore.ImportSummary
+            switch mode {
+            case .fillMissing:
+                summary = store.merge(imported: analysis.importedItems, mode: .fillMissing)
+            case .replace:
+                summary = store.replace(with: analysis.importedItems, keepingImages: true)
+            }
             if let name = analysis.restaurantName?.nilIfBlank, var draft = store.draft, draft.restaurantName.isEmpty {
                 draft.restaurantName = name
                 store.draft = draft
             }
-            aiSummary = "AI 整理完成：更新 \(summary.updated) 道、新增 \(summary.added) 道（\(dependencies.ai.providerName)）"
+            aiSummary = mode == .replace
+                ? "AI 整理完成：共 \(summary.total) 道（\(dependencies.ai.providerName)）"
+                : "AI 整理完成：補上 \(summary.updated) 道、新增 \(summary.added) 道（\(dependencies.ai.providerName)）"
         } catch {
-            translationError = UserFacingError.from(error)
+            aiError = UserFacingError.from(error)
         }
     }
 
@@ -331,9 +387,9 @@ struct MenuReviewView: View {
                             .foregroundStyle(AppColors.primaryText)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         Button {
-                            if let promoted = store.promoteOtherLine(id: line.id) {
-                                editingItem = promoted
-                            }
+                            // 先開編輯畫面，按「儲存」才真的移進菜單；按「取消」那一行還留在這裡
+                            promotingLineId = line.id
+                            editingItem = line
                         } label: {
                             Label("加入", systemImage: AppIcon.add)
                                 .font(.app(.buttonLabel))
