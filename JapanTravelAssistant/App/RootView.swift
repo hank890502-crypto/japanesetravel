@@ -20,6 +20,21 @@ struct RootView: View {
         .sheet(item: $router.receivedTrip) { package in
             TripReceiveView(package: package)
         }
+        .alert(
+            router.prompt?.title ?? "",
+            isPresented: Binding(get: { router.prompt != nil }, set: { if !$0 { router.prompt = nil } }),
+            presenting: router.prompt
+        ) { prompt in
+            switch prompt {
+            case .message:
+                Button("好") { router.prompt = nil }
+            case .switchRoom:
+                Button("離開，加入新房間") { router.confirmSwitchRoom() }
+                Button("留在目前的房間", role: .cancel) { router.prompt = nil }
+            }
+        } message: { prompt in
+            Text(prompt.message)
+        }
     }
 }
 

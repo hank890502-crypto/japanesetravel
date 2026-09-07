@@ -14,8 +14,8 @@ enum TripImportParser {
 
     struct Result: Hashable, Sendable {
         var tripName: String?
-        var startDate: Date?
-        var endDate: Date?
+        var startDate: DayDate?
+        var endDate: DayDate?
         var places: [ImportedPlace]
 
         var itinerary: [ImportedPlace] { places.filter { !$0.isRecommendation } }
@@ -30,7 +30,8 @@ enum TripImportParser {
     static func parse(_ text: String) -> Result {
         var lines = text.components(separatedBy: .newlines)
             .map { $0.replacingOccurrences(of: #"[*_]{1,3}"#, with: "", options: .regularExpression).trimmingCharacters(in: .whitespaces) }
-        if let start = lines.firstIndex(where: { $0.contains(ChatGPTTripPrompt.startMarker) }) {
+        // 取「最後一個」行程開始：長輩若把自己貼的提示文字（裡面有格式範本）和回覆一起複製，真正的行程在後面
+        if let start = lines.lastIndex(where: { $0.contains(ChatGPTTripPrompt.startMarker) }) {
             let end = lines[(start + 1)...].firstIndex(where: { $0.contains(ChatGPTTripPrompt.endMarker) }) ?? lines.endIndex
             lines = Array(lines[(start + 1)..<end])
         }
@@ -49,6 +50,7 @@ enum TripImportParser {
             let marker = first.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ":： "))
 
             if tripMarkers.contains(marker), fields.count >= 2 {
+                guard !isHeaderRow(fields[1]) else { continue }   // 範本的「行程 | 行程名稱 | 開始日期 | 結束日期」
                 result.tripName = fields[1].nilIfBlank
                 if fields.count > 2 { result.startDate = parseDate(fields[2]) }
                 if fields.count > 3 { result.endDate = parseDate(fields[3]) }
@@ -59,11 +61,13 @@ enum TripImportParser {
                 let label = fields.count >= 2 ? fields[1] : first
                 let date = fields.count > 2 ? parseDate(fields[2]) : nil
                 let theme = fields.count > 3 ? fields[3].nilIfBlank : nil
-                currentDay = [label.nilIfBlank, date.map(shortDate), theme].compactMap { $0 }.joined(separator: " ")
+                currentDay = [label.nilIfBlank, date?.shortText, theme].compactMap { $0 }.joined(separator: " ")
                 continue
             }
             if placeMarkers.contains(marker) || recommendationMarkers.contains(marker) {
                 guard fields.count >= 2, let name = fields[1].nilIfBlank else { continue }
+                // 表頭（「地點 | 中文名稱 | 日文正式名稱 | …」）不是地點
+                guard !isHeaderRow(fields: Array(fields.dropFirst())) else { continue }
                 let isRecommendation = recommendationMarkers.contains(marker)
                 result.places.append(ImportedPlace(
                     name: name,
@@ -77,7 +81,7 @@ enum TripImportParser {
                 continue
             }
             // 沒有「地點」標記但有 ≥3 格，也當地點
-            if fields.count >= 3, let name = first.nilIfBlank, !isHeaderRow(first) {
+            if fields.count >= 3, let name = first.nilIfBlank, !isHeaderRow(fields: fields) {
                 result.places.append(ImportedPlace(
                     name: name,
                     japaneseName: fields[1].nilIfBlank,
@@ -101,39 +105,62 @@ enum TripImportParser {
         return .other
     }
 
-    private static func isHeaderRow(_ text: String) -> Bool {
-        ["中文名稱", "名稱", "name", "地點名稱"].contains(text.lowercased())
+    // MARK: - 表頭判斷
+
+    /// 表格表頭或格式範本會出現的欄位名稱（ChatGPT 常自作主張加上）。
+    private static let headerWords: Set<String> = [
+        "中文名稱", "中文名", "名稱", "地點名稱", "行程名稱", "name", "chinesename",
+        "日文名稱", "日文正式名稱", "日文名", "日文", "japanesename", "japanese",
+        "地址", "日文地址", "address",
+        "類型", "類別", "type", "category",
+        "備註", "一句備註", "為什麼推薦", "說明", "note", "notes", "reason",
+        "開始日期", "結束日期", "日期", "date",
+    ]
+
+    /// 把「日文地址（含郵遞區號）」這種寫法也當表頭：去掉括號內容、空白、標點再比對。
+    static func isHeaderRow(_ text: String) -> Bool {
+        var cleaned = text.lowercased()
+        cleaned = cleaned.replacingOccurrences(of: #"[（(][^）)]*[）)]"#, with: "", options: .regularExpression)
+        cleaned = cleaned.replacingOccurrences(of: #"[\s:：*_]"#, with: "", options: .regularExpression)
+        return headerWords.contains(cleaned)
     }
 
-    private static let dateFormats = ["yyyy-MM-dd", "yyyy/MM/dd", "yyyy.MM.dd", "M/d", "M月d日", "yyyy年M月d日"]
+    /// 整行看起來是表頭：第一格是表頭字，或後面至少兩格都是表頭字。
+    private static func isHeaderRow(fields: [String]) -> Bool {
+        guard let first = fields.first else { return false }
+        if isHeaderRow(first) { return true }
+        let rest = fields.dropFirst().filter { !$0.isEmpty }
+        return rest.count >= 2 && rest.filter(isHeaderRow).count >= 2
+    }
 
-    static func parseDate(_ text: String) -> Date? {
+    // MARK: - 日期
+
+    private static let dateFormats = ["yyyy-MM-dd", "yyyy/MM/dd", "yyyy.MM.dd", "yyyy年M月d日", "M/d", "M月d日"]
+
+    /// 日期只代表「哪一天」，解析成 DayDate，跟手機在哪個時區沒有關係。
+    static func parseDate(_ text: String) -> DayDate? {
         let trimmed = text.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return nil }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = .current   // 日期只是「哪一天」，用手機的時區解析與顯示才一致
+        formatter.calendar = calendar
+        formatter.timeZone = calendar.timeZone
         for format in dateFormats {
             formatter.dateFormat = format
-            if let date = formatter.date(from: trimmed) {
-                // 只有月日：補上今年（或明年，若已經過了）
-                if !format.contains("y") {
-                    var comps = Calendar.current.dateComponents([.month, .day], from: date)
-                    comps.year = Calendar.current.component(.year, from: .now)
-                    if let d = Calendar.current.date(from: comps) {
-                        return d < Calendar.current.date(byAdding: .month, value: -6, to: .now)! ? Calendar.current.date(byAdding: .year, value: 1, to: d) : d
-                    }
+            guard let date = formatter.date(from: trimmed) else { continue }
+            var day = DayDate(date, calendar: calendar)
+            if !format.contains("y") {
+                // 只有月日：補上今年（或明年，若已經過了半年以上）
+                let today = DayDate.today
+                day.year = today.year
+                if let sixMonthsAgo = Calendar.current.date(byAdding: .month, value: -6, to: .now), day < DayDate(sixMonthsAgo) {
+                    day.year += 1
                 }
-                return date
             }
+            return day
         }
         return nil
-    }
-
-    static func shortDate(_ date: Date) -> String {
-        let f = DateFormatter()
-        f.locale = Locale(identifier: "zh_Hant_TW")
-        f.dateFormat = "M/d"
-        return f.string(from: date)
     }
 }

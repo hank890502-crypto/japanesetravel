@@ -2,7 +2,7 @@ import Foundation
 
 /// 解析 App 收到的連結。
 /// 目前：jptravel://join?code=A8F3K2
-/// 未來：https://<domain>/room/A8F3K2（需要 Universal Links，付費開發者帳號）
+/// Web Guest：https://<WEB_GUEST_URL 的主機>/…?code=A8F3K2 或 …/room/A8F3K2（只接受設定裡那個網站）
 enum DeepLink: Hashable, Sendable {
     case joinRoom(code: String)
 }
@@ -10,26 +10,37 @@ enum DeepLink: Hashable, Sendable {
 enum DeepLinkParser {
     static let scheme = "jptravel"
 
-    static func parse(_ url: URL) -> DeepLink? {
+    /// - webGuestHost：設定裡 Web Guest 網頁的主機（AppConfig.webGuestURL?.host）。
+    ///   nil 表示沒有設定網頁版，這時任何 http/https 連結都不算房間連結，
+    ///   免得餐廳桌上的官網、優惠 QR Code（也常帶 ?code=）被當成房間代碼送出去。
+    static func parse(_ url: URL, webGuestHost: String? = nil) -> DeepLink? {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
 
-        if components.scheme == scheme, components.host == "join" {
-            if let code = components.queryItems?.first(where: { $0.name == "code" })?.value?.nilIfBlank {
-                return .joinRoom(code: RoomCodeGenerator.normalize(code))
-            }
+        if components.scheme?.lowercased() == scheme, components.host?.lowercased() == "join" {
+            return joinRoom(rawCode: components.queryItems?.first(where: { $0.name == "code" })?.value)
         }
 
-        // Web 連結：https://<domain>/…/room/<code> 或 https://<domain>/…?code=<code>
-        if components.scheme == "https" || components.scheme == "http" {
+        // Web 連結：只接受設定中的 Web Guest 主機
+        if let httpScheme = components.scheme?.lowercased(), httpScheme == "https" || httpScheme == "http" {
+            guard let webGuestHost = webGuestHost?.nilIfBlank, let host = components.host,
+                  host.lowercased() == webGuestHost.lowercased() else { return nil }
             if let code = components.queryItems?.first(where: { $0.name == "code" })?.value?.nilIfBlank {
-                return .joinRoom(code: RoomCodeGenerator.normalize(code))
+                return joinRoom(rawCode: code)
             }
             let parts = components.path.split(separator: "/").map(String.init)
             if let index = parts.firstIndex(of: "room"), index + 1 < parts.count {
-                return .joinRoom(code: RoomCodeGenerator.normalize(parts[index + 1]))
+                return joinRoom(rawCode: parts[index + 1])
             }
         }
         return nil
+    }
+
+    /// 代碼要先清理再檢查長度與字元，不合法就不是房間連結。
+    private static func joinRoom(rawCode: String?) -> DeepLink? {
+        guard let rawCode = rawCode?.nilIfBlank else { return nil }
+        let code = RoomCodeGenerator.normalize(rawCode)
+        guard RoomCodeGenerator.isValid(code) else { return nil }
+        return .joinRoom(code: code)
     }
 
     /// App 專用連結（自訂 scheme）。

@@ -53,7 +53,7 @@ enum PlaceTint {
 
 #Preview {
     let store = PlaceStore(directory: nil)
-    store.addTrip(name: "9 月名古屋", startDate: .now, endDate: .now.addingTimeInterval(4 * 86400))
+    store.addTrip(name: "9 月名古屋", startDate: DayDate(year: 2026, month: 9, day: 12), endDate: DayDate(year: 2026, month: 9, day: 16))
     return NavigationStack { TripsView() }
         .environment(AppRouter())
         .environment(store)

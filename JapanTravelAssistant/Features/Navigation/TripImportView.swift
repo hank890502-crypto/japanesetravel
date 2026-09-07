@@ -13,6 +13,9 @@ struct TripImportView: View {
     @State private var pastedText = ""
     @State private var error: UserFacingError?
     @State private var importedSummary: (places: Int, stops: Int, recommendations: Int)?
+    /// 這趟已經有時間表：解析好的內容先放著，等使用者決定要取代還是加在後面
+    @State private var pendingResult: TripImportParser.Result?
+    @State private var askReplace = false
     @FocusState private var editorFocused: Bool
 
     var body: some View {
@@ -83,6 +86,13 @@ struct TripImportView: View {
             PrimaryButton(title: "匯入到這趟旅程", systemImage: AppIcon.check, isEnabled: !pastedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
                 importPasted()
             }
+            .confirmationDialog("這趟已經有時間表了", isPresented: $askReplace, titleVisibility: .visible) {
+                Button("換成這次貼上的時間表") { commitPending(replaceExisting: true) }
+                Button("加在原本的後面（只補新的）") { commitPending(replaceExisting: false) }
+                Button("取消", role: .cancel) { pendingResult = nil }
+            } message: {
+                Text("「換成」會把原本的時間表換掉，已經存的地點和它們的資料會保留。「加在後面」只會補上原本沒有的。")
+            }
         }
     }
 
@@ -110,7 +120,9 @@ struct TripImportView: View {
                 Image(systemName: AppIcon.check).font(.system(size: 44)).foregroundStyle(AppColors.success)
                 VStack(alignment: .leading, spacing: 4) {
                     Text("匯入完成").font(.app(.sectionTitle))
-                    Text("時間表 \(summary.stops) 站、會去的地點新增 \(summary.places) 個、推薦景點 \(summary.recommendations) 個。App 會在背景幫它們找座標。")
+                    Text(summary.stops == 0 && summary.places == 0 && summary.recommendations == 0
+                         ? "這些內容原本就都在這趟旅程裡了，沒有新增任何東西。"
+                         : "時間表新增 \(summary.stops) 站、會去的地點新增 \(summary.places) 個、推薦景點 \(summary.recommendations) 個。App 會在背景幫它們找座標。")
                         .font(.app(.body)).foregroundStyle(AppColors.secondaryText)
                 }
             }
@@ -129,6 +141,22 @@ struct TripImportView: View {
             return
         }
         error = nil
+        // 這趟已經有時間表：同一段回覆再貼一次、或 ChatGPT 改了行程再貼，要先問是取代還是補在後面
+        if !store.sortedStops(in: tripId).isEmpty, !result.itinerary.isEmpty {
+            pendingResult = result
+            askReplace = true
+            return
+        }
+        commit(result, replaceExisting: false)
+    }
+
+    private func commitPending(replaceExisting: Bool) {
+        guard let result = pendingResult else { return }
+        pendingResult = nil
+        commit(result, replaceExisting: replaceExisting)
+    }
+
+    private func commit(_ result: TripImportParser.Result, replaceExisting: Bool) {
         if var trip = store.trip(id: tripId) {
             if trip.name.isEmpty || trip.name == "新的旅程", let name = result.tripName { trip.name = name }
             if trip.startDate == nil { trip.startDate = result.startDate }
@@ -141,7 +169,7 @@ struct TripImportView: View {
         let recommendations = result.recommendations.map { p in
             Place(name: p.name, address: p.address, category: p.category, japaneseName: p.japaneseName, isRecommendation: true, recommendationReason: p.note)
         }
-        importedSummary = store.importItinerary(stops: stops, recommendations: recommendations, into: tripId)
+        importedSummary = store.importItinerary(stops: stops, recommendations: recommendations, into: tripId, replaceExisting: replaceExisting)
     }
 
     private func openChatGPT() {

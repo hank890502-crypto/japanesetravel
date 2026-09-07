@@ -19,14 +19,18 @@ struct PlaceEditorView: View {
 
     private enum Field { case name, japaneseName, address, dayLabel, note }
     private var isNew: Bool { placeId == nil }
+    /// 修改中的地點已經有座標（例如搜尋來的）：沒有地址也能導航
+    private var hasCoordinate: Bool { placeId.flatMap { store.place(id: $0) }?.hasCoordinate ?? false }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 field(label: "名稱（你自己看得懂就好）", text: $name, placeholder: "例如：我們的飯店", focus: .name)
                 field(label: "日文名稱（給司機看，可不填）", text: $japaneseName, placeholder: "例如：ドーミーイン名古屋", focus: .japaneseName)
-                field(label: "日文地址（拿給司機看的）", text: $address, placeholder: "例如：東京都千代田区丸の内1丁目9-1", focus: .address)
-                Text("地址可以從訂房確認信或 Google 地圖複製過來。")
+                field(label: "日文地址（拿給司機看的，可先不填）", text: $address, placeholder: "例如：東京都千代田区丸の内1丁目9-1", focus: .address)
+                Text(address.nilIfBlank == nil && !hasCoordinate
+                     ? "沒有地址就不能導航（帶我去）。地址可以從訂房確認信或 Google 地圖複製過來，之後再補也可以。"
+                     : "地址可以從訂房確認信或 Google 地圖複製過來。")
                     .font(.app(.caption))
                     .foregroundStyle(AppColors.secondaryText)
 
@@ -59,7 +63,8 @@ struct PlaceEditorView: View {
                 field(label: "第幾天（可不填，例如 第1天 9/12）", text: $dayLabel, placeholder: "例如：第2天 9/13", focus: .dayLabel)
                 field(label: "備註（可以不填）", text: $note, placeholder: "例如：退房 11:00、東口出來右轉", focus: .note)
 
-                PrimaryButton(title: "儲存", systemImage: AppIcon.check, isEnabled: name.nilIfBlank != nil && address.nilIfBlank != nil) {
+                // 只要有名稱就能存：ChatGPT 匯入的地點常常沒有地址，也要能改名、改類型
+                PrimaryButton(title: "儲存", systemImage: AppIcon.check, isEnabled: name.nilIfBlank != nil) {
                     save()
                 }
             }

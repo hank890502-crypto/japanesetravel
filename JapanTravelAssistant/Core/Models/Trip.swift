@@ -1,14 +1,15 @@
 import Foundation
 
 /// 一趟旅程（例如「9 月名古屋」）。地點都掛在某一趟旅程底下。
+/// 日期只存「哪一天」（DayDate），不含時間與時區，跨時區分享或人在日本建立都不會差一天。
 struct Trip: Codable, Identifiable, Hashable, Sendable {
     var id: UUID
     var name: String
-    var startDate: Date?
-    var endDate: Date?
+    var startDate: DayDate?
+    var endDate: DayDate?
     var createdAt: Date
 
-    init(id: UUID = UUID(), name: String, startDate: Date? = nil, endDate: Date? = nil, createdAt: Date = .now) {
+    init(id: UUID = UUID(), name: String, startDate: DayDate? = nil, endDate: DayDate? = nil, createdAt: Date = .now) {
         self.id = id
         self.name = name
         self.startDate = startDate
@@ -22,20 +23,18 @@ struct Trip: Codable, Identifiable, Hashable, Sendable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decode(UUID.self, forKey: .id)
         name = try c.decode(String.self, forKey: .name)
-        startDate = try c.decodeIfPresent(Date.self, forKey: .startDate)
-        endDate = try c.decodeIfPresent(Date.self, forKey: .endDate)
+        // DayDate 自己會相容舊資料（Date）；真的讀不懂就當沒填，不要讓整趟旅程讀不進來
+        startDate = try? c.decodeIfPresent(DayDate.self, forKey: .startDate)
+        endDate = try? c.decodeIfPresent(DayDate.self, forKey: .endDate)
         createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? .now
     }
 
     /// 例如「9/12 – 9/16」
     var dateRangeText: String? {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "zh_Hant_TW")
-        formatter.dateFormat = "M/d"
         switch (startDate, endDate) {
-        case let (s?, e?): return s == e ? formatter.string(from: s) : "\(formatter.string(from: s)) – \(formatter.string(from: e))"
-        case let (s?, nil): return formatter.string(from: s)
-        case let (nil, e?): return formatter.string(from: e)
+        case let (s?, e?): return s == e ? s.shortText : "\(s.shortText) – \(e.shortText)"
+        case let (s?, nil): return s.shortText
+        case let (nil, e?): return e.shortText
         default: return nil
         }
     }
