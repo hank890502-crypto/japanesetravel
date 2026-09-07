@@ -8,7 +8,8 @@ struct RestaurantHubView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                if let session = sessionStore.current {
+                // 過期的房間不要再引導長輩回去（家人加入時伺服器會拒絕，兩邊只會互相懷疑代碼唸錯）
+                if let session = sessionStore.current, session.room.isJoinable {
                     LargeActionCard(
                         title: "回到「\(session.room.name)」",
                         subtitle: "代碼 \(session.room.roomCode)，繼續點餐",

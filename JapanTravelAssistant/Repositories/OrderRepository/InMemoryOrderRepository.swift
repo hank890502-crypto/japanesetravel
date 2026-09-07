@@ -15,7 +15,7 @@ actor InMemoryOrderRepository: OrderRepository {
 
     func setQuantity(roomId: UUID, memberId: UUID, menuItemId: UUID, optionIds: [UUID], quantity: Int) async throws {
         let clamped = max(0, min(quantity, 99))
-        let variantKey = optionIds.map(\.uuidString).sorted().joined(separator: "+")
+        let variantKey = MenuSelection.variantKey(for: optionIds)
         let key = Key(roomId: roomId, memberId: memberId, menuItemId: menuItemId, variantKey: variantKey)
         if var existing = selections[key] {
             existing.quantity = clamped

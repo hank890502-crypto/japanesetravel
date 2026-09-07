@@ -4,7 +4,7 @@ import SwiftUI
 struct CreateRoomView: View {
     @Environment(AppRouter.self) private var router
     @Environment(MenuDraftStore.self) private var draftStore
-    @Environment(DiningSessionStore.self) private var sessionStore
+    @Environment(RoomSessionCoordinator.self) private var coordinator
     @Environment(\.dependencies) private var dependencies
 
     @State private var roomName = ""
@@ -43,7 +43,11 @@ struct CreateRoomView: View {
                 }
 
                 field(label: "這一餐叫什麼？", text: $roomName, placeholder: "例如：酒津屋晚餐", focus: .room)
-                field(label: "我的稱呼（家人看到的名字）", text: $displayName, placeholder: "例如：爸爸、小明", focus: .name)
+                field(label: "我的稱呼（家人看到的名字）", text: $displayName, placeholder: "例如：爸爸、小明", focus: .name, hint: displayNameHint)
+                    .onChange(of: displayName) { _, newValue in
+                        let clamped = RoomMember.clampDisplayName(newValue)
+                        if clamped != newValue { displayName = clamped }
+                    }
 
                 PrimaryButton(title: isCreating ? "建立中…" : "建立房間", systemImage: AppIcon.joinRoom, isLoading: isCreating, isEnabled: !items.isEmpty) {
                     Task { await create() }
@@ -58,7 +62,13 @@ struct CreateRoomView: View {
         }
     }
 
-    private func field(label: String, text: Binding<String>, placeholder: String, focus: Field) -> some View {
+    private var displayNameHint: String {
+        displayName.count >= RoomMember.maxDisplayNameLength
+            ? "稱呼最多 \(RoomMember.maxDisplayNameLength) 個字，已經到上限了。"
+            : "稱呼最多 \(RoomMember.maxDisplayNameLength) 個字。"
+    }
+
+    private func field(label: String, text: Binding<String>, placeholder: String, focus: Field, hint: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(label)
                 .font(.app(.body))
@@ -70,6 +80,11 @@ struct CreateRoomView: View {
                 .frame(minHeight: AccessibilityMetrics.minimumTapTarget)
                 .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(focused == focus ? AppColors.accent : AppColors.separator, lineWidth: 2))
+            if let hint {
+                Text(hint)
+                    .font(.app(.caption))
+                    .foregroundStyle(AppColors.secondaryText)
+            }
         }
     }
 
@@ -81,14 +96,14 @@ struct CreateRoomView: View {
         error = nil
         defer { isCreating = false }
         let name = roomName.nilIfBlank ?? "一起點餐"
-        let me = displayName.nilIfBlank ?? "我"
+        let me = RoomMember.clampDisplayName(displayName.nilIfBlank ?? "我")
         DiningSessionStore.rememberDisplayName(me)
         do {
-            let session = try await dependencies.roomRepository.createRoom(name: name, hostDisplayName: me, preferredCode: DebugSettings.fixedRoomCode)
+            let session = try await dependencies.roomRepository.createRoom(name: name, hostDisplayName: me)
             var bundle = draft.toBundle()
             bundle.menu.restaurantName = bundle.menu.restaurantName ?? name
             _ = try await dependencies.menuRepository.saveMenu(bundle, toRoom: session.room.id)
-            sessionStore.current = session
+            coordinator.enter(session)
             router.push(.room)
         } catch {
             self.error = UserFacingError.from(error)
@@ -99,9 +114,11 @@ struct CreateRoomView: View {
 #Preview {
     let store = MenuDraftStore(directory: nil)
     store.draft = DebugLaunchOptions.sampleDraft(arguments: ["-openRoute", "createRoom"])
+    let sessionStore = DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!)
     return NavigationStack { CreateRoomView() }
         .environment(AppRouter())
         .environment(store)
-        .environment(DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(sessionStore)
+        .environment(RoomSessionCoordinator.preview(sessionStore: sessionStore))
         .environment(\.dependencies, .preview)
 }

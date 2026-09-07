@@ -52,4 +52,14 @@ enum DeepLinkParser {
         components.queryItems = items
         return components.url ?? joinURL(code: code)
     }
+
+    /// 「分享」按鈕送出的文字。
+    /// 有網頁版網址才說「點這個連結」；沒有的話 jptravel:// 在 LINE／簡訊裡不是可點的連結，改教家人在 App 裡輸入代碼。
+    static func shareMessage(roomName: String, code: String, webGuestURL: URL?) -> String {
+        if let webGuestURL {
+            let link = shareURL(code: code, webGuestURL: webGuestURL)
+            return "一起點餐：\(roomName)\n房間代碼：\(code)\n點這個連結加入：\(link.absoluteString)"
+        }
+        return "一起點餐：\(roomName)\n房間代碼：\(code)\n加入方法：打開「日本旅遊助手」→ 我要看懂這個 → 看菜單、一起點餐 → 加入家人的點餐，輸入代碼 \(code)"
+    }
 }

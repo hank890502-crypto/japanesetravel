@@ -43,8 +43,20 @@ App 端實作在 `Services/AI/RemoteAIService.swift`；設定頁選「自己的�
 範本在 `supabase/functions/ai/index.ts`。步驟：
 1. 安裝 Supabase CLI：`brew install supabase/tap/supabase`，`supabase login`，`supabase link --project-ref 你的專案ref`。
 2. 設定金鑰（只在伺服器）：`supabase secrets set OPENAI_API_KEY=sk-...`（或 `GEMINI_API_KEY` / `ANTHROPIC_API_KEY`，範本預設用 OpenAI，改幾行就能換）。
-3. 部署：`supabase functions deploy ai --no-verify-jwt`
-4. App 設定頁 → AI 幫手 → 自己的伺服器 → 網址填 `https://你的專案ref.supabase.co/functions/v1/ai`。
+3. **設定伺服器密碼**（擋住不是你的 App 的呼叫）：自己想一串夠長的密碼，例如在終端機執行 `openssl rand -hex 24` 產生，然後
+   `supabase secrets set APP_TOKEN=那一串`。
+4. 部署：`supabase functions deploy ai --no-verify-jwt`
+5. App 設定頁 → AI 幫手 → 自己的伺服器 → 網址填 `https://你的專案ref.supabase.co/functions/v1/ai`，
+   「伺服器密碼（沒有可以不填）」填第 3 步那一串。
+
+## 呼叫者驗證（共享密鑰）
+
+- App 每次呼叫都帶 header `X-App-Token: <密碼>`（`RemoteAIService.appToken`，來自設定頁的「伺服器密碼」）。
+- 函式啟動時讀環境變數 `APP_TOKEN`；**有設定**就用固定時間比對 header，不符回 `401 {"error":"unauthorized"}`，App 會顯示
+  「AI 伺服器不接受這個密碼」並請使用者到設定頁檢查。**沒設定** `APP_TOKEN` 則不檢查（只適合本機測試）。
+- 網址是可以猜到的（`https://<project-ref>.supabase.co/functions/v1/ai`，而 project ref 也在網頁版的 config.js 裡），
+  所以正式部署一定要設定 `APP_TOKEN`，否則任何人都能用它燒你的 AI 額度。
+- 換密碼：`supabase secrets set APP_TOKEN=新的`，重新部署後到 App 設定頁改成新的即可。
 
 範本目前是最小可用版本：把 App 送來的文字／照片組成提示詞、要求模型輸出上面的 JSON、驗證後回傳。
-之後想加「只允許自己的 App 呼叫」，可以在函式裡檢查 Supabase 匿名登入的 JWT（App 端加上 Authorization header）。
+之後若想改成用 Supabase 匿名登入的 JWT 驗證（可以做每人每日次數限制），把 `X-App-Token` 換成檢查 `Authorization` header 即可。

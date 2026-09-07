@@ -34,7 +34,14 @@ struct MenuSelection: Codable, Identifiable, Hashable, Sendable {
     }
 
     /// 同一道菜、同一組選項 = 同一種東西
-    var variantKey: String { optionIds.map(\.uuidString).sorted().joined(separator: "+") }
+    var variantKey: String { Self.variantKey(for: optionIds) }
+
+    /// 選項組合的識別字串。App、網頁版與資料庫三邊都用同一條規則：
+    /// **小寫 UUID、排序後用「,」連接**；沒有選項是空字串。
+    /// （資料庫的 BEFORE INSERT/UPDATE trigger 也用同樣規則重算，所以任一端算錯也不會拆成兩行。）
+    static func variantKey(for optionIds: [UUID]) -> String {
+        optionIds.map { $0.uuidString.lowercased() }.sorted().joined(separator: ",")
+    }
 }
 
 /// Host 彙總畫面的一行：某個品項的總數，以及每個人各點了幾份。

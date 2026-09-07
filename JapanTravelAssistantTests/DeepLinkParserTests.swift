@@ -32,6 +32,20 @@ struct DeepLinkParserTests {
         #expect(DeepLinkParser.parse(DeepLinkParser.shareURL(code: "A8F3K2", webGuestURL: web)) == .joinRoom(code: "A8F3K2"))
     }
 
+    @Test("分享文字：有網頁版才寫「點這個連結」；沒有就教家人在 App 輸入代碼，不放 jptravel:// 字串")
+    func shareMessage() {
+        let web = URL(string: "https://user.github.io/jptravel/")!
+        let withWeb = DeepLinkParser.shareMessage(roomName: "酒津屋晚餐", code: "A8F3K2", webGuestURL: web)
+        #expect(withWeb.contains("點這個連結加入：https://user.github.io/jptravel/?code=A8F3K2"))
+        #expect(withWeb.contains("房間代碼：A8F3K2"))
+
+        let withoutWeb = DeepLinkParser.shareMessage(roomName: "酒津屋晚餐", code: "A8F3K2", webGuestURL: nil)
+        #expect(!withoutWeb.contains("jptravel://"))
+        #expect(!withoutWeb.contains("點這個連結"))
+        #expect(withoutWeb.contains("加入家人的點餐"))
+        #expect(withoutWeb.contains("輸入代碼 A8F3K2"))
+    }
+
     @Test("不認識的連結回 nil")
     func ignoresUnknown() {
         #expect(DeepLinkParser.parse(URL(string: "https://example.com/about")!) == nil)

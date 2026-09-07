@@ -1,4 +1,5 @@
 import Foundation
+import os
 import Supabase
 
 /// Supabase 連線與身分（匿名登入）。Repository 透過這個 protocol 拿 client 與使用者 id；View 永遠不碰它。
@@ -20,6 +21,10 @@ struct UnconfiguredSupabaseService: SupabaseService {
 final class LiveSupabaseService: SupabaseService {
     let client: SupabaseClient
 
+    /// 連續幾次「刷新登入狀態」失敗（網路、伺服器暫時有問題）。達到上限才放棄舊身分、重新匿名登入。
+    private let refreshFailures = OSAllocatedUnfairLock(initialState: 0)
+    static let refreshFailuresBeforeNewIdentity = 3
+
     init(url: URL, anonKey: String) {
         client = SupabaseClient(
             supabaseURL: url,
@@ -32,12 +37,35 @@ final class LiveSupabaseService: SupabaseService {
 
     var isConfigured: Bool { true }
 
+    /// 三種情況分開處理，不要一有錯就換成全新的匿名使用者（舊房間的房主／成員身分會跟著失聯）：
+    /// 1. 從來沒登入過 → 匿名登入。
+    /// 2. 舊的登入狀態已經確定作廢（refresh token 被用過、使用者被清掉）→ 只能重新匿名登入；回到房間時會重新加入或提示重建。
+    /// 3. 刷新暫時失敗（沒網路、伺服器忙）→ 保留身分、告訴長輩稍後再試；連續失敗多次才退回 2。
     func signInAnonymouslyIfNeeded() async throws -> UUID {
-        if let session = try? await client.auth.session, !session.isExpired {
+        do {
+            let session = try await client.auth.session   // 過期會自動用 refresh token 換新的
+            refreshFailures.withLock { $0 = 0 }
             return session.user.id
+        } catch let error as AuthError where error == .sessionMissing {
+            return try await signInAnonymously()
+        } catch let error as AuthError where Self.isIdentityGone(error) {
+            return try await signInAnonymously()
+        } catch {
+            let failures = refreshFailures.withLock { $0 += 1; return $0 }
+            if failures >= Self.refreshFailuresBeforeNewIdentity {
+                return try await signInAnonymously()
+            }
+            throw UserFacingError(
+                title: "還沒連上多人點餐",
+                message: "請確認網路連線，等一下再試一次。"
+            )
         }
+    }
+
+    private func signInAnonymously() async throws -> UUID {
         do {
             let session = try await client.auth.signInAnonymously()
+            refreshFailures.withLock { $0 = 0 }
             return session.user.id
         } catch {
             throw UserFacingError(
@@ -45,6 +73,12 @@ final class LiveSupabaseService: SupabaseService {
                 message: "請確認網路連線後再試一次。"
             )
         }
+    }
+
+    /// 伺服器明確說這個身分已經不能用了（不是暫時的網路問題）。
+    private static func isIdentityGone(_ error: AuthError) -> Bool {
+        guard case .api(_, let code, _, _) = error else { return false }
+        return [.refreshTokenNotFound, .refreshTokenAlreadyUsed, .sessionNotFound, .userNotFound].contains(code)
     }
 }
 

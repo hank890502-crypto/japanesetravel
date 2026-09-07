@@ -79,7 +79,7 @@ struct SupabaseMenuRepository: MenuRepository {
             }
             return MenuBundle(menu: menu, sections: bundle.sections, items: bundle.items, options: bundle.options)
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: UserFacingError(title: "菜單沒有上傳成功", message: "請確認網路連線後再試一次。"))
+            throw SupabaseErrorMapper.map(error, context: .saveMenu)
         }
     }
 
@@ -102,7 +102,7 @@ struct SupabaseMenuRepository: MenuRepository {
                 )
             }
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: .syncUnavailable)
+            throw SupabaseErrorMapper.map(error, context: .selections)
         }
     }
 
@@ -114,7 +114,7 @@ struct SupabaseMenuRepository: MenuRepository {
                 .eq("id", value: item.id.uuidString)
                 .execute()
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: .syncUnavailable)
+            throw SupabaseErrorMapper.map(error, context: .editMenu)
         }
     }
 
@@ -122,7 +122,7 @@ struct SupabaseMenuRepository: MenuRepository {
         do {
             try await client.from("menu_items").delete().eq("id", value: id.uuidString).execute()
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: .syncUnavailable)
+            throw SupabaseErrorMapper.map(error, context: .editMenu)
         }
     }
 

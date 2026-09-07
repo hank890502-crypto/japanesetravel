@@ -43,6 +43,20 @@ struct UserFacingError: LocalizedError, Hashable, Sendable {
         message: "請確認代碼有沒有打錯，或請家人再分享一次。"
     )
 
+    /// 房間已經過期、被房主關閉、或這台手機已不是成員。
+    static let roomEnded = UserFacingError(
+        title: "這個房間已經結束",
+        message: "房間超過兩天會自動結束，或是房主已經關閉。要再一起點餐，請重新建立房間，或請家人再分享一次代碼。",
+        isRetryable: false
+    )
+
+    /// 房主的身分在這台手機上已經換掉，拿不回原本的房間。
+    static let roomNeedsRecreate = UserFacingError(
+        title: "這個房間需要重新建立",
+        message: "這台手機的身分已經改變，沒辦法再當這個房間的房主。請回到餐廳，重新拍菜單、建立一個新房間。",
+        isRetryable: false
+    )
+
     static let cameraUnavailable = UserFacingError(
         title: "無法使用相機",
         message: "請到「設定」允許這個 App 使用相機，或改從相簿選照片。",

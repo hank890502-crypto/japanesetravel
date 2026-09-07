@@ -1,41 +1,38 @@
 import SwiftUI
 
 /// 本桌訂單：每道菜的總數、誰點的、金額。可以整份「給店員看」。
+/// 與點餐頁共用同一份 RoomViewModel（RoomSessionCoordinator 持有），進來不會重新載入、回去也不會閃。
 struct OrderSummaryView: View {
     @Environment(AppRouter.self) private var router
-    @Environment(DiningSessionStore.self) private var sessionStore
-    @Environment(\.dependencies) private var dependencies
+    @Environment(RoomSessionCoordinator.self) private var coordinator
 
-    @State private var viewModel: RoomViewModel?
-    @State private var showStaffView = false
+    /// 「給店員看」讀這份快照：全螢幕 cover 打開時底層畫面會收到 onDisappear，不能依賴任何會被清掉的狀態
+    @State private var staffOrder: StaffOrderSnapshot?
 
     var body: some View {
         Group {
-            if let viewModel {
+            if let viewModel = coordinator.viewModel {
                 content(viewModel)
             } else {
-                Text("目前沒有在任何房間裡。")
-                    .font(.app(.body))
-                    .foregroundStyle(AppColors.secondaryText)
-                    .padding()
+                VStack(spacing: 20) {
+                    if let notice = coordinator.endedNotice {
+                        ErrorBanner(error: notice)
+                    } else {
+                        Text("目前沒有在任何房間裡。")
+                            .font(.app(.body))
+                            .foregroundStyle(AppColors.secondaryText)
+                    }
+                    SecondaryButton(title: "回到餐廳") {
+                        coordinator.dismissEndedNotice()
+                        router.popOrPush(.restaurantHub)
+                    }
+                }
+                .padding(AccessibilityMetrics.screenPadding)
             }
         }
         .elderlyScreen(title: "本桌訂單")
-        .onAppear {
-            if viewModel == nil, let session = sessionStore.current {
-                let vm = RoomViewModel(session: session, roomRepository: dependencies.roomRepository, menuRepository: dependencies.menuRepository, orderRepository: dependencies.orderRepository)
-                vm.start()
-                viewModel = vm
-            }
-        }
-        .onDisappear {
-            viewModel?.stop()
-            viewModel = nil
-        }
-        .fullScreenCover(isPresented: $showStaffView) {
-            if let viewModel {
-                StaffOrderView(lines: viewModel.summaryLines, roomName: viewModel.room.name) { showStaffView = false }
-            }
+        .fullScreenCover(item: $staffOrder) { snapshot in
+            StaffOrderView(lines: snapshot.lines, roomName: snapshot.roomName) { staffOrder = nil }
         }
     }
 
@@ -47,7 +44,13 @@ struct OrderSummaryView: View {
                     ErrorBanner(error: error)
                 }
 
-                if lines.isEmpty {
+                if !viewModel.isReady {
+                    HStack(spacing: 12) {
+                        ProgressView()
+                        Text("正在載入本桌訂單…").font(.app(.body)).foregroundStyle(AppColors.secondaryText)
+                    }
+                    .padding(.vertical, 20)
+                } else if lines.isEmpty {
                     Text("還沒有人點東西。回到菜單按「+」就會出現在這裡。")
                         .font(.app(.body))
                         .foregroundStyle(AppColors.secondaryText)
@@ -101,7 +104,7 @@ struct OrderSummaryView: View {
                 }
             }
             PrimaryButton(title: "給店員看", systemImage: AppIcon.showToStaff) {
-                showStaffView = true
+                staffOrder = StaffOrderSnapshot(lines: viewModel.summaryLines, roomName: viewModel.room.name)
             }
         }
         .padding(.horizontal, AccessibilityMetrics.screenPadding)
@@ -148,6 +151,13 @@ struct OrderSummaryView: View {
         .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AccessibilityMetrics.cornerRadius, style: .continuous))
         .accessibilityElement(children: .combine)
     }
+}
+
+/// 按下「給店員看」那一刻的訂單內容。
+struct StaffOrderSnapshot: Identifiable {
+    let id = UUID()
+    let lines: [OrderSummaryLine]
+    let roomName: String
 }
 
 /// 給店員看的整桌訂單：白底、大日文、數量。
@@ -204,8 +214,10 @@ struct StaffOrderView: View {
 }
 
 #Preview {
+    let store = DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!)
     NavigationStack { OrderSummaryView() }
         .environment(AppRouter())
-        .environment(DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(store)
+        .environment(RoomSessionCoordinator.preview(sessionStore: store))
         .environment(\.dependencies, .preview)
 }

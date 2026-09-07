@@ -10,13 +10,14 @@ enum RoomCodeGenerator {
         String((0..<length).map { _ in alphabet.randomElement()! })
     }
 
-    /// 使用者輸入的清理：去空白與連字號、轉大寫。
+    /// 使用者輸入的清理：全形英數折成半形（LINE 或注音鍵盤常打出「Ａ８Ｆ３Ｋ２」）、去空白與連字號、轉大寫。
     static func normalize(_ input: String) -> String {
-        String(input.uppercased().filter { !$0.isWhitespace && $0 != "-" })
+        let halfwidth = input.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? input
+        return String(halfwidth.uppercased().filter { !$0.isWhitespace && $0 != "-" })
     }
 
-    /// 正式代碼是 6 碼；測試用的固定代碼（例如 0000）也接受：4～8 碼英數字。
+    /// 正式代碼是 6 碼；為了容忍舊連結與手打，接受 4～8 碼的半形英數字。
     static func isValid(_ code: String) -> Bool {
-        (4...8).contains(code.count) && code.allSatisfy { $0.isLetter || $0.isNumber }
+        (4...8).contains(code.count) && code.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber) }
     }
 }

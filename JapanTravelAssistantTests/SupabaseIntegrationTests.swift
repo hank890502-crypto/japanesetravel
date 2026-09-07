@@ -3,12 +3,9 @@ import Testing
 @testable import JapanTravelAssistant
 
 /// 對真實 Supabase 專案的整合測試。只有 App 有設定 SUPABASE_URL 時才會跑，否則整個 suite 跳過。
-/// 會在資料庫留下一個代碼 TEST01 的房間（下次跑會自動關掉舊的）。
+/// 房間代碼由伺服器產生（沒有「指定代碼」），跑完（含失敗）都會把建立的房間關掉。
 @Suite("Supabase 整合（需要真實專案）")
 struct SupabaseIntegrationTests {
-    private static var config: AppConfig { AppConfig.fromBundle(Bundle(for: TestHost.self)) }
-    private final class TestHost {}
-
     @Test("建房 → 上傳菜單 → 點餐 → 讀回 → 即時串流第一筆")
     func endToEnd() async throws {
         let config = AppConfig.fromBundle(Bundle.main)
@@ -21,8 +18,10 @@ struct SupabaseIntegrationTests {
         let menus = SupabaseMenuRepository(service: service)
         let orders = SupabaseOrderRepository(service: service)
 
-        let session = try await rooms.createRoom(name: "整合測試", hostDisplayName: "測試主", preferredCode: "TEST01")
-        #expect(session.room.roomCode == "TEST01")
+        let session = try await rooms.createRoom(name: "整合測試", hostDisplayName: "測試主")
+        defer { Task { try? await rooms.closeRoom(roomId: session.room.id) } }
+        let code = session.room.roomCode
+        #expect(code.count == RoomCodeGenerator.length && RoomCodeGenerator.isValid(code))
         #expect(session.member.isHost)
 
         let draft = MenuDraft(restaurantName: "測試店", items: [
@@ -33,10 +32,11 @@ struct SupabaseIntegrationTests {
         ], sectionChineseNames: ["揚げ物": "炸物"])
         let saved = try await menus.saveMenu(draft.toBundle(), toRoom: session.room.id)
 
-        // 同一份草稿再建一個房間、再上傳一次，不能撞 ID
-        let second = try await rooms.createRoom(name: "整合測試 2", hostDisplayName: "測試主", preferredCode: "TEST02")
+        // 同一份草稿再建一個房間、再上傳一次，不能撞 ID；代碼也不能一樣
+        let second = try await rooms.createRoom(name: "整合測試 2", hostDisplayName: "測試主")
+        defer { Task { try? await rooms.closeRoom(roomId: second.room.id) } }
+        #expect(second.room.roomCode != code)
         _ = try await menus.saveMenu(draft.toBundle(), toRoom: second.room.id)
-        try await rooms.closeRoom(roomId: second.room.id)
 
         let fetched = try await menus.menus(roomId: session.room.id)
         #expect(fetched.count == 1)
@@ -45,10 +45,14 @@ struct SupabaseIntegrationTests {
         #expect(fetched.first?.options.first?.priceDelta == 150)
         #expect(fetched.first?.items.first { $0.japaneseName == "若どり唐揚げ" }?.reading == "wakadori karaage")
 
-        let joined = try await rooms.joinRoom(code: "test01", displayName: "測試主改名")
+        let joined = try await rooms.joinRoom(code: code.lowercased(), displayName: "測試主改名")
         #expect(joined.member.id == session.member.id)
         let members = try await rooms.members(roomId: session.room.id)
         #expect(members.count == 1 && members.first?.displayName == "測試主改名")
+
+        // 回到房間：同一個人 → 同一位成員、拿到最新的房間資料
+        let restored = try await rooms.restoreSession(session)
+        #expect(restored.member.id == session.member.id && restored.room.id == session.room.id)
 
         let tonkatsu = saved.items.first { $0.japaneseName == "とんかつ" }!
         let large = saved.options.first!
@@ -70,6 +74,13 @@ struct SupabaseIntegrationTests {
             _ = try await rooms.joinRoom(code: "ZZZZZZ", displayName: "x")
         }
 
-        try await rooms.closeRoom(roomId: session.room.id)
+        // 關掉的房間：回到房間會得到「已結束」
+        try await rooms.closeRoom(roomId: second.room.id)
+        do {
+            _ = try await rooms.restoreSession(second)
+            Issue.record("關掉的房間應該回報已結束")
+        } catch let error as UserFacingError {
+            #expect(error == .roomEnded)
+        }
     }
 }

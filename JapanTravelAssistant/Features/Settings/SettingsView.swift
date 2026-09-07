@@ -7,6 +7,7 @@ struct SettingsView: View {
 
     @State private var availableProviders: [NavigationProvider] = [.appleMaps]
     @FocusState private var urlFocused: Bool
+    @FocusState private var tokenFocused: Bool
 
     var body: some View {
         @Bindable var settings = settings
@@ -44,6 +45,21 @@ struct SettingsView: View {
                                     .font(.app(.caption))
                                     .foregroundStyle(AppColors.error)
                             }
+                            Text("伺服器密碼（沒有可以不填）")
+                                .font(.app(.body))
+                                .foregroundStyle(AppColors.secondaryText)
+                            TextField("架設伺服器時自己設定的那一串", text: $settings.aiBackendTokenText)
+                                .font(.app(.body))
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                                .focused($tokenFocused)
+                                .padding(16)
+                                .frame(minHeight: AccessibilityMetrics.minimumTapTarget)
+                                .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(tokenFocused ? AppColors.accent : AppColors.separator, lineWidth: 2))
+                            Text("有設定密碼的伺服器只接受這個 App 的呼叫，別人拿到網址也用不了。")
+                                .font(.app(.caption))
+                                .foregroundStyle(AppColors.secondaryText)
                             Text("金鑰只放在伺服器上，App 裡不會有任何金鑰。架設方式見專案內的 docs/AI_BACKEND.md。")
                                 .font(.app(.caption))
                                 .foregroundStyle(AppColors.secondaryText)

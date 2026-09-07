@@ -5,8 +5,12 @@ import UIKit
 /// HTTP 介面規格見 docs/AI_BACKEND.md，Supabase Edge Function 範本見 supabase/functions/ai/。
 struct RemoteAIService: AIService {
     let baseURL: URL
+    /// 伺服器密碼（選填）：與伺服器環境變數 APP_TOKEN 相同的字串，放在 X-App-Token header，讓伺服器只接受這個 App 的呼叫。
+    var appToken: String? = nil
     var session: URLSession = .shared
     var timeout: TimeInterval = 60
+
+    static let tokenHeader = "X-App-Token"
 
     var isEnabled: Bool { true }
     var providerName: String { AIProviderKind.remoteBackend.displayName }
@@ -69,6 +73,9 @@ struct RemoteAIService: AIService {
         var request = URLRequest(url: baseURL.appending(path: path), timeoutInterval: timeout)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let appToken = appToken?.nilIfBlank {
+            request.setValue(appToken, forHTTPHeaderField: Self.tokenHeader)
+        }
         request.httpBody = try JSONEncoder().encode(body)
         let data: Data
         let response: URLResponse
@@ -79,7 +86,13 @@ struct RemoteAIService: AIService {
                 ? UserFacingError(title: "AI 伺服器沒有回應", message: "請確認網路，或到「設定」檢查伺服器網址。")
                 : UserFacingError.from(error)
         }
-        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+        guard let http = response as? HTTPURLResponse else {
+            throw UserFacingError(title: "AI 伺服器回傳錯誤", message: "請稍後再試。如果一直失敗，請檢查伺服器設定。")
+        }
+        if http.statusCode == 401 || http.statusCode == 403 {
+            throw UserFacingError(title: "AI 伺服器不接受這個密碼", message: "請到「設定 → AI 幫手」檢查伺服器密碼有沒有填對。", isRetryable: false)
+        }
+        guard (200..<300).contains(http.statusCode) else {
             throw UserFacingError(title: "AI 伺服器回傳錯誤", message: "請稍後再試。如果一直失敗，請檢查伺服器設定。")
         }
         do {

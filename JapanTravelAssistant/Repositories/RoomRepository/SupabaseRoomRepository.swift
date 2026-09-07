@@ -10,18 +10,16 @@ struct SupabaseRoomRepository: RoomRepository {
         var member: RoomMember
     }
 
-    func createRoom(name: String, hostDisplayName: String, preferredCode: String?) async throws -> RoomSession {
+    func createRoom(name: String, hostDisplayName: String) async throws -> RoomSession {
         _ = try await service.signInAnonymouslyIfNeeded()
         do {
-            var params = ["p_name": name, "p_display_name": hostDisplayName]
-            if let preferredCode { params["p_code"] = RoomCodeGenerator.normalize(preferredCode) }
             let response: SessionResponse = try await client
-                .rpc("create_room", params: params)
+                .rpc("create_room", params: ["p_name": name, "p_display_name": RoomMember.clampDisplayName(hostDisplayName)])
                 .execute()
                 .value
             return RoomSession(room: response.room, member: response.member)
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: UserFacingError(title: "無法建立房間", message: "請確認網路連線後再試一次。"))
+            throw SupabaseErrorMapper.map(error, context: .createRoom)
         }
     }
 
@@ -29,12 +27,26 @@ struct SupabaseRoomRepository: RoomRepository {
         _ = try await service.signInAnonymouslyIfNeeded()
         do {
             let response: SessionResponse = try await client
-                .rpc("join_room", params: ["p_code": RoomCodeGenerator.normalize(code), "p_display_name": displayName])
+                .rpc("join_room", params: ["p_code": RoomCodeGenerator.normalize(code), "p_display_name": RoomMember.clampDisplayName(displayName)])
                 .execute()
                 .value
             return RoomSession(room: response.room, member: response.member)
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: UserFacingError(title: "無法加入房間", message: "請確認代碼與網路連線後再試一次。"))
+            throw SupabaseErrorMapper.map(error, context: .joinRoom)
+        }
+    }
+
+    func restoreSession(_ session: RoomSession) async throws -> RoomSession {
+        let userId = try await service.signInAnonymouslyIfNeeded()
+        // 匿名身分換掉了：家人可以用代碼重新加入（下面的 join_room），房主則拿不回房間
+        if userId != session.member.userId, session.member.isHost {
+            throw UserFacingError.roomNeedsRecreate
+        }
+        // join_room 是 upsert：同一個人只會更新稱呼並回傳最新的房間／成員；房間已關或過期會回 room_not_found
+        do {
+            return try await joinRoom(code: session.room.roomCode, displayName: session.member.displayName)
+        } catch let error as UserFacingError where error == .roomNotFound {
+            throw UserFacingError.roomEnded
         }
     }
 
@@ -47,7 +59,7 @@ struct SupabaseRoomRepository: RoomRepository {
                 .execute()
                 .value
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: .syncUnavailable)
+            throw SupabaseErrorMapper.map(error, context: .members)
         }
     }
 
@@ -64,28 +76,7 @@ struct SupabaseRoomRepository: RoomRepository {
                 .eq("id", value: roomId.uuidString)
                 .execute()
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: .syncUnavailable)
+            throw SupabaseErrorMapper.map(error, context: .closeRoom)
         }
-    }
-}
-
-/// 把 Supabase / 網路錯誤翻成白話。
-enum SupabaseErrorMapper {
-    static func map(_ error: Error, fallback: UserFacingError) -> UserFacingError {
-        if let userFacing = error as? UserFacingError { return userFacing }
-        #if DEBUG
-        print("[Supabase] \(error)")
-        #endif
-        let description = String(describing: error).lowercased()
-        if description.contains("duplicate key") {
-            return UserFacingError(title: "這份菜單已經上傳過", message: "請回到「檢查菜單」再按一次「下一步」，App 會用新的資料重新上傳。")
-        }
-        if description.contains("row-level security") || description.contains("permission denied") {
-            return UserFacingError(title: "沒有權限", message: "只有建立房間的人可以上傳菜單。請重新建立一個房間。", isRetryable: false)
-        }
-        if description.contains("room_not_found") { return .roomNotFound }
-        if description.contains("not_authenticated") { return UserFacingError(title: "還沒連上", message: "請再試一次。") }
-        if error is URLError { return .networkUnavailable }
-        return fallback
     }
 }

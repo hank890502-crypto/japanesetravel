@@ -9,6 +9,9 @@ struct RoomMember: Codable, Identifiable, Hashable, Sendable {
     var isHost: Bool
     var createdAt: Date
 
+    /// 稱呼最多 30 個字（資料庫 room_members.display_name 的限制）。輸入時就截斷並提示，不讓長輩撞到伺服器錯誤。
+    static let maxDisplayNameLength = 30
+
     init(
         id: UUID = UUID(),
         roomId: UUID,
@@ -23,6 +26,11 @@ struct RoomMember: Codable, Identifiable, Hashable, Sendable {
         self.displayName = displayName
         self.isHost = isHost
         self.createdAt = createdAt
+    }
+
+    /// 把稱呼截到上限（以「字」計，不是 byte）。
+    static func clampDisplayName(_ name: String) -> String {
+        String(name.prefix(maxDisplayNameLength))
     }
 }
 

@@ -45,14 +45,16 @@ struct ImportSectionRobustnessTests {
         #expect(items[0].section == "揚げ物")
     }
 
-    @Test("固定代碼 0000：建房會關掉舊的同代碼房間，加入用 0000")
-    func fixedCode() async throws {
+    @Test("建房代碼一律由系統產生：連建兩間代碼不同、各自都能用代碼加入，不會互相關掉")
+    func generatedCodesDoNotCollide() async throws {
         let repo = InMemoryRoomRepository(currentUserId: UUID())
-        let first = try await repo.createRoom(name: "第一次", hostDisplayName: "我", preferredCode: "0000")
-        let second = try await repo.createRoom(name: "第二次", hostDisplayName: "我", preferredCode: "0000")
-        #expect(first.room.roomCode == "0000")
-        #expect(second.room.roomCode == "0000")
-        let joined = try await repo.joinRoom(code: "0000", displayName: "媽媽")
-        #expect(joined.room.id == second.room.id)
+        let first = try await repo.createRoom(name: "第一次", hostDisplayName: "我")
+        let second = try await repo.createRoom(name: "第二次", hostDisplayName: "我")
+        #expect(first.room.roomCode != second.room.roomCode)
+        #expect(RoomCodeGenerator.isValid(first.room.roomCode) && first.room.roomCode.count == RoomCodeGenerator.length)
+        let joinedFirst = try await repo.joinRoom(code: first.room.roomCode, displayName: "媽媽")
+        let joinedSecond = try await repo.joinRoom(code: second.room.roomCode, displayName: "媽媽")
+        #expect(joinedFirst.room.id == first.room.id)
+        #expect(joinedSecond.room.id == second.room.id)
     }
 }

@@ -103,7 +103,7 @@ struct ReadingVisibilityTests {
         let hostRepo = InMemoryRoomRepository(currentUserId: UUID())
         let menuRepo = InMemoryMenuRepository()
         let orderRepo = InMemoryOrderRepository()
-        let host = try await hostRepo.createRoom(name: "測試", hostDisplayName: "我", preferredCode: "0000")
+        let host = try await hostRepo.createRoom(name: "測試", hostDisplayName: "我")
         let bundle = try await menuRepo.saveMenu(MenuDraft(items: [MenuItemDraft(japaneseName: "とんかつ", priceText: "540", reading: "tonkatsu")]).toBundle(), toRoom: host.room.id)
         let item = bundle.items[0]
 

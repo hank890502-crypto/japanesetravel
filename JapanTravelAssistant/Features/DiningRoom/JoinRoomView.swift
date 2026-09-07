@@ -5,7 +5,7 @@ struct JoinRoomView: View {
     let prefilledCode: String?
 
     @Environment(AppRouter.self) private var router
-    @Environment(DiningSessionStore.self) private var sessionStore
+    @Environment(RoomSessionCoordinator.self) private var coordinator
     @Environment(\.dependencies) private var dependencies
 
     @State private var code = ""
@@ -17,7 +17,8 @@ struct JoinRoomView: View {
 
     private enum Field { case code, name }
     private var normalizedCode: String { RoomCodeGenerator.normalize(code) }
-    private var canJoin: Bool { RoomCodeGenerator.isValid(normalizedCode) && !isJoining }
+    private var isConfigured: Bool { dependencies.config.isCollaborationConfigured }
+    private var canJoin: Bool { isConfigured && RoomCodeGenerator.isValid(normalizedCode) && !isJoining }
 
     var body: some View {
         ScrollView {
@@ -26,20 +27,27 @@ struct JoinRoomView: View {
                     .font(.app(.body))
                     .foregroundStyle(AppColors.secondaryText)
 
-                if !dependencies.config.isCollaborationConfigured {
-                    ErrorBanner(error: .collaborationNotConfigured)
+                if !isConfigured {
+                    // 這台手機根本沒連上多人點餐：把「加入」關掉，不要讓長輩以為是代碼打錯
+                    ErrorBanner(error: UserFacingError(
+                        title: "這台手機還不能加入家人的點餐",
+                        message: "這個版本還沒有連上多人點餐。請家人幫忙檢查 App 的設定，或改用家人手機上的網頁版。",
+                        isRetryable: false
+                    ))
                 }
                 if let error {
                     ErrorBanner(error: error) { Task { await join() } }
                 }
 
-                LargeActionCard(title: "掃 QR Code", subtitle: "對準家人手機上的 QR Code", systemImage: AppIcon.qrCode, tint: AppColors.talk) {
-                    focused = nil
-                    showScanner = true
+                if isConfigured {
+                    LargeActionCard(title: "掃 QR Code", subtitle: "對準家人手機上的 QR Code", systemImage: AppIcon.qrCode, tint: AppColors.talk) {
+                        focused = nil
+                        showScanner = true
+                    }
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("或輸入房間代碼")
+                    Text(isConfigured ? "或輸入房間代碼" : "房間代碼")
                         .font(.app(.body))
                         .foregroundStyle(AppColors.secondaryText)
                     TextField("例如 A8F3K2", text: $code)
@@ -71,6 +79,15 @@ struct JoinRoomView: View {
                         .frame(minHeight: AccessibilityMetrics.minimumTapTarget)
                         .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(focused == .name ? AppColors.accent : AppColors.separator, lineWidth: 2))
+                        .onChange(of: displayName) { _, newValue in
+                            let clamped = RoomMember.clampDisplayName(newValue)
+                            if clamped != newValue { displayName = clamped }
+                        }
+                    Text(displayName.count >= RoomMember.maxDisplayNameLength
+                         ? "稱呼最多 \(RoomMember.maxDisplayNameLength) 個字，已經到上限了。"
+                         : "稱呼最多 \(RoomMember.maxDisplayNameLength) 個字。")
+                        .font(.app(.caption))
+                        .foregroundStyle(AppColors.secondaryText)
                 }
 
                 PrimaryButton(title: isJoining ? "加入中…" : "加入", systemImage: AppIcon.joinRoom, isLoading: isJoining, isEnabled: canJoin) {
@@ -83,7 +100,6 @@ struct JoinRoomView: View {
         .elderlyScreen(title: "加入家人的點餐")
         .onAppear {
             if let prefilledCode, code.isEmpty { code = RoomCodeGenerator.normalize(prefilledCode) }
-            if code.isEmpty, let fixed = DebugSettings.fixedRoomCode { code = fixed }
             focused = code.isEmpty ? .code : .name
         }
         .fullScreenCover(isPresented: $showScanner) {
@@ -115,15 +131,16 @@ struct JoinRoomView: View {
     }
 
     private func join() async {
+        guard isConfigured else { return }
         focused = nil
         isJoining = true
         error = nil
         defer { isJoining = false }
-        let me = displayName.nilIfBlank ?? "家人"
+        let me = RoomMember.clampDisplayName(displayName.nilIfBlank ?? "家人")
         DiningSessionStore.rememberDisplayName(me)
         do {
             let session = try await dependencies.roomRepository.joinRoom(code: normalizedCode, displayName: me)
-            sessionStore.current = session
+            coordinator.enter(session)
             router.push(.room)
         } catch {
             self.error = UserFacingError.from(error)
@@ -132,8 +149,10 @@ struct JoinRoomView: View {
 }
 
 #Preview("有代碼") {
+    let store = DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!)
     NavigationStack { JoinRoomView(prefilledCode: "A8F3K2") }
         .environment(AppRouter())
-        .environment(DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(store)
+        .environment(RoomSessionCoordinator.preview(sessionStore: store))
         .environment(\.dependencies, .preview)
 }

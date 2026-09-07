@@ -1,15 +1,20 @@
 import SwiftUI
 
 /// 用餐房間：看菜單、+ / − 點餐、看誰在房間裡、分享代碼。房主與家人看的是同一個畫面。
+///
+/// 資料來源是 RoomSessionCoordinator 持有的那一份 RoomViewModel（整個房間只有一份）。
+/// 這裡不在 onAppear / onDisappear 建立或清掉任何東西：全螢幕 cover 會讓底層畫面收到 onDisappear，
+/// 若在那裡清狀態，cover 會變成空白、關掉後整頁重新載入。
 struct RoomView: View {
     @Environment(AppRouter.self) private var router
     @Environment(DiningSessionStore.self) private var sessionStore
+    @Environment(RoomSessionCoordinator.self) private var coordinator
     @Environment(\.dependencies) private var dependencies
 
-    @State private var viewModel: RoomViewModel?
     @State private var optionPickerItem: MenuItem?
     @State private var confirmLeave = false
-    @State private var showQRCode = false
+    /// QR Code cover 讀這份快照，房間狀態在 cover 打開時改變也不會變成空白
+    @State private var qrCodeRoom: DiningRoom?
     @State private var selectedGroupId = RoomView.allGroupsId
 
     @State private var didPickInitialGroup = false
@@ -18,37 +23,22 @@ struct RoomView: View {
 
     var body: some View {
         Group {
-            if let viewModel {
+            if let viewModel = coordinator.viewModel {
                 content(viewModel)
+            } else if let notice = coordinator.endedNotice {
+                endedView(notice)
+            } else if sessionStore.current != nil {
+                enteringView
             } else {
                 noRoomView
             }
         }
         .elderlyScreen(title: sessionStore.current?.room.name ?? "點餐")
-        .onAppear {
-            if viewModel == nil, let session = sessionStore.current {
-                let vm = RoomViewModel(
-                    session: session,
-                    roomRepository: dependencies.roomRepository,
-                    menuRepository: dependencies.menuRepository,
-                    orderRepository: dependencies.orderRepository
-                )
-                vm.start()
-                viewModel = vm
-            }
-        }
-        .onDisappear {
-            // 離開畫面就停掉串流；回到畫面時 onAppear 會建新的
-            viewModel?.stop()
-            viewModel = nil
-        }
-        .fullScreenCover(isPresented: $showQRCode) {
-            if let room = sessionStore.current?.room {
-                RoomQRCodeSheet(room: room, webGuestURL: dependencies.config.webGuestURL) { showQRCode = false }
-            }
+        .fullScreenCover(item: $qrCodeRoom) { room in
+            RoomQRCodeSheet(room: room, webGuestURL: dependencies.config.webGuestURL) { qrCodeRoom = nil }
         }
         .sheet(item: $optionPickerItem) { item in
-            if let viewModel {
+            if let viewModel = coordinator.viewModel {
                 OptionPickerSheet(item: item, options: viewModel.options(for: item), reading: viewModel.reading(for: item)) { optionIds in
                     Task { await viewModel.adjust(item: item, optionIds: optionIds, by: 1) }
                     optionPickerItem = nil
@@ -65,6 +55,26 @@ struct RoomView: View {
                 .font(.app(.body))
                 .foregroundStyle(AppColors.secondaryText)
             SecondaryButton(title: "回到餐廳") { router.popOrPush(.restaurantHub) }
+        }
+        .padding(AccessibilityMetrics.screenPadding)
+    }
+
+    /// session 剛設定好、ViewModel 還在準備的一瞬間
+    private var enteringView: some View {
+        HStack(spacing: 12) {
+            ProgressView()
+            Text("正在進入房間…").font(.app(.body)).foregroundStyle(AppColors.secondaryText)
+        }
+        .padding(AccessibilityMetrics.screenPadding)
+    }
+
+    private func endedView(_ notice: UserFacingError) -> some View {
+        VStack(spacing: 20) {
+            ErrorBanner(error: notice)
+            PrimaryButton(title: "回到餐廳", systemImage: AppIcon.restaurant) {
+                coordinator.dismissEndedNotice()
+                router.popOrPush(.restaurantHub)
+            }
         }
         .padding(AccessibilityMetrics.screenPadding)
     }
@@ -122,7 +132,7 @@ struct RoomView: View {
                 .padding(.top, 8)
                 .confirmationDialog("要離開這個房間嗎？", isPresented: $confirmLeave, titleVisibility: .visible) {
                     Button("離開", role: .destructive) {
-                        sessionStore.leave()
+                        coordinator.leave()
                         router.popOrPush(.restaurantHub)
                     }
                     Button("留下", role: .cancel) {}
@@ -133,7 +143,7 @@ struct RoomView: View {
             .padding(.horizontal, AccessibilityMetrics.screenPadding)
             .padding(.bottom, 80)
         }
-        .onChange(of: groups.map(\.id)) { _, ids in
+        .onChange(of: groups.map(\.id), initial: true) { _, ids in
             // 第一次載入菜單時預設選第一個分類；分類消失時退回全部
             if selectedGroupId != Self.allGroupsId, !ids.contains(selectedGroupId) {
                 selectedGroupId = ids.first ?? Self.allGroupsId
@@ -181,7 +191,7 @@ struct RoomView: View {
                     .accessibilityLabel("代碼 \(viewModel.room.roomCode.map(String.init).joined(separator: " "))")
                 Spacer()
                 Button {
-                    showQRCode = true
+                    qrCodeRoom = viewModel.room
                 } label: {
                     VStack(spacing: 4) {
                         Image(systemName: AppIcon.qrCode)
@@ -212,8 +222,7 @@ struct RoomView: View {
     }
 
     private func shareText(_ viewModel: RoomViewModel) -> String {
-        let link = DeepLinkParser.shareURL(code: viewModel.room.roomCode, webGuestURL: dependencies.config.webGuestURL)
-        return "一起點餐：\(viewModel.room.name)\n房間代碼：\(viewModel.room.roomCode)\n點這個連結加入：\(link.absoluteString)"
+        DeepLinkParser.shareMessage(roomName: viewModel.room.name, code: viewModel.room.roomCode, webGuestURL: dependencies.config.webGuestURL)
     }
 
     private func membersRow(_ viewModel: RoomViewModel) -> some View {
@@ -311,8 +320,10 @@ struct RoomView: View {
 }
 
 #Preview {
+    let store = DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!)
     NavigationStack { RoomView() }
         .environment(AppRouter())
-        .environment(DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(store)
+        .environment(RoomSessionCoordinator.preview(sessionStore: store))
         .environment(\.dependencies, .preview)
 }
