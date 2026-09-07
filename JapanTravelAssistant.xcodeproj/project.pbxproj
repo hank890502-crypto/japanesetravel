@@ -85,6 +85,7 @@
 		9476200FE13DCD5B8EC624FE /* PhraseProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686FC88DB39877E3CD0E4A41 /* PhraseProviderTests.swift */; };
 		95388BC62EADDF13DE58E22A /* PlaceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61340D08B2DA014919B4A917 /* PlaceSearchView.swift */; };
 		96C6519BC423F460F244D927 /* KanjiNumberParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B155AD4A0897F5B7BD5ACE67 /* KanjiNumberParser.swift */; };
+		9781C06047AD563EE8FBFA60 /* DayDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0381FFE0E7495FC17E73881 /* DayDate.swift */; };
 		97C0F5F0659C319FA9372C53 /* RoomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9E0A583F1AAD8DFC185B59 /* RoomViewModel.swift */; };
 		98952A67F95B886CF6F84E34 /* AppIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223CCE967AF66DCFAABFE84E /* AppIcon.swift */; };
 		9AF7EBF8147DA696D75049BF /* JapaneseReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A1F4F6C1A7CE2B179B6F59 /* JapaneseReading.swift */; };
@@ -117,6 +118,7 @@
 		BCA661CD66B9CC48165243BE /* AIServiceRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292FF0564B7A5830FD95BE4C /* AIServiceRouter.swift */; };
 		C0179BB973A09A1C82E3A66D /* RoomMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C127F075BBF85B34136F0C /* RoomMember.swift */; };
 		C0AD5C7CFAB58D754916FD16 /* RoomRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8145D22EF2AFC66A91A216 /* RoomRepository.swift */; };
+		C726D30B2C416169FF2071EF /* AppRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56545719E41E65A6874B116A /* AppRouterTests.swift */; };
 		C85DEA81F5DABDDBD5BCF6A7 /* MenuSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45146C970885C69559C819DB /* MenuSelection.swift */; };
 		C88F115CDB8399CF363DCDFF /* TripEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC866C43B8172378D88D7464 /* TripEditorView.swift */; };
 		C9A5BC6168C26711A71A1F0B /* OrderSummaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C20F1116C4A8C1718A72503 /* OrderSummaryTests.swift */; };
@@ -214,6 +216,7 @@
 		4F4CE3D1612982E53EA50E60 /* PlaceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceTests.swift; sourceTree = "<group>"; };
 		53B6F3587E947696F7A726D6 /* PlaceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceStore.swift; sourceTree = "<group>"; };
 		55562A42CB7E428345CB7477 /* MenuGlossary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuGlossary.swift; sourceTree = "<group>"; };
+		56545719E41E65A6874B116A /* AppRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouterTests.swift; sourceTree = "<group>"; };
 		591F394288E579487FF4F834 /* JapanesePhraseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JapanesePhraseCard.swift; sourceTree = "<group>"; };
 		5AAC08D9C9D12DF4AFC1868E /* DeepLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkParser.swift; sourceTree = "<group>"; };
 		5BA2ACD33C07FB7398DD8E45 /* RoomMemberAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberAvatar.swift; sourceTree = "<group>"; };
@@ -294,6 +297,7 @@
 		ECA85E7BC6E00D011A3BE79D /* TripMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripMapView.swift; sourceTree = "<group>"; };
 		ED62761ECDC7BB2C9D10280B /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
 		EF8ED6F0140E8130E36CA18A /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
+		F0381FFE0E7495FC17E73881 /* DayDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDate.swift; sourceTree = "<group>"; };
 		F0C127F075BBF85B34136F0C /* RoomMember.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMember.swift; sourceTree = "<group>"; };
 		F1317FC645C69A22008A3EFF /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		F34931DFD237E16DF86F0C41 /* MenuReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuReviewView.swift; sourceTree = "<group>"; };
@@ -581,6 +585,7 @@
 			children = (
 				0F758B2641CCC4B89F9F16AE /* AIAdapterTests.swift */,
 				8CD9046B41F13F56F7D315CD /* AppleIntelligenceTests.swift */,
+				56545719E41E65A6874B116A /* AppRouterTests.swift */,
 				9E563D2D948CE78BA645AAA7 /* DeepLinkParserTests.swift */,
 				F9516AE937FE40ED5B9CE851 /* ImportSectionRobustnessTests.swift */,
 				DC33F6F68F52109A9244A5A0 /* JapaneseReadingTests.swift */,
@@ -650,6 +655,7 @@
 		A7040D0945477572DD62BA6D /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F0381FFE0E7495FC17E73881 /* DayDate.swift */,
 				8674DAA2815120B3889EF015 /* DiningRoom.swift */,
 				1C3FBFCF9E728261D64346F7 /* ItineraryStop.swift */,
 				A0B2F75795DAD6E090328B74 /* Menu.swift */,
@@ -929,6 +935,7 @@
 				B62AA756F391AFB3AD6876B5 /* CommunicationCategoriesView.swift in Sources */,
 				FA5236E364A98F790664D324 /* CreateRoomView.swift in Sources */,
 				3C3FB45A4479008D92C7FD7B /* CurrentLocationProvider.swift in Sources */,
+				9781C06047AD563EE8FBFA60 /* DayDate.swift in Sources */,
 				E72A91C96DB20AEF7A3CAC1E /* DebugLaunchOptions.swift in Sources */,
 				F4362A987F2C56529BD53263 /* DebugSettings.swift in Sources */,
 				D2F1598E635088A029A2DF1E /* DeepLinkParser.swift in Sources */,
@@ -1035,6 +1042,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A316299A15408BAF2EAA5B2 /* AIAdapterTests.swift in Sources */,
+				C726D30B2C416169FF2071EF /* AppRouterTests.swift in Sources */,
 				AD420D0952E98DF217F97458 /* AppleIntelligenceTests.swift in Sources */,
 				B7E77B3AC2D484FF51407FA1 /* DeepLinkParserTests.swift in Sources */,
 				D37E9A214DD21D5B068C706D /* ImportSectionRobustnessTests.swift in Sources */,

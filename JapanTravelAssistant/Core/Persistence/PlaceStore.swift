@@ -11,6 +11,8 @@ final class PlaceStore {
 
     private let directory: URL?
     private var persistTask: Task<Void, Never>?
+    /// 這次 App 開著期間已經試過補座標（成功或失敗）的地點，不重試，避免被限流。
+    @ObservationIgnored private var geocodeAttempted: Set<UUID> = []
 
     init(directory: URL? = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first) {
         self.directory = directory
@@ -43,40 +45,70 @@ final class PlaceStore {
     }
 
     /// 舊版把「第幾天」存在地點上、同一地點每天存一份：改成站點，並把重複的地點合併。
+    /// 只有名稱相同「而且」地址／座標沒有明顯不同的才合併；刪除前先把 places.json 備份成 places.backup.json。
     private func migrateDayLabelsToStops() {
+        var didBackup = false
         for trip in trips where !stops.contains(where: { $0.tripId == trip.id }) {
             let tripPlaces = places.filter { $0.tripId == trip.id && !$0.isRecommendation }.sorted { ($0.sortOrder, $0.createdAt) < ($1.sortOrder, $1.createdAt) }
             guard !tripPlaces.isEmpty else { continue }
-            var canonical: [String: UUID] = [:]
+            var canonicalIds: [String: [UUID]] = [:]   // 鍵 → 已保留的地點（同名但不同地方可能不只一個）
+            var canonical: [UUID: Place] = [:]
             var newStops: [ItineraryStop] = []
             var removed: Set<UUID> = []
             for place in tripPlaces {
-                let key = place.dedupeKey
+                var candidates: [UUID] = []
+                for key in place.dedupeKeys {
+                    for id in canonicalIds[key] ?? [] where !candidates.contains(id) { candidates.append(id) }
+                }
                 let targetId: UUID
-                if let existing = canonical[key] {
-                    targetId = existing
+                if let match = candidates.first(where: { canonical[$0].map(place.looksLikeSamePlace(as:)) ?? false }) {
+                    targetId = match
                     removed.insert(place.id)
+                    // 被合併的那份若有保留的那份缺少的資料，補過去
+                    if var kept = canonical[match], let index = places.firstIndex(where: { $0.id == match }) {
+                        if kept.address?.nilIfBlank == nil { kept.address = place.address }
+                        if kept.japaneseName?.nilIfBlank == nil { kept.japaneseName = place.japaneseName }
+                        if kept.phone?.nilIfBlank == nil { kept.phone = place.phone }
+                        if kept.note?.nilIfBlank == nil { kept.note = place.note }
+                        if !kept.hasCoordinate, place.hasCoordinate { kept.latitude = place.latitude; kept.longitude = place.longitude }
+                        canonical[match] = kept
+                        places[index] = kept
+                    }
                 } else {
-                    canonical[key] = place.id
+                    for key in place.dedupeKeys { canonicalIds[key, default: []].append(place.id) }
+                    canonical[place.id] = place
                     targetId = place.id
                 }
                 newStops.append(ItineraryStop(tripId: trip.id, placeId: targetId, dayLabel: place.dayLabel, sortOrder: newStops.count))
             }
             stops.append(contentsOf: newStops)
-            places.removeAll { removed.contains($0.id) }
+            if !removed.isEmpty {
+                if !didBackup { backupPlacesFile(); didBackup = true }
+                places.removeAll { removed.contains($0.id) }
+            }
         }
+    }
+
+    /// 遷移要刪資料前先留一份，萬一合錯還救得回來。
+    private func backupPlacesFile() {
+        guard let directory else { return }
+        let source = directory.appendingPathComponent("places.json")
+        let backup = directory.appendingPathComponent("places.backup.json")
+        guard FileManager.default.fileExists(atPath: source.path) else { return }
+        try? FileManager.default.removeItem(at: backup)
+        try? FileManager.default.copyItem(at: source, to: backup)
     }
 
     // MARK: - 旅程
 
     var sortedTrips: [Trip] {
-        trips.sorted { ($0.startDate ?? $0.createdAt) > ($1.startDate ?? $1.createdAt) }
+        trips.sorted { ($0.startDate?.date() ?? $0.createdAt) > ($1.startDate?.date() ?? $1.createdAt) }
     }
 
     func trip(id: UUID) -> Trip? { trips.first { $0.id == id } }
 
     @discardableResult
-    func addTrip(name: String, startDate: Date? = nil, endDate: Date? = nil) -> Trip {
+    func addTrip(name: String, startDate: DayDate? = nil, endDate: DayDate? = nil) -> Trip {
         let trip = Trip(name: name.nilIfBlank ?? "新的旅程", startDate: startDate, endDate: endDate)
         trips.append(trip)
         return trip
@@ -188,11 +220,26 @@ final class PlaceStore {
         for place in newPlaces { add(place, to: tripId) }
     }
 
-    /// 匯入行程：同名地點只存一份，每次出現都是一個站點。回傳（新增的地點數、站點數）。
+    /// 匯入行程：同名地點只存一份，每次出現都是一個站點。回傳（新增的地點數、站點數、推薦數）。
+    /// - 同一地點同一天已經在時間表上就不再加（同一份回覆貼兩次不會加倍）。
+    /// - replaceExisting：先清掉這趟原本的時間表再匯入（地點與它們的資料保留）。
+    /// - 命中既有的「推薦景點」時，它就變成會去的地點（不再是推薦）。
     @discardableResult
-    func importItinerary(stops imported: [(place: Place, dayLabel: String?)], recommendations: [Place], into tripId: UUID) -> (places: Int, stops: Int, recommendations: Int) {
+    func importItinerary(stops imported: [(place: Place, dayLabel: String?)], recommendations: [Place], into tripId: UUID, replaceExisting: Bool = false) -> (places: Int, stops: Int, recommendations: Int) {
+        if replaceExisting {
+            stops.removeAll { $0.tripId == tripId }
+        }
         var byKey: [String: UUID] = [:]
-        for place in places where place.tripId == tripId { byKey[place.dedupeKey] = place.id }
+        for place in places where place.tripId == tripId {
+            for key in place.dedupeKeys where byKey[key] == nil { byKey[key] = place.id }
+        }
+        func existingId(for place: Place) -> UUID? {
+            place.dedupeKeys.lazy.compactMap { byKey[$0] }.first
+        }
+        func register(_ place: Place) {
+            for key in place.dedupeKeys where byKey[key] == nil { byKey[key] = place.id }
+        }
+
         var addedPlaces = 0
         var addedStops = 0
         var nextSort = (places(in: tripId).last?.sortOrder ?? -1) + 1
@@ -200,36 +247,44 @@ final class PlaceStore {
             var place = entry.place
             place.tripId = tripId
             place.isRecommendation = false
-            let key = place.dedupeKey
             let placeId: UUID
-            if let existing = byKey[key] {
+            if let existing = existingId(for: place) {
                 placeId = existing
-                // 補上原本沒有的資料
                 if let index = places.firstIndex(where: { $0.id == existing }) {
+                    // 補上原本沒有的資料
                     if places[index].address?.nilIfBlank == nil { places[index].address = place.address }
                     if places[index].japaneseName?.nilIfBlank == nil { places[index].japaneseName = place.japaneseName }
                     if places[index].note?.nilIfBlank == nil { places[index].note = place.note }
+                    // 原本只是推薦、現在排進行程了
+                    if places[index].isRecommendation {
+                        places[index].isRecommendation = false
+                        places[index].recommendationReason = nil
+                    }
+                    register(places[index])
                 }
             } else {
                 place.sortOrder = nextSort
                 nextSort += 1
                 places.append(place)
-                byKey[key] = place.id
+                register(place)
                 placeId = place.id
                 addedPlaces += 1
             }
-            appendStop(placeId: placeId, tripId: tripId, dayLabel: entry.dayLabel)
-            addedStops += 1
+            let alreadyScheduled = stops.contains { $0.tripId == tripId && $0.placeId == placeId && $0.dayLabel?.nilIfBlank == entry.dayLabel?.nilIfBlank }
+            if !alreadyScheduled {
+                appendStop(placeId: placeId, tripId: tripId, dayLabel: entry.dayLabel)
+                addedStops += 1
+            }
         }
         var addedRecommendations = 0
         for var rec in recommendations {
             rec.tripId = tripId
             rec.isRecommendation = true
-            guard byKey[rec.dedupeKey] == nil else { continue }
+            guard existingId(for: rec) == nil else { continue }
             rec.sortOrder = nextSort
             nextSort += 1
             places.append(rec)
-            byKey[rec.dedupeKey] = rec.id
+            register(rec)
             addedRecommendations += 1
         }
         return (addedPlaces, addedStops, addedRecommendations)
@@ -237,7 +292,7 @@ final class PlaceStore {
 
     private func appendStop(placeId: UUID, tripId: UUID, dayLabel: String?) {
         let next = (sortedStops(in: tripId).last?.sortOrder ?? -1) + 1
-        stops.append(ItineraryStop(tripId: tripId, placeId: placeId, dayLabel: dayLabel, sortOrder: next))
+        stops.append(ItineraryStop(tripId: tripId, placeId: placeId, dayLabel: dayLabel?.nilIfBlank, sortOrder: next))
     }
 
     func update(_ place: Place) {
@@ -253,17 +308,26 @@ final class PlaceStore {
         }
     }
 
-    /// 推薦景點加進行程（變成一般地點，並排在時間表最後）
+    /// 推薦景點加進行程（變成一般地點，並排在時間表最後）。已經在行程裡的不會重複加。
     func addRecommendationToItinerary(placeId: UUID) {
-        guard let index = places.firstIndex(where: { $0.id == placeId }), let tripId = places[index].tripId else { return }
+        guard let index = places.firstIndex(where: { $0.id == placeId }), let tripId = places[index].tripId,
+              places[index].isRecommendation else { return }
         places[index].isRecommendation = false
         appendStop(placeId: placeId, tripId: tripId, dayLabel: nil)
     }
 
+    /// 刪地點：連同它在時間表上的所有站點
     func remove(id: UUID) {
         places.removeAll { $0.id == id }
         stops.removeAll { $0.placeId == id }
     }
+
+    /// 只刪時間表上的一站，地點本身保留（它在其他天的站點也保留）。
+    func removeStop(id: UUID) {
+        stops.removeAll { $0.id == id }
+    }
+
+    // MARK: - 補座標
 
     /// 背景補座標用：只有還沒有座標的才更新
     func setCoordinate(placeId: UUID, latitude: Double, longitude: Double, address: String? = nil) {
@@ -271,6 +335,18 @@ final class PlaceStore {
         places[index].latitude = latitude
         places[index].longitude = longitude
         if places[index].address?.nilIfBlank == nil, let address { places[index].address = address }
+    }
+
+    /// 這趟裡還沒有座標、有地址或日文名可以查、而且這次 App 開著期間還沒試過的地點。
+    func placesNeedingGeocode(in tripId: UUID) -> [Place] {
+        places(in: tripId).filter {
+            !$0.hasCoordinate && !geocodeAttempted.contains($0.id) && ($0.address?.nilIfBlank != nil || $0.japaneseName?.nilIfBlank != nil)
+        }
+    }
+
+    /// 記下這個地點已經查過座標（不論成功失敗），這次不再重試。
+    func markGeocodeAttempted(_ placeId: UUID) {
+        geocodeAttempted.insert(placeId)
     }
 
     // MARK: - 分享（匯出／匯入整趟）

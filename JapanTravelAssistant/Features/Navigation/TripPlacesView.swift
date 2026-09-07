@@ -105,7 +105,7 @@ struct TripPlacesView: View {
             .padding(.bottom, AccessibilityMetrics.screenPadding)
         }
         .elderlyScreen(title: trip?.name ?? "旅程")
-        .task(id: store.places(in: tripId).filter { !$0.hasCoordinate }.map(\.id)) {
+        .task(id: tripId) {
             await geocodeMissing()
         }
     }
@@ -122,14 +122,21 @@ struct TripPlacesView: View {
     }
 
     /// 沒座標的地點在背景補座標（地圖與 Google／Yahoo 導航需要）。
+    /// 一次把清單跑完：查過（不論成功失敗）就記在 store 裡，這次 App 開著期間不再重試；
+    /// 每次查詢間隔至少 1 秒，避免一次太多請求被限流，之後連查得到的也失敗。
     private func geocodeMissing() async {
-        let missing = store.places(in: tripId).filter { !$0.hasCoordinate && ($0.address?.nilIfBlank != nil || $0.japaneseName?.nilIfBlank != nil) }
-        guard !missing.isEmpty else { return }
+        let pending = store.placesNeedingGeocode(in: tripId)
+        guard !pending.isEmpty else { return }
         isGeocoding = true
         defer { isGeocoding = false }
-        for place in missing {
+        for (index, place) in pending.enumerated() {
+            if index > 0 {
+                try? await Task.sleep(for: .seconds(1))
+            }
             if Task.isCancelled { return }
-            if let result = await dependencies.geocoder.coordinate(address: place.address, name: place.japaneseName ?? place.name) {
+            let result = await dependencies.geocoder.coordinate(address: place.address, name: place.japaneseName ?? place.name)
+            store.markGeocodeAttempted(place.id)
+            if let result {
                 store.setCoordinate(placeId: place.id, latitude: result.latitude, longitude: result.longitude, address: result.address)
             }
         }

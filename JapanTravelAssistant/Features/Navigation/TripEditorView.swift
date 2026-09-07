@@ -82,7 +82,11 @@ struct TripEditorView: View {
             loaded = true
             if let tripId, let trip = store.trip(id: tripId) {
                 name = trip.name
-                if let s = trip.startDate { hasDates = true; startDate = s; endDate = trip.endDate ?? s }
+                if let s = trip.startDate?.date() {
+                    hasDates = true
+                    startDate = s
+                    endDate = trip.endDate?.date() ?? s
+                }
             } else {
                 focused = true
             }
@@ -91,14 +95,17 @@ struct TripEditorView: View {
 
     private func save() {
         focused = false
+        // 只存「哪一天」（手機目前時區的年月日），不含時間，換時區不會差一天
+        let start = hasDates ? DayDate(startDate) : nil
+        let end = hasDates ? DayDate(endDate) : nil
         if let tripId, var trip = store.trip(id: tripId) {
             trip.name = name.trimmingCharacters(in: .whitespaces)
-            trip.startDate = hasDates ? startDate : nil
-            trip.endDate = hasDates ? endDate : nil
+            trip.startDate = start
+            trip.endDate = end
             store.updateTrip(trip)
             router.popOrPush(.tripPlaces(trip.id))
         } else {
-            let trip = store.addTrip(name: name, startDate: hasDates ? startDate : nil, endDate: hasDates ? endDate : nil)
+            let trip = store.addTrip(name: name, startDate: start, endDate: end)
             router.popOrPush(.places)
             router.push(.tripPlaces(trip.id))
         }

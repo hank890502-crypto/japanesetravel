@@ -42,10 +42,16 @@ struct PlaceDetailView: View {
                     Label(([place.category.displayName] + (place.isRecommendation ? ["推薦景點"] : store.dayLabels(of: place.id))).joined(separator: "・"), systemImage: place.category.systemImage)
                         .font(.app(.caption))
                         .foregroundStyle(PlaceTint.color(for: place.category))
-                    if let japanese = place.japaneseName?.nilIfBlank, japanese != place.name {
-                        Text(japanese)
-                            .font(.app(.japanese))
-                            .foregroundStyle(AppColors.primaryText)
+                    if let japanese = place.japaneseName?.nilIfBlank {
+                        if japanese != place.name {
+                            Text(japanese)
+                                .font(.app(.japanese))
+                                .foregroundStyle(AppColors.primaryText)
+                        }
+                    } else {
+                        Text("還沒有日文名稱。按下面的「修改」可以補上，給司機看會更清楚。")
+                            .font(.app(.caption))
+                            .foregroundStyle(AppColors.secondaryText)
                     }
                     Text(place.address ?? "（沒有地址）")
                         .font(.app(.body))

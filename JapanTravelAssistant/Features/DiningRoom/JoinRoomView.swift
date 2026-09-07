@@ -18,6 +18,13 @@ struct JoinRoomView: View {
     private enum Field { case code, name }
     private var normalizedCode: String { RoomCodeGenerator.normalize(code) }
     private var canJoin: Bool { RoomCodeGenerator.isValid(normalizedCode) && !isJoining }
+    /// 這台手機目前所在（還能用）的房間
+    private var currentRoom: DiningRoom? {
+        guard let room = sessionStore.current?.room, room.isJoinable else { return nil }
+        return room
+    }
+    /// 輸入的代碼就是目前所在的房間
+    private var isCurrentRoomCode: Bool { currentRoom?.roomCode == normalizedCode }
 
     var body: some View {
         ScrollView {
@@ -31,6 +38,28 @@ struct JoinRoomView: View {
                 }
                 if let error {
                     ErrorBanner(error: error) { Task { await join() } }
+                }
+
+                if let currentRoom {
+                    if isCurrentRoomCode {
+                        LargeActionCard(title: "你已經在「\(currentRoom.name)」裡了", subtitle: "不用再加入，直接回到點餐畫面", systemImage: AppIcon.joinRoom, tint: AppColors.go) {
+                            router.push(.room)
+                        }
+                    } else {
+                        HStack(alignment: .top, spacing: 12) {
+                            Image(systemName: "info.circle.fill")
+                                .font(.app(.cardTitle))
+                                .foregroundStyle(AppColors.accent)
+                                .accessibilityHidden(true)
+                            Text("你現在在「\(currentRoom.name)」房間。加入新的房間後，就會離開它（你點的東西會留著）。")
+                                .font(.app(.body))
+                                .foregroundStyle(AppColors.primaryText)
+                        }
+                        .padding(AccessibilityMetrics.screenPadding)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AccessibilityMetrics.cornerRadius, style: .continuous))
+                        .accessibilityElement(children: .combine)
+                    }
                 }
 
                 LargeActionCard(title: "掃 QR Code", subtitle: "對準家人手機上的 QR Code", systemImage: AppIcon.qrCode, tint: AppColors.talk) {
@@ -97,24 +126,36 @@ struct JoinRoomView: View {
         }
     }
 
+    /// 只接受 App 專用連結、設定裡那個網頁版的連結，或直接印著代碼的 QR；
+    /// 餐廳桌上的官網、優惠 QR（也常帶 ?code=）一律不算，不會拿去加入。
     private func handleScanned(_ payload: String) {
         let scanned: String?
-        if let url = URL(string: payload), case .joinRoom(let value)? = DeepLinkParser.parse(url) {
+        if let url = URL(string: payload), case .joinRoom(let value)? = DeepLinkParser.parse(url, webGuestHost: dependencies.config.webGuestURL?.host) {
             scanned = value
-        } else {
+        } else if !payload.contains("://") {
             let plain = RoomCodeGenerator.normalize(payload)
             scanned = RoomCodeGenerator.isValid(plain) ? plain : nil
+        } else {
+            scanned = nil
         }
-        guard let scanned else {
-            error = UserFacingError(title: "這不是點餐房間的 QR Code", message: "請掃家人 App 裡「QR Code」按鈕顯示的那個。")
+        guard let scanned, RoomCodeGenerator.isValid(scanned) else {
+            error = .notRoomQRCode
             return
         }
         code = scanned
         error = nil
+        if isCurrentRoomCode {
+            router.push(.room)   // 掃到的就是目前所在的房間：直接回去，不重新加入
+            return
+        }
         Task { await join() }
     }
 
     private func join() async {
+        guard RoomCodeGenerator.isValid(normalizedCode) else {
+            error = UserFacingError(title: "代碼不完整", message: "房間代碼是 6 個英文字母或數字，請再確認一次。", isRetryable: false)
+            return
+        }
         focused = nil
         isJoining = true
         error = nil

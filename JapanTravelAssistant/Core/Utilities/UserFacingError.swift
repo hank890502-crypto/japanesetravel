@@ -49,6 +49,18 @@ struct UserFacingError: LocalizedError, Hashable, Sendable {
         isRetryable: false
     )
 
+    static let unreadableTripFile = UserFacingError(
+        title: "打不開這個旅程檔",
+        message: "檔案可能在傳送時壞掉了。請請對方再分享一次，或改用 AirDrop 傳。",
+        isRetryable: false
+    )
+
+    static let notRoomQRCode = UserFacingError(
+        title: "這不是點餐房間的 QR Code",
+        message: "請掃家人 App 裡「QR Code」按鈕顯示的那個，或直接輸入 6 碼代碼。",
+        isRetryable: false
+    )
+
     static let unknown = UserFacingError(
         title: "發生了一點問題",
         message: "請再試一次。如果還是不行，請關掉 App 重新打開。"

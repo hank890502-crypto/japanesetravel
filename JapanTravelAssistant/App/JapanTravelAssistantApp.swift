@@ -13,7 +13,7 @@ struct JapanTravelAssistantApp: App {
         let deps = AppDependencies.live(config: DebugLaunchOptions.forcesInMemory() ? .empty : AppConfig.fromBundle())
         dependencies = deps
         _settingsStore = State(initialValue: SettingsStore(aiRouter: deps.aiRouter))
-        let router = AppRouter()
+        let router = AppRouter(webGuestHost: deps.config.webGuestURL?.host)
         router.path = DebugLaunchOptions.initialPath()
         _router = State(initialValue: router)
         if let sample = DebugLaunchOptions.sampleDraft() {
@@ -35,7 +35,7 @@ struct JapanTravelAssistantApp: App {
                 .task { DebugLaunchOptions.seedPlacesIfRequested(into: placeStore, router: router) }
                 .task { await DebugLaunchOptions.seedRoomIfRequested(dependencies: dependencies, sessionStore: sessionStore, router: router) }
                 .onOpenURL { url in
-                    router.handle(url)
+                    router.handle(url, currentRoom: sessionStore.current)
                 }
         }
     }

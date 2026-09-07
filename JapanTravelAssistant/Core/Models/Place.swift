@@ -89,7 +89,8 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
         address = try c.decodeIfPresent(String.self, forKey: .address)
         latitude = try c.decodeIfPresent(Double.self, forKey: .latitude)
         longitude = try c.decodeIfPresent(Double.self, forKey: .longitude)
-        category = try c.decodeIfPresent(PlaceCategory.self, forKey: .category) ?? .other
+        // 不認識的類型（例如新版 App 多加的）退回「其他」，不要讓整份資料讀不進來
+        category = (try c.decodeIfPresent(String.self, forKey: .category)).flatMap(PlaceCategory.init(rawValue:)) ?? .other
         phone = try c.decodeIfPresent(String.self, forKey: .phone)
         note = try c.decodeIfPresent(String.self, forKey: .note)
         createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? .now
@@ -104,9 +105,36 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
     /// 給司機／店員看的名稱：有日文名用日文名
     var staffName: String { japaneseName?.nilIfBlank ?? name }
 
-    /// 用來判斷「同一個地點」的鍵：日文名優先，去空白、統一大小寫
+    /// 名稱正規化：去空白、統一大小寫，讓「ドーミーイン 名古屋」與「ドーミーイン名古屋」視為相同
+    static func normalizedKey(_ text: String) -> String {
+        text.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "　", with: "").lowercased()
+    }
+
+    /// 用來判斷「同一個地點」的主鍵：日文名優先
     var dedupeKey: String {
-        (japaneseName?.nilIfBlank ?? name).replacingOccurrences(of: " ", with: "").lowercased()
+        Self.normalizedKey(japaneseName?.nilIfBlank ?? name)
+    }
+
+    /// 所有可用來合併的鍵：日文名（有的話）與中文名都算。任一相符就視為同一地點，
+    /// 這樣「有日文名」與「沒日文名」的同一個地方（ChatGPT 補充匯入常只給中文名）也能合併。
+    var dedupeKeys: [String] {
+        var keys: [String] = []
+        if let japanese = japaneseName?.nilIfBlank { keys.append(Self.normalizedKey(japanese)) }
+        let nameKey = Self.normalizedKey(name)
+        if !nameKey.isEmpty, !keys.contains(nameKey) { keys.append(nameKey) }
+        return keys
+    }
+
+    /// 兩個名稱相同的地點是不是「明顯不同的地方」：地址都有而且不同、或座標都有而且差很遠。
+    /// 舊資料遷移合併前用這個保護，避免把不同的兩家「晚餐」合成一家而把地址、電話弄丟。
+    func looksLikeSamePlace(as other: Place) -> Bool {
+        let a = address?.nilIfBlank.map(Self.normalizedKey), b = other.address?.nilIfBlank.map(Self.normalizedKey)
+        if let a, let b, a != b { return false }
+        if let lat1 = latitude, let lon1 = longitude, let lat2 = other.latitude, let lon2 = other.longitude {
+            // 約 50 公尺內視為同一地點
+            if abs(lat1 - lat2) > 0.0005 || abs(lon1 - lon2) > 0.0005 { return false }
+        }
+        return true
     }
 
     var hasCoordinate: Bool { latitude != nil && longitude != nil }

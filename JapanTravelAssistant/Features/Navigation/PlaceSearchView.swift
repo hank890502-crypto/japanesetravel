@@ -13,6 +13,8 @@ struct PlaceSearchView: View {
     @State private var isSearching = false
     @State private var didSearch = false
     @State private var error: UserFacingError?
+    /// 正在存的那一筆（要先用日文反查名稱與地址，需要一點時間）
+    @State private var savingId: String?
     @FocusState private var focused: Bool
 
     var body: some View {
@@ -62,7 +64,7 @@ struct PlaceSearchView: View {
 
                 ForEach(results) { result in
                     Button {
-                        save(result)
+                        Task { await save(result) }
                     } label: {
                         HStack(spacing: 14) {
                             Image(systemName: result.suggestedCategory.systemImage)
@@ -82,17 +84,27 @@ struct PlaceSearchView: View {
                                 }
                             }
                             Spacer()
-                            Text("存起來")
-                                .font(.system(.caption, weight: .semibold))
-                                .foregroundStyle(AppColors.accent)
+                            if savingId == result.id {
+                                ProgressView()
+                            } else {
+                                Text("存起來")
+                                    .font(.system(.caption, weight: .semibold))
+                                    .foregroundStyle(AppColors.accent)
+                            }
                         }
                         .padding(AccessibilityMetrics.screenPadding)
                         .frame(maxWidth: .infinity, minHeight: AccessibilityMetrics.minimumTapTarget, alignment: .leading)
                         .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AccessibilityMetrics.cornerRadius, style: .continuous))
                     }
                     .buttonStyle(CardPressStyle())
+                    .disabled(savingId != nil)
                     .accessibilityLabel("\(result.name)，\(result.address ?? "")")
                     .accessibilityHint("點一下存起來")
+                }
+                if savingId != nil {
+                    Text("正在查這個地點的日文名稱和地址（給司機看用）…")
+                        .font(.app(.caption))
+                        .foregroundStyle(AppColors.secondaryText)
                 }
 
                 SecondaryButton(title: "自己輸入名稱和地址", systemImage: AppIcon.edit) {
@@ -123,9 +135,14 @@ struct PlaceSearchView: View {
         }
     }
 
-    private func save(_ result: PlaceSearchResult) {
-        var place = result.toPlace()
-        place.japaneseName = result.name
+    /// 搜尋結果的名稱與地址是手機語言（繁中）的寫法，不能直接當「日文名稱（給司機看）」；
+    /// 存之前用日文反查一次。查不到就把日文名稱留空，地點頁會提示可以稍後補。
+    private func save(_ result: PlaceSearchResult) async {
+        guard savingId == nil else { return }
+        savingId = result.id
+        defer { savingId = nil }
+        let japanese = await dependencies.placeSearch.japaneseDetails(latitude: result.latitude, longitude: result.longitude)
+        let place = result.toPlace(japanese: japanese)
         store.add(place, to: tripId)
         router.popOrPush(.tripPlaces(tripId))
         router.push(.placeDetail(place.id))
