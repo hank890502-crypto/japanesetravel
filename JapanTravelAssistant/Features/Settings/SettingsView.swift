@@ -17,6 +17,12 @@ struct SettingsView: View {
                         choiceCard(title: kind.displayName, subtitle: kind.explanation, isSelected: settings.aiProvider == kind) {
                             settings.aiProvider = kind
                         }
+                        if kind == .appleIntelligence, let reason = AppleIntelligence.availability.reason {
+                            Label(reason, systemImage: AppIcon.warning)
+                                .font(.app(.caption))
+                                .foregroundStyle(AppColors.secondaryText)
+                                .padding(.horizontal, 4)
+                        }
                     }
                     if settings.aiProvider == .remoteBackend {
                         VStack(alignment: .leading, spacing: 8) {

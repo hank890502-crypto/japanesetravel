@@ -74,12 +74,14 @@ enum TranslationLanguage: String, Sendable {
 /// 目前可選的 AI 供應商。金鑰永遠不在 App 裡：正式使用走「自己的伺服器」（iPhone → 你的 Backend → OpenAI / Gemini / Claude）。
 enum AIProviderKind: String, CaseIterable, Codable, Sendable {
     case disabled
+    case appleIntelligence
     case mock
     case remoteBackend
 
     var displayName: String {
         switch self {
         case .disabled: "未啟用"
+        case .appleIntelligence: "Apple 智慧（手機上處理）"
         case .mock: "測試用（假資料）"
         case .remoteBackend: "自己的伺服器"
         }
@@ -88,6 +90,7 @@ enum AIProviderKind: String, CaseIterable, Codable, Sendable {
     var explanation: String {
         switch self {
         case .disabled: "不使用 AI。菜單翻譯用內建詞彙表與 iPhone 離線翻譯。"
+        case .appleIntelligence: "用 iPhone 內建的 Apple 智慧整理菜單、翻譯、回答問題。免費、離線、資料不離開手機。只能處理文字，不能看照片。"
         case .mock: "用假資料走完整流程，給開發測試用，不會連網。"
         case .remoteBackend: "把照片與文字送到你自己架的伺服器，由它去呼叫 AI。金鑰只放在伺服器上。"
         }

@@ -15,7 +15,9 @@ final class SettingsStore {
     init(defaults: UserDefaults = .standard, aiRouter: AIServiceRouter? = nil) {
         self.defaults = defaults
         self.aiRouter = aiRouter
-        aiProvider = defaults.string(forKey: Keys.aiProvider).flatMap(AIProviderKind.init(rawValue:)) ?? .disabled
+        // 沒設定過：裝置支援 Apple 智慧就預設用它（免費、離線）
+        aiProvider = defaults.string(forKey: Keys.aiProvider).flatMap(AIProviderKind.init(rawValue:))
+            ?? (AppleIntelligence.availability.isAvailable ? .appleIntelligence : .disabled)
         aiBackendURLText = defaults.string(forKey: Keys.aiBackendURL) ?? ""
         navigationProvider = defaults.string(forKey: Keys.navigation).flatMap(NavigationProvider.init(rawValue:)) ?? .appleMaps
         applyAI()
@@ -26,9 +28,13 @@ final class SettingsStore {
         return url
     }
 
-    /// 自己的伺服器但網址無效 → 實際上等於未啟用
+    /// 自己的伺服器但網址無效、或 Apple 智慧不可用 → 實際上等於未啟用
     var effectiveAIProvider: AIProviderKind {
-        aiProvider == .remoteBackend && aiBackendURL == nil ? .disabled : aiProvider
+        switch aiProvider {
+        case .remoteBackend where aiBackendURL == nil: return .disabled
+        case .appleIntelligence where !AppleIntelligence.availability.isAvailable: return .disabled
+        default: return aiProvider
+        }
     }
 
     private enum Keys {

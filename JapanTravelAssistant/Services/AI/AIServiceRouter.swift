@@ -28,6 +28,13 @@ final class AIServiceRouter: AIService, @unchecked Sendable {
         switch selection.kind {
         case .disabled: return disabled
         case .mock: return mock
+        case .appleIntelligence:
+            #if canImport(FoundationModels)
+            if #available(iOS 26, *), AppleIntelligence.availability.isAvailable {
+                return AppleIntelligenceAIService()
+            }
+            #endif
+            return disabled
         case .remoteBackend:
             guard let url = selection.backendURL else { return disabled }
             return RemoteAIService(baseURL: url)

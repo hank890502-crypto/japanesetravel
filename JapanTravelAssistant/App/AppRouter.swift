@@ -23,6 +23,7 @@ enum Route: Hashable {
     case placeEditor(tripId: UUID, placeId: UUID?)
     case emergency
     case settings
+    case assistant
 }
 
 /// 導覽狀態：一條 NavigationStack 的路徑 + 全螢幕的「給店員看」。

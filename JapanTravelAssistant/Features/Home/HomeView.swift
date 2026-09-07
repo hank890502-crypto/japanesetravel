@@ -59,6 +59,7 @@ enum HomeEntry: CaseIterable, Identifiable {
     case understand
     case go
     case help
+    case ask
 
     var id: Self { self }
 
@@ -68,6 +69,7 @@ enum HomeEntry: CaseIterable, Identifiable {
         case .understand: "我要看懂這個"
         case .go: "我要去一個地方"
         case .help: "我遇到問題"
+        case .ask: "我想問問題"
         }
     }
 
@@ -77,6 +79,7 @@ enum HomeEntry: CaseIterable, Identifiable {
         case .understand: "菜單、商品、價牌，一家人一起點餐"
         case .go: "用地圖帶我去"
         case .help: "求助、找醫院、找警察"
+        case .ask: "問日本旅遊、商品、餐廳的事"
         }
     }
 
@@ -86,6 +89,7 @@ enum HomeEntry: CaseIterable, Identifiable {
         case .understand: AppIcon.understand
         case .go: AppIcon.go
         case .help: AppIcon.help
+        case .ask: "questionmark.bubble.fill"
         }
     }
 
@@ -95,6 +99,7 @@ enum HomeEntry: CaseIterable, Identifiable {
         case .understand: AppColors.understand
         case .go: AppColors.go
         case .help: AppColors.help
+        case .ask: Color(uiColor: .systemPurple)
         }
     }
 
@@ -104,6 +109,7 @@ enum HomeEntry: CaseIterable, Identifiable {
         case .understand: .understandHub
         case .go: .places
         case .help: .emergency
+        case .ask: .assistant
         }
     }
 }

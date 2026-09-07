@@ -395,3 +395,12 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 - `Phrase.scene`：同一分類下再分「場面」（飯店：入住／住宿中／客房服務／早餐／退房／遇到問題…），共 7 類 34 個場面 304 句，資料在 `Resources/Phrases/phrases.json`（由對話中的 Python 產生器一次寫入，之後直接編輯 JSON 即可）。
 - `PhraseListView` 與 `EmergencyView` 用 `CategoryChipBar` 切換場面，預設選第一個場面；「全部」時依場面分段顯示。
 - 找商品頁引用的 id（shop-have-this 等）維持不變。
+
+## 附錄 J：Apple Intelligence 與「我想問問題」
+
+- `AppleIntelligenceAIService`（iOS 26+，`FoundationModels`）：`@Generable` 結構化輸出整理菜單（日文、中文、拼音、價格、分類、選項）、翻譯；商品／收據需要看圖，回白話錯誤請改用自己的伺服器。
+  `AppleIntelligence.availability` 把不可用原因翻成白話（裝置不支援／未開啟／模型下載中／iOS 版本不夠）。
+- `AIProviderKind.appleIntelligence`；`SettingsStore` 第一次啟動且裝置支援時預設選它；不可用時 `effectiveAIProvider` 退回未啟用。
+- 「我想問問題」（首頁第五張卡）：`AssistantChat` 用 `LanguageModelSession` 多輪對話，角色設定在 `AppleIntelligence.travelAssistantInstructions`（日本旅遊／商品助手、對長輩說話、短句、沒連網要提醒）。
+  對話太長（`exceededContextWindowSize`）自動重開一段。回答可用 `SpeechService` 唸出（zh-TW）。
+- 側滑返回：`SwipeBackEnabler.swift` 讓 `UINavigationController` 在隱藏系統導覽列時仍可用 interactivePopGesture。

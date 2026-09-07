@@ -68,6 +68,8 @@ struct RouteDestinationView: View {
             EmergencyView()
         case .settings:
             SettingsView()
+        case .assistant:
+            AssistantView()
         }
     }
 }
