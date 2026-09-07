@@ -2,6 +2,7 @@ import PhotosUI
 import SwiftUI
 
 /// 拍菜單：文件掃描（自動裁切拉正）或選圖 → 自動辨識 → 進入檢查頁。也可以跳過拍照直接手動輸入。
+/// 已經有一份菜單時，不會無聲把它換掉：辨識完先問要「加到目前的菜單」還是「換成新的菜單」。
 struct MenuScanView: View {
     @Environment(AppRouter.self) private var router
     @Environment(MenuDraftStore.self) private var store
@@ -12,6 +13,12 @@ struct MenuScanView: View {
     @State private var showCamera = false
     @State private var pickerItems: [PhotosPickerItem] = []
     @State private var confirmDeleteDraft = false
+    @State private var pendingScan: MenuScanViewModel.Recognized?
+    @State private var askAppendOrReplace = false
+    @State private var askManualEntry = false
+
+    private var existingItemCount: Int { store.draft?.items.count ?? 0 }
+    private var hasExistingItems: Bool { existingItemCount > 0 }
 
     var body: some View {
         ScrollView {
@@ -74,10 +81,24 @@ struct MenuScanView: View {
                     }
 
                     SecondaryButton(title: "不拍照，直接手動輸入", systemImage: AppIcon.edit) {
-                        store.startNew()
-                        router.push(.menuReview)
+                        if hasExistingItems {
+                            askManualEntry = true
+                        } else {
+                            store.startNew()
+                            router.push(.menuReview)
+                        }
                     }
                     .padding(.top, 8)
+                    .confirmationDialog("目前已經有一份菜單（\(existingItemCount) 道菜）", isPresented: $askManualEntry, titleVisibility: .visible) {
+                        Button("繼續改目前的菜單") { router.push(.menuReview) }
+                        Button("清掉，從空白開始", role: .destructive) {
+                            store.startNew()
+                            router.push(.menuReview)
+                        }
+                        Button("取消", role: .cancel) {}
+                    } message: {
+                        Text("要接著改目前這份，還是清掉重新輸入？清掉就找不回來了。")
+                    }
                 }
             }
             .padding(AccessibilityMetrics.screenPadding)
@@ -90,7 +111,7 @@ struct MenuScanView: View {
             DocumentCameraScanner(
                 onScan: { images in
                     showDocumentScanner = false
-                    Task { await handle(images) }
+                    Task { await handle(images.map { .image(TransferableImage(image: $0)) }) }
                 },
                 onCancel: { showDocumentScanner = false }
             )
@@ -100,7 +121,7 @@ struct MenuScanView: View {
             CameraPicker(
                 onImage: { image in
                     showCamera = false
-                    Task { await handle([image]) }
+                    Task { await handle([.image(TransferableImage(image: image))]) }
                 },
                 onCancel: { showCamera = false }
             )
@@ -109,6 +130,13 @@ struct MenuScanView: View {
         .onChange(of: pickerItems) { _, newItems in
             guard !newItems.isEmpty else { return }
             Task { await loadAndHandle(newItems) }
+        }
+        .confirmationDialog("目前已經有一份菜單（\(existingItemCount) 道菜）", isPresented: $askAppendOrReplace, titleVisibility: .visible) {
+            Button("加到目前的菜單") { apply(append: true) }
+            Button("換成新的菜單", role: .destructive) { apply(append: false) }
+            Button("取消", role: .cancel) { pendingScan = nil }
+        } message: {
+            Text("剛拍的菜要加進目前這份（例如菜單的另一面），還是換成一份新的？換掉的話，原本改好的內容會不見。")
         }
     }
 
@@ -133,21 +161,37 @@ struct MenuScanView: View {
 
     private func loadAndHandle(_ items: [PhotosPickerItem]) async {
         pickerItems = []
-        var images: [UIImage] = []
+        var sources: [MenuScanViewModel.Source] = []
         for item in items {
-            if let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) {
-                images.append(image)
+            // 只拿檔案資料，縮圖交給 ViewModel 在背景做（不在這裡解碼整張原圖）
+            if let data = try? await item.loadTransferable(type: Data.self) {
+                sources.append(.data(data))
             }
         }
-        guard !images.isEmpty else { return }
-        await handle(images)
+        guard !sources.isEmpty else { return }
+        await handle(sources)
     }
 
-    private func handle(_ images: [UIImage]) async {
-        guard let viewModel else { return }
-        if await viewModel.process(images: images, into: store) {
+    private func handle(_ sources: [MenuScanViewModel.Source]) async {
+        guard let viewModel, let result = await viewModel.recognize(sources) else { return }
+        if hasExistingItems {
+            pendingScan = result
+            askAppendOrReplace = true
+        } else {
+            store.startNew(items: result.items, otherLines: result.otherLines, images: result.images)
             router.push(.menuReview)
         }
+    }
+
+    private func apply(append: Bool) {
+        guard let result = pendingScan else { return }
+        pendingScan = nil
+        if append {
+            store.append(items: result.items, otherLines: result.otherLines, images: result.images)
+        } else {
+            store.startNew(items: result.items, otherLines: result.otherLines, images: result.images)
+        }
+        router.push(.menuReview)
     }
 }
 

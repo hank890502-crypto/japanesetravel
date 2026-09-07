@@ -77,23 +77,35 @@ enum PriceParser {
         Pattern(regex: try! NSRegularExpression(pattern: pattern, options: [.caseInsensitive]), isKanji: kanji)
     }
 
-    /// group 1 是數字部分。
-    private static let taxIncludedPattern = make(#"[（(]?\s*税込[^0-9]{0,4}([0-9][0-9,]*)\s*円?\s*[）)]?"#)
+    /// 税込價：數字前要有 ¥、或數字後要有 円、或「税込」直接接數字（税込540）、或數字後面接「（税込）」。
+    /// 「※表示価格は税込（消費税10%）です」「税込価格 2024年改定」這類備註不能被抓成價格。
+    /// 各分支各自一個 group，取第一個有值的。
+    private static let taxIncludedPatterns: [Pattern] = [
+        make(#"[（(]?\s*税込(?:[^0-9¥]{0,4}¥\s*([0-9][0-9,]*)(?:\s*円)?|[^0-9¥]{0,4}([0-9][0-9,]*)\s*円|\s*[:：]?\s*([0-9][0-9,]*))(?![0-9,]*\s*[%％年])\s*[）)]?"#),
+        make(#"(?<![0-9,.:\-–—〜~+/])([0-9][0-9,]*)\s*円?\s*[（(]?\s*税込\s*[）)]?"#),
+    ]
     /// 有明確標記的價格：¥540、·540（Live Text 常把 ¥ 讀成 ·）、540円、各520円、八四〇円
     private static let markedPatterns: [Pattern] = [
         make(#"各?\s*(?:¥|[·・]\s*)([0-9][0-9,]*)(?:\s*円)?"#),
         make(#"各?\s*([0-9][0-9,]*)\s*(?:円|yen)"#),
         make("各?\\s*(\(kanji))\\s*円", kanji: true),
     ]
-    /// 行尾的純數字（2–6 位），只在完全沒有標記時使用
-    private static let trailingNumberPattern = make(#"(?<![0-9,.])([0-9]{2,6})\s*$"#)
+    /// 行尾的純數字（2–6 位），只在完全沒有標記時使用。
+    /// 前面接著 - : 〜 + / 的數字（電話、時間、郵遞區號、地址、日期）不算。
+    private static let trailingNumberPattern = make(#"(?<![0-9,.:\-–—〜~+/])([0-9]{2,6})\s*$"#)
+    /// 整行看起來是店家資訊（電話、營業時間、郵遞區號、稅金備註、日期、人數）→ 不用行尾數字當價格
+    private static let storeInfoPattern = make(
+        #"TEL|☎|電話|営業|時間|〒|L\.O|税込|税抜|消費税|:|[0-9]\s*(?:年|月|日|時|分|名|人|席|階|F)"#
+    )
 
     /// 優先順序：税込價 → 所有有標記的價格（可多個，依位置排序）→ 行尾純數字
     private static func allPriceMatches(in text: String) -> [PriceMatch] {
         let fullRange = NSRange(text.startIndex..., in: text)
 
-        let taxIncluded = matches(of: taxIncludedPattern, in: text, range: fullRange)
-        if !taxIncluded.isEmpty { return taxIncluded }
+        for pattern in taxIncludedPatterns {
+            let taxIncluded = matches(of: pattern, in: text, range: fullRange)
+            if !taxIncluded.isEmpty { return taxIncluded }
+        }
 
         var marked = markedPatterns.flatMap { matches(of: $0, in: text, range: fullRange) }
             .sorted { $0.range.lowerBound < $1.range.lowerBound }
@@ -105,13 +117,14 @@ enum PriceParser {
         marked = result
         if !marked.isEmpty { return marked }
 
+        if storeInfoPattern.regex.firstMatch(in: text, range: fullRange) != nil { return [] }
         return matches(of: trailingNumberPattern, in: text, range: fullRange)
     }
 
     private static func matches(of pattern: Pattern, in text: String, range: NSRange) -> [PriceMatch] {
         pattern.regex.matches(in: text, range: range).compactMap { match -> PriceMatch? in
-            guard let digitsRange = Range(match.range(at: 1), in: text),
-                  let wholeRange = Range(match.range, in: text) else { return nil }
+            guard let wholeRange = Range(match.range, in: text),
+                  let digitsRange = firstCapturedRange(in: match, text: text) else { return nil }
             let digits = String(text[digitsRange])
             let value: Decimal?
             if pattern.isKanji {
@@ -122,6 +135,15 @@ enum PriceParser {
             guard let value, value > 0 else { return nil }
             return PriceMatch(range: wholeRange, price: value)
         }
+    }
+
+    /// 第一個有值的 capture group（pattern 用「或」分支時，只有其中一個 group 會有值）。
+    private static func firstCapturedRange(in match: NSTextCheckingResult, text: String) -> Range<String.Index>? {
+        for index in 1..<match.numberOfRanges {
+            let range = match.range(at: index)
+            if range.location != NSNotFound, let converted = Range(range, in: text) { return converted }
+        }
+        return nil
     }
 
     /// 只把全形數字、貨幣符號、逗號、標點轉成半形；假名、漢字完全不動
@@ -146,13 +168,15 @@ enum PriceParser {
             .replacingOccurrences(of: #"[（(]\s*[）)]"#, with: " ", options: .regularExpression)
     }
 
+    /// 「各520円」的「各」已經包含在價格 pattern 的範圍裡，這裡不再從品名兩端削掉，
+    /// 否則「各種サワー」會變成「種サワー」。
     static func cleanName(_ text: String) -> String {
         text
             .replacingOccurrences(of: #"[.・…:：\-–—_·]{2,}"#, with: " ", options: .regularExpression)
             .replacingOccurrences(of: "【", with: "")
             .replacingOccurrences(of: "】", with: " ")
             .trimmingCharacters(in: .whitespacesAndNewlines)
-            .trimmingCharacters(in: CharacterSet(charactersIn: ".・…:：-–—_· 各"))
+            .trimmingCharacters(in: CharacterSet(charactersIn: ".・…:：-–—_· "))
             .replacingOccurrences(of: #"\s{2,}"#, with: " ", options: .regularExpression)
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }

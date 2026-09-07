@@ -134,6 +134,7 @@
 		E2BECE336573A7A212F706E8 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085A5B1C473E009E5C68C80D /* SettingsStore.swift */; };
 		E69D9C050AD667BDB0980D13 /* TripImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9117387A322F00B07C0D62FF /* TripImportView.swift */; };
 		E72A91C96DB20AEF7A3CAC1E /* DebugLaunchOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4D1A22C76412089D46BEB78 /* DebugLaunchOptions.swift */; };
+		E7EE46AE1DB2FD2C17477306 /* PriceFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3995B8FC2D2365A21BA6E10B /* PriceFormatterTests.swift */; };
 		EA496EE3EA3787022D78D602 /* RestaurantHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77AC96DDA7658E1696FAAB8 /* RestaurantHubView.swift */; };
 		EC9D54C91D52554E53256CBB /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FAF35353FC21E37AAE0226 /* RoomView.swift */; };
 		EE7089EC86E72FF3DFF140AC /* RoomQRCodeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 056975EF441FC61C63EB1BB1 /* RoomQRCodeSheet.swift */; };
@@ -199,6 +200,7 @@
 		34896DFAB516943F012D88F9 /* LiveTextOCRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextOCRService.swift; sourceTree = "<group>"; };
 		36DA11253EB14182D67C5D06 /* MenuScanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScanTests.swift; sourceTree = "<group>"; };
 		387F1C7CCB9FCA906A8F3FE2 /* MenuSectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSectionTests.swift; sourceTree = "<group>"; };
+		3995B8FC2D2365A21BA6E10B /* PriceFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceFormatterTests.swift; sourceTree = "<group>"; };
 		3BADCF0DFE1F2B6F42707F95 /* ChatGPTImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTImportView.swift; sourceTree = "<group>"; };
 		3D8145D22EF2AFC66A91A216 /* RoomRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomRepository.swift; sourceTree = "<group>"; };
 		3E237DEBC5DFCA4D224D9BD2 /* RoomCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCodeGenerator.swift; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 				6C20F1116C4A8C1718A72503 /* OrderSummaryTests.swift */,
 				686FC88DB39877E3CD0E4A41 /* PhraseProviderTests.swift */,
 				4F4CE3D1612982E53EA50E60 /* PlaceTests.swift */,
+				3995B8FC2D2365A21BA6E10B /* PriceFormatterTests.swift */,
 				0E8A800272E404834FF4EC9E /* PriceParserTests.swift */,
 				CDC7DED5B3F04AE8B0BCAD57 /* RoomCodeGeneratorTests.swift */,
 				AD8224688604247F8E38AC94 /* RoomViewModelTests.swift */,
@@ -1047,6 +1050,7 @@
 				C9A5BC6168C26711A71A1F0B /* OrderSummaryTests.swift in Sources */,
 				9476200FE13DCD5B8EC624FE /* PhraseProviderTests.swift in Sources */,
 				941521A4CB7DC035AC96E08C /* PlaceTests.swift in Sources */,
+				E7EE46AE1DB2FD2C17477306 /* PriceFormatterTests.swift in Sources */,
 				CC3EA39C1922B902B2A2CB28 /* PriceParserTests.swift in Sources */,
 				AA559F56CF33334A0E09D052 /* RoomCodeGeneratorTests.swift in Sources */,
 				B1D471CE5083FA827C759D51 /* RoomViewModelTests.swift in Sources */,

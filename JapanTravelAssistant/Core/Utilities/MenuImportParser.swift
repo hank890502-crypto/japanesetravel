@@ -1,7 +1,7 @@
 import Foundation
 
 /// 解析使用者從 ChatGPT 貼回來的文字。盡量寬容：
-/// - 有沒有「菜單開始／菜單結束」都可以
+/// - 有沒有「菜單開始／菜單結束」都可以；連提示文字一起貼回來也可以
 /// - 純文字、markdown 表格（| a | b |、|---|）、程式碼區塊、「1. 」「- 」編號都可以
 /// - 也接受 JSON 陣列：[{"japanese":"…","chinese":"…","price":540,"section":"…","note":"…"}]
 enum MenuImportParser {
@@ -35,18 +35,50 @@ enum MenuImportParser {
 
     // MARK: - 逐行格式
 
+    /// 提示文字本身的每一行（長輩「全選複製」時常把自己的提示一起貼回來）
+    private static let promptLines: Set<String> = Set(
+        ChatGPTMenuPrompt.text.components(separatedBy: .newlines).map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
+    )
+    private static let promptFirstLine = ChatGPTMenuPrompt.text.components(separatedBy: .newlines).first?.trimmingCharacters(in: .whitespaces) ?? ""
+
     private static func parseLines(_ text: String) -> [ImportedItem] {
         var lines = text.components(separatedBy: .newlines).map { $0.trimmingCharacters(in: .whitespaces) }
 
-        // 只取「菜單開始」到「菜單結束」之間（如果有的話）
-        if let start = lines.firstIndex(where: { $0.contains(ChatGPTMenuPrompt.startMarker) }) {
-            let end = lines[(start + 1)...].firstIndex(where: { $0.contains(ChatGPTMenuPrompt.endMarker) }) ?? lines.endIndex
-            lines = Array(lines[(start + 1)..<end])
+        // 貼上的內容裡連提示文字都有：把提示的每一行拿掉（包含格式範本裡的「菜單開始」與範例）
+        if !promptFirstLine.isEmpty, lines.contains(promptFirstLine) {
+            lines = lines.filter { !promptLines.contains($0) }
         }
 
+        // 「菜單開始」到「菜單結束」可能有好幾組（範本 + 真正的回覆）：每一組各自解析，取菜最多的那組；
+        // 每一組都是空的就退回整段文字解析。
+        let blocks = markedBlocks(in: lines)
+        if !blocks.isEmpty {
+            if let best = blocks.map(parseBlock).max(by: { $0.count < $1.count }), !best.isEmpty {
+                return best
+            }
+        }
+        return parseBlock(lines)
+    }
+
+    private static func markedBlocks(in lines: [String]) -> [[String]] {
+        var blocks: [[String]] = []
+        var index = 0
+        while let start = lines[index...].firstIndex(where: { $0.contains(ChatGPTMenuPrompt.startMarker) }) {
+            let end = lines[(start + 1)...].firstIndex(where: { $0.contains(ChatGPTMenuPrompt.endMarker) }) ?? lines.endIndex
+            blocks.append(Array(lines[(start + 1)..<end]))
+            index = min(end + 1, lines.endIndex)
+            if index >= lines.endIndex { break }
+        }
+        return blocks
+    }
+
+    private static func parseBlock(_ lines: [String]) -> [ImportedItem] {
         var items: [ImportedItem] = []
         var currentSection: String?
         var currentSectionChinese: String?
+        /// 上一個成功解析的行是「一道菜」或「那道菜的選項」：選項行才能掛上去。
+        /// 分類行、被跳過的行之後的選項行找不到對應的菜，忽略。
+        var lastLineWasItem = false
 
         for rawLine in lines {
             // 粗體、斜體的星號與底線先拿掉（從 ChatGPT App 複製時常帶著）
@@ -56,6 +88,7 @@ enum MenuImportParser {
             // 分類：## 日文 | 中文、分類：名稱、【名稱】
             if let section = sectionName(from: line) {
                 applySection(section, currentSection: &currentSection, currentSectionChinese: &currentSectionChinese)
+                lastLineWasItem = false
                 continue
             }
 
@@ -71,25 +104,37 @@ enum MenuImportParser {
                 .replacingOccurrences(of: "｜", with: "|")
                 .components(separatedBy: "|")
                 .map { $0.trimmingCharacters(in: .whitespaces) }
-            guard fields.count >= 2 else { continue }
+
+            // 只有一格、但以「540円」「¥540」結尾：ChatGPT 漏了分隔線，仍當一道菜
+            if fields.count == 1 {
+                if let item = singleFieldItem(line, section: currentSection, sectionChinese: currentSectionChinese) {
+                    items.append(item)
+                    lastLineWasItem = true
+                } else {
+                    lastLineWasItem = false
+                }
+                continue
+            }
 
             let marker = fields[0].lowercased().trimmingCharacters(in: CharacterSet(charactersIn: ":： "))
 
             // 分類行：分類 | 日文 | 中文
             if sectionMarkers.contains(marker) {
                 applySection(fields.dropFirst().joined(separator: "|"), currentSection: &currentSection, currentSectionChinese: &currentSectionChinese)
+                lastLineWasItem = false
                 continue
             }
 
             // 「## 」被 markdown 吃掉的分類行：只有兩格、沒有數字、看起來不像菜
             if fields.count == 2, !line.contains(where: \.isNumber), looksLikeSectionPair(japanese: fields[0], chinese: fields[1]) {
                 applySection(line, currentSection: &currentSection, currentSectionChinese: &currentSectionChinese)
+                lastLineWasItem = false
                 continue
             }
 
-            // 選項行：選項 | 群組 | 日文 | 中文 | 價差 → 掛在上一道菜
+            // 選項行：選項 | 群組 | 日文 | 中文 | 價差 → 掛在上一道菜（前一行必須就是那道菜或它的選項）
             if optionMarkers.contains(marker) {
-                guard !items.isEmpty, fields.count >= 3 else { continue }
+                guard lastLineWasItem, !items.isEmpty, fields.count >= 3 else { continue }
                 let group = fields[1].nilIfBlank ?? "選項"
                 let japanese = fields[2]
                 guard !japanese.isEmpty else { continue }
@@ -101,15 +146,31 @@ enum MenuImportParser {
 
             let japanese = fields[0]
             let chinese = fields[1]
-            if isHeaderRow(japanese: japanese, chinese: chinese) { continue }
-            guard !japanese.isEmpty else { continue }
+            if isHeaderRow(japanese: japanese, chinese: chinese) {
+                lastLineWasItem = false
+                continue
+            }
+            guard !japanese.isEmpty else {
+                lastLineWasItem = false
+                continue
+            }
 
             let price = fields.count > 2 ? PriceFormatter.parse(fields[2]) : nil
             let note = fields.count > 3 ? fields[3].nilIfBlank : nil
             let reading = fields.count > 4 ? fields[4].nilIfBlank : nil
             items.append(ImportedItem(japaneseName: japanese, chineseName: chinese, price: price, note: note, section: currentSection, sectionChinese: currentSectionChinese, reading: reading))
+            lastLineWasItem = true
         }
         return items
+    }
+
+    /// 「とんかつ 540円」這種沒有分隔線的行：品名 + 有標記的價格（円／¥）才算，避免把閒聊句當成菜。
+    private static func singleFieldItem(_ line: String, section: String?, sectionChinese: String?) -> ImportedItem? {
+        let normalized = PriceParser.normalize(line)
+        guard normalized.contains("円") || normalized.contains("¥") else { return nil }
+        let (name, price) = PriceParser.split(normalized)
+        guard let price, let japanese = name.nilIfBlank else { return nil }
+        return ImportedItem(japaneseName: japanese, chineseName: "", price: price, note: nil, section: section, sectionChinese: sectionChinese)
     }
 
     private static func applySection(_ text: String, currentSection: inout String?, currentSectionChinese: inout String?) {

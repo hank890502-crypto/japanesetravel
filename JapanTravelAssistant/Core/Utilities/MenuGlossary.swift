@@ -6,6 +6,10 @@ final class MenuGlossary: Sendable {
     private let entries: [String: String]
     private let keysByLength: [String]
 
+    /// 只有這幾個單字條目可以在多字詞裡單獨套用（尺寸）。其他單字條目（皮、天、刺、焼…）
+    /// 只在整個字串完全相等時使用，否則「鶏皮」會變成「雞雞皮」、「天然鯛」變成「天婦羅然鯛魚」。
+    static let allowedSingleCharacterKeys: Set<String> = ["大", "中", "小", "並"]
+
     init(entries: [String: String]) {
         self.entries = entries
         self.keysByLength = entries.keys.sorted { $0.count > $1.count }
@@ -50,7 +54,7 @@ final class MenuGlossary: Sendable {
         var index = text.startIndex
         while index < text.endIndex {
             let rest = text[index...]
-            if let key = keysByLength.first(where: { rest.hasPrefix($0) }) {
+            if let key = keysByLength.first(where: { rest.hasPrefix($0) && Self.canMatchPartially($0) }) {
                 output += entries[key] ?? key
                 matchedCount += key.count
                 index = text.index(index, offsetBy: key.count)
@@ -64,5 +68,9 @@ final class MenuGlossary: Sendable {
         }
         let coverage = Double(matchedCount) / Double(text.count)
         return coverage >= minimumCoverage ? output : nil
+    }
+
+    private static func canMatchPartially(_ key: String) -> Bool {
+        key.count >= 2 || allowedSingleCharacterKeys.contains(key)
     }
 }

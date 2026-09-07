@@ -27,11 +27,32 @@ enum PriceFormatter {
         return isNegative ? -value : value
     }
 
-    /// 使用者輸入的價格文字（可能含 ¥、全形數字、逗號）轉成數字。
+    /// 「税込」後面的那個數字優先（380円（税込418円）→ 418）；百分比不算。
+    private static let taxIncludedRegex = try! NSRegularExpression(pattern: #"税込[^0-9]{0,4}([0-9][0-9,]*(?:\.[0-9]+)?)(?!\s*[%％])"#)
+    /// 第一段連續的數字（可含千分位逗號、小數）
+    private static let firstNumberRegex = try! NSRegularExpression(pattern: #"[0-9][0-9,]*(?:\.[0-9]+)?"#)
+
+    /// 使用者輸入或 ChatGPT 給的價格文字（可能含 ¥、全形數字、逗號）轉成數字。
+    /// 只取「一個」數字，不把多段數字黏在一起：
+    /// 540〜800 → 540、¥500/1個 → 500、380円（税込418円）→ 418、時価 → nil。
     static func parse(_ text: String) -> Decimal? {
-        let halfwidth = text.applyingTransform(.fullwidthToHalfwidth, reverse: false) ?? text
-        let digits = halfwidth.filter { $0.isNumber || $0 == "." }
-        guard !digits.isEmpty else { return nil }
-        return Decimal(string: digits)
+        let normalized = PriceParser.normalize(text)
+        guard !normalized.isEmpty else { return nil }
+        let fullRange = NSRange(normalized.startIndex..., in: normalized)
+
+        if let match = taxIncludedRegex.firstMatch(in: normalized, range: fullRange),
+           let range = Range(match.range(at: 1), in: normalized),
+           let value = decimal(from: String(normalized[range])) {
+            return value
+        }
+        guard let match = firstNumberRegex.firstMatch(in: normalized, range: fullRange),
+              let range = Range(match.range, in: normalized) else { return nil }
+        return decimal(from: String(normalized[range]))
+    }
+
+    private static func decimal(from digits: String) -> Decimal? {
+        let cleaned = digits.replacingOccurrences(of: ",", with: "").trimmingCharacters(in: CharacterSet(charactersIn: "."))
+        guard !cleaned.isEmpty else { return nil }
+        return Decimal(string: cleaned)
     }
 }
