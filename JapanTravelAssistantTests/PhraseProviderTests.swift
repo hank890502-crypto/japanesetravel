@@ -16,6 +16,19 @@ struct PhraseProviderTests {
         }
     }
 
+    @Test("每個分類至少 4 個場面、25 句，且每句都有場面與讀音")
+    func scenesAreRich() async throws {
+        let provider = BundledPhraseProvider()
+        for category in PhraseCategory.allCases {
+            let phrases = try await provider.phrases(in: category)
+            #expect(phrases.count >= 25, "\(category.displayName) 只有 \(phrases.count) 句")
+            #expect(phrases.scenes.count >= 4, "\(category.displayName) 只有 \(phrases.scenes.count) 個場面")
+            #expect(phrases.allSatisfy { $0.scene?.nilIfBlank != nil && $0.reading?.nilIfBlank != nil })
+        }
+        let hotel = try await provider.phrases(in: .hotel)
+        #expect(hotel.scenes == ["入住", "住宿中", "客房服務", "早餐", "退房", "遇到問題"])
+    }
+
     @Test("找商品用的問題都存在，且順序照指定")
     func findProductQuestionsExist() async throws {
         let ids = ["shop-have-this", "shop-where", "shop-stock", "shop-size", "shop-color", "shop-price"]

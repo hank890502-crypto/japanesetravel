@@ -389,3 +389,9 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 - 「帶我去」每次都跳出地圖選單（設定裡的預設排第一）：Apple 永遠可用；Google 沒裝改開網頁版 `google.com/maps/dir/?api=1&destination=`；Yahoo! カーナビ 需安裝且需要座標。
 - `ChatGPTTripPrompt` + `TripImportParser`：格式 `行程 | 名稱 | 開始 | 結束`、`天 | 第N天 | 日期 | 主題`、`地點 | 中文名 | 日文名 | 日文地址 | 類型 | 備註`。
   匯入後 `TripPlacesView` 在背景用 `PlaceGeocoder`（CLGeocoder → MKLocalSearch）補座標。
+
+## 附錄 I：溝通助手擴充（場面分類）
+
+- `Phrase.scene`：同一分類下再分「場面」（飯店：入住／住宿中／客房服務／早餐／退房／遇到問題…），共 7 類 34 個場面 304 句，資料在 `Resources/Phrases/phrases.json`（由對話中的 Python 產生器一次寫入，之後直接編輯 JSON 即可）。
+- `PhraseListView` 與 `EmergencyView` 用 `CategoryChipBar` 切換場面，預設選第一個場面；「全部」時依場面分段顯示。
+- 找商品頁引用的 id（shop-have-this 等）維持不變。

@@ -26,13 +26,13 @@ enum PhraseCategory: String, Codable, CaseIterable, Identifiable, Sendable {
 
     var subtitle: String {
         switch self {
-        case .hotel: "入住、行李、早餐"
-        case .carRental: "取車、還車、加油"
-        case .restaurant: "訂位、點餐、結帳"
-        case .onsen: "入浴、毛巾、規定"
-        case .shopping: "找商品、尺寸、免稅"
-        case .transport: "買票、月台、轉乘"
-        case .emergency: "求助、醫院、警察"
+        case .hotel: "入住、客房服務、早餐、退房"
+        case .carRental: "取車、加油、遇到問題、還車"
+        case .restaurant: "訂位、點餐、用餐中、結帳"
+        case .onsen: "入場、泡湯規矩、溫泉旅館"
+        case .shopping: "找商品、免稅、藥妝、電器"
+        case .transport: "買票、電車、計程車、巴士"
+        case .emergency: "求助、不舒服、東西掉了、迷路"
         }
     }
 
@@ -53,6 +53,8 @@ enum PhraseCategory: String, Codable, CaseIterable, Identifiable, Sendable {
 struct Phrase: Codable, Identifiable, Hashable, Sendable {
     var id: String
     var category: PhraseCategory
+    /// 場面（例如 入住、退房）。同一分類底下再分區塊。
+    var scene: String?
     var chinese: String
     var japanese: String
     var reading: String?

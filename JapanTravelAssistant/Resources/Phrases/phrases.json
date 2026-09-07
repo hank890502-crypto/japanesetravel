@@ -1,79 +1,2434 @@
 [
-  { "id": "hotel-reservation", "category": "hotel", "chinese": "我有預約。", "japanese": "予約しています。", "reading": "よやく しています" },
-  { "id": "hotel-checkin", "category": "hotel", "chinese": "我要辦理入住。", "japanese": "チェックインをお願いします。", "reading": "チェックインを おねがいします" },
-  { "id": "hotel-checkout", "category": "hotel", "chinese": "我要退房。", "japanese": "チェックアウトをお願いします。", "reading": "チェックアウトを おねがいします" },
-  { "id": "hotel-luggage", "category": "hotel", "chinese": "可以寄放行李嗎？", "japanese": "荷物を預かってもらえますか？", "reading": "にもつを あずかって もらえますか" },
-  { "id": "hotel-breakfast", "category": "hotel", "chinese": "早餐在哪裡？幾點開始？", "japanese": "朝食はどこですか？何時からですか？", "reading": "ちょうしょくは どこですか？ なんじからですか" },
-  { "id": "hotel-parking", "category": "hotel", "chinese": "停車場在哪裡？", "japanese": "駐車場はどこですか？", "reading": "ちゅうしゃじょうは どこですか" },
-  { "id": "hotel-room-problem", "category": "hotel", "chinese": "房間有問題，可以來看一下嗎？", "japanese": "部屋に問題があります。見に来てもらえますか？", "reading": "へやに もんだいが あります。みに きて もらえますか" },
-  { "id": "hotel-wifi", "category": "hotel", "chinese": "請告訴我 Wi-Fi 密碼。", "japanese": "Wi-Fiのパスワードを教えてください。", "reading": "ワイファイの パスワードを おしえてください" },
-  { "id": "hotel-towel", "category": "hotel", "chinese": "可以再給我一條毛巾嗎？", "japanese": "タオルをもう一枚いただけますか？", "reading": "タオルを もういちまい いただけますか" },
-  { "id": "hotel-taxi", "category": "hotel", "chinese": "可以幫我叫計程車嗎？", "japanese": "タクシーを呼んでもらえますか？", "reading": "タクシーを よんで もらえますか" },
-
-  { "id": "car-reservation", "category": "carRental", "chinese": "我有預約租車。", "japanese": "レンタカーを予約しています。", "reading": "レンタカーを よやく しています" },
-  { "id": "car-fuel-how", "category": "carRental", "chinese": "請教我怎麼加油。", "japanese": "給油の仕方を教えてください。", "reading": "きゅうゆの しかたを おしえてください" },
-  { "id": "car-fuel-full", "category": "carRental", "chinese": "還車時需要加滿油嗎？", "japanese": "返却時は満タンにする必要がありますか？", "reading": "へんきゃくじは まんたんに する ひつようが ありますか" },
-  { "id": "car-etc", "category": "carRental", "chinese": "有 ETC 卡嗎？", "japanese": "ETCカードはありますか？", "reading": "イーティーシー カードは ありますか" },
-  { "id": "car-navi-chinese", "category": "carRental", "chinese": "導航可以設定成中文嗎？", "japanese": "ナビを中国語に設定できますか？", "reading": "ナビを ちゅうごくごに せってい できますか" },
-  { "id": "car-scratch", "category": "carRental", "chinese": "車子有傷痕，請先確認一下。", "japanese": "車に傷があります。先に確認してください。", "reading": "くるまに きずが あります。さきに かくにん してください" },
-  { "id": "car-return-where", "category": "carRental", "chinese": "還車的地方在哪裡？", "japanese": "返却場所はどこですか？", "reading": "へんきゃくばしょは どこですか" },
-  { "id": "car-insurance", "category": "carRental", "chinese": "這個保險包含什麼？", "japanese": "この保険は何が含まれていますか？", "reading": "この ほけんは なにが ふくまれて いますか" },
-  { "id": "car-return-time", "category": "carRental", "chinese": "還車時間是幾點？", "japanese": "返却時間は何時ですか？", "reading": "へんきゃくじかんは なんじですか" },
-
-  { "id": "rest-two-people", "category": "restaurant", "chinese": "兩個人。", "japanese": "二人です。", "reading": "ふたりです" },
-  { "id": "rest-four-people", "category": "restaurant", "chinese": "四個人。", "japanese": "四人です。", "reading": "よにんです" },
-  { "id": "rest-chinese-menu", "category": "restaurant", "chinese": "有中文菜單嗎？", "japanese": "中国語のメニューはありますか？", "reading": "ちゅうごくごの メニューは ありますか" },
-  { "id": "rest-this-one", "category": "restaurant", "chinese": "請給我這個。（指菜單）", "japanese": "これをください。", "reading": "これを ください" },
-  { "id": "rest-recommend", "category": "restaurant", "chinese": "有推薦的嗎？", "japanese": "おすすめは何ですか？", "reading": "おすすめは なんですか" },
-  { "id": "rest-not-spicy", "category": "restaurant", "chinese": "請不要加辣。", "japanese": "辛くしないでください。", "reading": "からく しないで ください" },
-  { "id": "rest-allergy", "category": "restaurant", "chinese": "我對這個過敏。", "japanese": "これにアレルギーがあります。", "reading": "これに アレルギーが あります" },
-  { "id": "rest-water", "category": "restaurant", "chinese": "請給我水。", "japanese": "お水をください。", "reading": "おみずを ください" },
-  { "id": "rest-bill", "category": "restaurant", "chinese": "請幫我結帳。", "japanese": "お会計をお願いします。", "reading": "おかいけいを おねがいします" },
-  { "id": "rest-card", "category": "restaurant", "chinese": "可以刷卡嗎？", "japanese": "カードは使えますか？", "reading": "カードは つかえますか" },
-  { "id": "rest-separate", "category": "restaurant", "chinese": "可以分開結帳嗎？", "japanese": "別々に会計できますか？", "reading": "べつべつに かいけい できますか" },
-  { "id": "rest-takeout", "category": "restaurant", "chinese": "可以外帶嗎？", "japanese": "持ち帰りできますか？", "reading": "もちかえり できますか" },
-
-  { "id": "onsen-price", "category": "onsen", "chinese": "一個人多少錢？", "japanese": "一人いくらですか？", "reading": "ひとり いくらですか" },
-  { "id": "onsen-towel", "category": "onsen", "chinese": "可以借毛巾嗎？", "japanese": "タオルは借りられますか？", "reading": "タオルは かりられますか" },
-  { "id": "onsen-tattoo", "category": "onsen", "chinese": "有刺青可以進去嗎？", "japanese": "タトゥーがあっても入れますか？", "reading": "タトゥーが あっても はいれますか" },
-  { "id": "onsen-where", "category": "onsen", "chinese": "男湯／女湯在哪裡？", "japanese": "男湯・女湯はどこですか？", "reading": "おとこゆ・おんなゆは どこですか" },
-  { "id": "onsen-hours", "category": "onsen", "chinese": "營業到幾點？", "japanese": "何時まで営業していますか？", "reading": "なんじまで えいぎょう していますか" },
-  { "id": "onsen-private", "category": "onsen", "chinese": "有包場的家庭湯嗎？", "japanese": "貸切風呂はありますか？", "reading": "かしきりぶろは ありますか" },
-  { "id": "onsen-locker", "category": "onsen", "chinese": "請教我置物櫃怎麼用。", "japanese": "ロッカーの使い方を教えてください。", "reading": "ロッカーの つかいかたを おしえてください" },
-  { "id": "onsen-yukata", "category": "onsen", "chinese": "浴衣可以穿去外面嗎？", "japanese": "浴衣で外に出てもいいですか？", "reading": "ゆかたで そとに でても いいですか" },
-
-  { "id": "shop-have-this", "category": "shopping", "chinese": "請問有這個商品嗎？", "japanese": "こちらの商品はありますか？", "reading": "こちらの しょうひんは ありますか" },
-  { "id": "shop-where", "category": "shopping", "chinese": "這個在哪裡？", "japanese": "これはどこにありますか？", "reading": "これは どこに ありますか" },
-  { "id": "shop-stock", "category": "shopping", "chinese": "有庫存嗎？", "japanese": "在庫はありますか？", "reading": "ざいこは ありますか" },
-  { "id": "shop-size", "category": "shopping", "chinese": "有其他尺寸嗎？", "japanese": "他のサイズはありますか？", "reading": "ほかの サイズは ありますか" },
-  { "id": "shop-color", "category": "shopping", "chinese": "有其他顏色或款式嗎？", "japanese": "他の色やデザインはありますか？", "reading": "ほかの いろや デザインは ありますか" },
-  { "id": "shop-price", "category": "shopping", "chinese": "這個多少錢？", "japanese": "これはいくらですか？", "reading": "これは いくらですか" },
-  { "id": "shop-tax-free", "category": "shopping", "chinese": "可以免稅嗎？", "japanese": "免税できますか？", "reading": "めんぜい できますか" },
-  { "id": "shop-discount", "category": "shopping", "chinese": "這個有折扣嗎？", "japanese": "これは割引がありますか？", "reading": "これは わりびきが ありますか" },
-  { "id": "shop-try-on", "category": "shopping", "chinese": "可以試穿嗎？", "japanese": "試着できますか？", "reading": "しちゃく できますか" },
-  { "id": "shop-gift-wrap", "category": "shopping", "chinese": "請幫我包裝成禮物。", "japanese": "プレゼント用に包んでください。", "reading": "プレゼントように つつんで ください" },
-  { "id": "shop-card", "category": "shopping", "chinese": "可以刷卡嗎？", "japanese": "カードは使えますか？", "reading": "カードは つかえますか" },
-  { "id": "shop-bag", "category": "shopping", "chinese": "請給我一個袋子。", "japanese": "袋をください。", "reading": "ふくろを ください" },
-
-  { "id": "trans-go-here", "category": "transport", "chinese": "我要去這裡。（指地圖）", "japanese": "ここに行きたいです。", "reading": "ここに いきたいです" },
-  { "id": "trans-this-train", "category": "transport", "chinese": "這班車有到這裡嗎？", "japanese": "この電車はここに行きますか？", "reading": "この でんしゃは ここに いきますか" },
-  { "id": "trans-platform", "category": "transport", "chinese": "月台在哪裡？", "japanese": "ホームはどこですか？", "reading": "ホームは どこですか" },
-  { "id": "trans-transfer", "category": "transport", "chinese": "要在哪裡轉車？", "japanese": "どこで乗り換えますか？", "reading": "どこで のりかえますか" },
-  { "id": "trans-ticket", "category": "transport", "chinese": "我要買到這裡的票。", "japanese": "ここまでの切符をください。", "reading": "ここまでの きっぷを ください" },
-  { "id": "trans-taxi-stand", "category": "transport", "chinese": "計程車乘車處在哪裡？", "japanese": "タクシー乗り場はどこですか？", "reading": "タクシーのりばは どこですか" },
-  { "id": "trans-bus-stop", "category": "transport", "chinese": "巴士站在哪裡？", "japanese": "バス停はどこですか？", "reading": "バスていは どこですか" },
-  { "id": "trans-last-train", "category": "transport", "chinese": "最後一班車是幾點？", "japanese": "終電は何時ですか？", "reading": "しゅうでんは なんじですか" },
-  { "id": "trans-ic-card", "category": "transport", "chinese": "可以用 Suica 嗎？", "japanese": "Suicaは使えますか？", "reading": "スイカは つかえますか" },
-  { "id": "trans-how-long", "category": "transport", "chinese": "到這裡要多久？", "japanese": "ここまでどのくらいかかりますか？", "reading": "ここまで どのくらい かかりますか" },
-
-  { "id": "emergency-help", "category": "emergency", "chinese": "我需要幫忙。", "japanese": "助けてください。", "reading": "たすけて ください" },
-  { "id": "emergency-ambulance", "category": "emergency", "chinese": "請幫我叫救護車。", "japanese": "救急車を呼んでください。", "reading": "きゅうきゅうしゃを よんで ください" },
-  { "id": "emergency-police", "category": "emergency", "chinese": "請幫我叫警察。", "japanese": "警察を呼んでください。", "reading": "けいさつを よんで ください" },
-  { "id": "emergency-sick", "category": "emergency", "chinese": "我身體不舒服。", "japanese": "気分が悪いです。", "reading": "きぶんが わるいです" },
-  { "id": "emergency-hospital", "category": "emergency", "chinese": "最近的醫院在哪裡？", "japanese": "一番近い病院はどこですか？", "reading": "いちばん ちかい びょういんは どこですか" },
-  { "id": "emergency-lost", "category": "emergency", "chinese": "我迷路了。", "japanese": "道に迷いました。", "reading": "みちに まよいました" },
-  { "id": "emergency-lost-item", "category": "emergency", "chinese": "我的東西不見了。", "japanese": "物をなくしました。", "reading": "ものを なくしました" },
-  { "id": "emergency-passport", "category": "emergency", "chinese": "我的護照不見了。", "japanese": "パスポートをなくしました。", "reading": "パスポートを なくしました" },
-  { "id": "emergency-no-japanese", "category": "emergency", "chinese": "我不會說日文，請說慢一點。", "japanese": "日本語が話せません。ゆっくり話してください。", "reading": "にほんごが はなせません。ゆっくり はなして ください" },
-  { "id": "emergency-chinese-speaker", "category": "emergency", "chinese": "有會說中文的人嗎？", "japanese": "中国語が話せる人はいますか？", "reading": "ちゅうごくごが はなせる ひとは いますか" }
+ {
+  "id": "hotel-reservation",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "我有預約，名字是（給對方看護照）。",
+  "japanese": "予約しています。この名前です。",
+  "reading": "よやく しています。この なまえです"
+ },
+ {
+  "id": "hotel-checkin",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "我要辦理入住。",
+  "japanese": "チェックインをお願いします。",
+  "reading": "チェックインを おねがいします"
+ },
+ {
+  "id": "hotel-passport",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "這是我的護照。",
+  "japanese": "パスポートです。",
+  "reading": "パスポートです"
+ },
+ {
+  "id": "hotel-checkin-time",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "幾點可以進房間？",
+  "japanese": "チェックインは何時からですか？",
+  "reading": "チェックインは なんじからですか"
+ },
+ {
+  "id": "hotel-luggage",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "可以先寄放行李嗎？",
+  "japanese": "荷物を預かってもらえますか？",
+  "reading": "にもつを あずかって もらえますか"
+ },
+ {
+  "id": "hotel-twin",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "可以要兩張床的房間嗎？",
+  "japanese": "ツインの部屋にできますか？",
+  "reading": "ツインの へやに できますか"
+ },
+ {
+  "id": "hotel-high-floor",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "可以安排高樓層或安靜的房間嗎？",
+  "japanese": "高層階か静かな部屋をお願いできますか？",
+  "reading": "こうそうかいか しずかな へやを おねがい できますか"
+ },
+ {
+  "id": "hotel-wifi",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "請告訴我 Wi-Fi 密碼。",
+  "japanese": "Wi-Fiのパスワードを教えてください。",
+  "reading": "ワイファイの パスワードを おしえてください"
+ },
+ {
+  "id": "hotel-breakfast-info",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "早餐幾點到幾點？在哪裡？",
+  "japanese": "朝食は何時から何時まで、どこですか？",
+  "reading": "ちょうしょくは なんじから なんじまで、どこですか"
+ },
+ {
+  "id": "hotel-bath-hours",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "大浴場開到幾點？",
+  "japanese": "大浴場は何時までですか？",
+  "reading": "だいよくじょうは なんじまでですか"
+ },
+ {
+  "id": "hotel-convenience",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "附近有便利商店嗎？",
+  "japanese": "近くにコンビニはありますか？",
+  "reading": "ちかくに コンビニは ありますか"
+ },
+ {
+  "id": "hotel-chinese-staff",
+  "category": "hotel",
+  "scene": "入住",
+  "chinese": "有會說中文的人嗎？",
+  "japanese": "中国語が話せる人はいますか？",
+  "reading": "ちゅうごくごが はなせる ひとは いますか"
+ },
+ {
+  "id": "hotel-key-not-working",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "房卡打不開門。",
+  "japanese": "カードキーでドアが開きません。",
+  "reading": "カードキーで ドアが あきません"
+ },
+ {
+  "id": "hotel-locked-out",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "我把鑰匙鎖在房間裡了。",
+  "japanese": "部屋にカギを置いたまま閉めてしまいました。",
+  "reading": "へやに カギを おいたまま しめて しまいました"
+ },
+ {
+  "id": "hotel-ac",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "房間的冷氣（暖氣）不會動。",
+  "japanese": "部屋のエアコンが動きません。",
+  "reading": "へやの エアコンが うごきません"
+ },
+ {
+  "id": "hotel-hot-water",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "熱水不熱。",
+  "japanese": "お湯が出ません。",
+  "reading": "おゆが でません"
+ },
+ {
+  "id": "hotel-noisy",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "隔壁太吵，可以換房間嗎？",
+  "japanese": "隣がうるさいので、部屋を変えてもらえますか？",
+  "reading": "となりが うるさいので、へやを かえて もらえますか"
+ },
+ {
+  "id": "hotel-adapter",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "可以借轉接頭（充電器）嗎？",
+  "japanese": "変換プラグ（充電器）を借りられますか？",
+  "reading": "へんかんプラグ（じゅうでんき）を かりられますか"
+ },
+ {
+  "id": "hotel-iron",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "可以借熨斗嗎？",
+  "japanese": "アイロンを借りられますか？",
+  "reading": "アイロンを かりられますか"
+ },
+ {
+  "id": "hotel-laundry",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "洗衣機在哪裡？怎麼用？",
+  "japanese": "コインランドリーはどこですか？使い方を教えてください。",
+  "reading": "コインランドリーは どこですか？ つかいかたを おしえてください"
+ },
+ {
+  "id": "hotel-vending",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "自動販賣機（製冰機）在哪裡？",
+  "japanese": "自動販売機（製氷機）はどこですか？",
+  "reading": "じどうはんばいき（せいひょうき）は どこですか"
+ },
+ {
+  "id": "hotel-parking",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "停車場在哪裡？要收費嗎？",
+  "japanese": "駐車場はどこですか？有料ですか？",
+  "reading": "ちゅうしゃじょうは どこですか？ ゆうりょうですか"
+ },
+ {
+  "id": "hotel-taxi",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "可以幫我叫計程車嗎？",
+  "japanese": "タクシーを呼んでもらえますか？",
+  "reading": "タクシーを よんで もらえますか"
+ },
+ {
+  "id": "hotel-package",
+  "category": "hotel",
+  "scene": "住宿中",
+  "chinese": "可以幫我收（寄）包裹嗎？",
+  "japanese": "荷物を受け取って（送って）もらえますか？",
+  "reading": "にもつを うけとって（おくって）もらえますか"
+ },
+ {
+  "id": "hotel-clean",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "請幫我打掃房間。",
+  "japanese": "部屋の掃除をお願いします。",
+  "reading": "へやの そうじを おねがいします"
+ },
+ {
+  "id": "hotel-no-clean",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "今天不用打掃。",
+  "japanese": "今日は掃除は要りません。",
+  "reading": "きょうは そうじは いりません"
+ },
+ {
+  "id": "hotel-towel",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "可以再給我毛巾嗎？",
+  "japanese": "タオルをもう一枚いただけますか？",
+  "reading": "タオルを もういちまい いただけますか"
+ },
+ {
+  "id": "hotel-amenities",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "可以再給我牙刷（刮鬍刀、梳子）嗎？",
+  "japanese": "歯ブラシ（カミソリ、ブラシ）をもう一つください。",
+  "reading": "はブラシ（カミソリ、ブラシ）を もうひとつ ください"
+ },
+ {
+  "id": "hotel-pillow",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "可以多一個枕頭（棉被）嗎？",
+  "japanese": "枕（布団）をもう一つお願いします。",
+  "reading": "まくら（ふとん）を もうひとつ おねがいします"
+ },
+ {
+  "id": "hotel-water",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "可以再給我水嗎？",
+  "japanese": "お水をもう一本いただけますか？",
+  "reading": "おみずを もういっぽん いただけますか"
+ },
+ {
+  "id": "hotel-kettle",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "房間有熱水壺嗎？",
+  "japanese": "部屋に電気ケトルはありますか？",
+  "reading": "へやに でんきケトルは ありますか"
+ },
+ {
+  "id": "hotel-trash",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "請幫我收垃圾。",
+  "japanese": "ゴミを回収してください。",
+  "reading": "ゴミを かいしゅう してください"
+ },
+ {
+  "id": "hotel-light-broken",
+  "category": "hotel",
+  "scene": "客房服務",
+  "chinese": "燈（電視、吹風機）壞了。",
+  "japanese": "電気（テレビ、ドライヤー）が壊れています。",
+  "reading": "でんき（テレビ、ドライヤー）が こわれています"
+ },
+ {
+  "id": "hotel-breakfast-where",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "早餐在哪裡吃？",
+  "japanese": "朝食はどこで食べられますか？",
+  "reading": "ちょうしょくは どこで たべられますか"
+ },
+ {
+  "id": "hotel-breakfast-time",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "早餐幾點開始？幾點結束？",
+  "japanese": "朝食は何時から何時までですか？",
+  "reading": "ちょうしょくは なんじから なんじまでですか"
+ },
+ {
+  "id": "hotel-room-number",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "房號是（給對方看房卡）。",
+  "japanese": "部屋番号はこれです。",
+  "reading": "へやばんごうは これです"
+ },
+ {
+  "id": "hotel-breakfast-ticket",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "早餐券在哪裡拿？",
+  "japanese": "朝食券はどこでもらえますか？",
+  "reading": "ちょうしょくけんは どこで もらえますか"
+ },
+ {
+  "id": "hotel-breakfast-two",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "兩位用餐。",
+  "japanese": "二人です。",
+  "reading": "ふたりです"
+ },
+ {
+  "id": "hotel-breakfast-what",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "這是什麼？",
+  "japanese": "これは何ですか？",
+  "reading": "これは なんですか"
+ },
+ {
+  "id": "hotel-breakfast-vegetarian",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "有素食（不吃肉）的餐點嗎？",
+  "japanese": "ベジタリアン（肉なし）のメニューはありますか？",
+  "reading": "ベジタリアン（にくなし）の メニューは ありますか"
+ },
+ {
+  "id": "hotel-breakfast-coffee",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "可以再來一杯咖啡嗎？",
+  "japanese": "コーヒーをもう一杯いただけますか？",
+  "reading": "コーヒーを もういっぱい いただけますか"
+ },
+ {
+  "id": "hotel-breakfast-takeout",
+  "category": "hotel",
+  "scene": "早餐",
+  "chinese": "可以外帶到房間嗎？",
+  "japanese": "部屋に持って行ってもいいですか？",
+  "reading": "へやに もっていっても いいですか"
+ },
+ {
+  "id": "hotel-checkout",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "我要退房。",
+  "japanese": "チェックアウトをお願いします。",
+  "reading": "チェックアウトを おねがいします"
+ },
+ {
+  "id": "hotel-checkout-time",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "退房是幾點？",
+  "japanese": "チェックアウトは何時ですか？",
+  "reading": "チェックアウトは なんじですか"
+ },
+ {
+  "id": "hotel-late-checkout",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "可以延後退房嗎？要加錢嗎？",
+  "japanese": "レイトチェックアウトはできますか？追加料金はかかりますか？",
+  "reading": "レイトチェックアウトは できますか？ ついかりょうきんは かかりますか"
+ },
+ {
+  "id": "hotel-luggage-after",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "退房後可以寄放行李到下午嗎？",
+  "japanese": "チェックアウト後、午後まで荷物を預かってもらえますか？",
+  "reading": "チェックアウトご、ごごまで にもつを あずかって もらえますか"
+ },
+ {
+  "id": "hotel-receipt",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "請給我收據。",
+  "japanese": "領収書をお願いします。",
+  "reading": "りょうしゅうしょを おねがいします"
+ },
+ {
+  "id": "hotel-card",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "可以刷卡嗎？",
+  "japanese": "カードは使えますか？",
+  "reading": "カードは つかえますか"
+ },
+ {
+  "id": "hotel-taxi-station",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "請幫我叫計程車到車站。",
+  "japanese": "駅までタクシーを呼んでください。",
+  "reading": "えきまで タクシーを よんでください"
+ },
+ {
+  "id": "hotel-forgot",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "我東西忘在房間，可以回去拿嗎？",
+  "japanese": "部屋に忘れ物をしました。取りに戻れますか？",
+  "reading": "へやに わすれものを しました。とりに もどれますか"
+ },
+ {
+  "id": "hotel-thanks",
+  "category": "hotel",
+  "scene": "退房",
+  "chinese": "住得很舒服，謝謝。",
+  "japanese": "とても快適でした。ありがとうございました。",
+  "reading": "とても かいてきでした。ありがとうございました"
+ },
+ {
+  "id": "hotel-lost-item",
+  "category": "hotel",
+  "scene": "遇到問題",
+  "chinese": "我在房間（大廳）掉了東西。",
+  "japanese": "部屋（ロビー）で物をなくしました。",
+  "reading": "へや（ロビー）で ものを なくしました"
+ },
+ {
+  "id": "hotel-sick",
+  "category": "hotel",
+  "scene": "遇到問題",
+  "chinese": "我身體不舒服，可以幫我叫醫生嗎？",
+  "japanese": "気分が悪いです。医者を呼んでもらえますか？",
+  "reading": "きぶんが わるいです。いしゃを よんで もらえますか"
+ },
+ {
+  "id": "hotel-pharmacy",
+  "category": "hotel",
+  "scene": "遇到問題",
+  "chinese": "附近有藥局嗎？",
+  "japanese": "近くに薬局はありますか？",
+  "reading": "ちかくに やっきょくは ありますか"
+ },
+ {
+  "id": "hotel-power",
+  "category": "hotel",
+  "scene": "遇到問題",
+  "chinese": "房間停電（沒水）了。",
+  "japanese": "部屋の電気（水）が止まりました。",
+  "reading": "へやの でんき（みず）が とまりました"
+ },
+ {
+  "id": "hotel-smell",
+  "category": "hotel",
+  "scene": "遇到問題",
+  "chinese": "房間有煙味，可以換房嗎？",
+  "japanese": "部屋がタバコ臭いので、変えてもらえますか？",
+  "reading": "へやが タバコくさいので、かえて もらえますか"
+ },
+ {
+  "id": "hotel-earthquake",
+  "category": "hotel",
+  "scene": "遇到問題",
+  "chinese": "地震的時候要去哪裡避難？",
+  "japanese": "地震のとき、どこに避難すればいいですか？",
+  "reading": "じしんのとき、どこに ひなんすれば いいですか"
+ },
+ {
+  "id": "car-reservation",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "我有預約租車。",
+  "japanese": "レンタカーを予約しています。",
+  "reading": "レンタカーを よやく しています"
+ },
+ {
+  "id": "car-license",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "這是駕照和日文譯本。",
+  "japanese": "運転免許証と翻訳文です。",
+  "reading": "うんてんめんきょしょうと ほんやくぶんです"
+ },
+ {
+  "id": "car-insurance",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "這個保險包含什麼？有免責補償嗎？",
+  "japanese": "この保険は何が含まれていますか？免責補償はありますか？",
+  "reading": "この ほけんは なにが ふくまれていますか？ めんせきほしょうは ありますか"
+ },
+ {
+  "id": "car-full-insurance",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "請幫我加最完整的保險。",
+  "japanese": "一番手厚い保険をお願いします。",
+  "reading": "いちばん てあつい ほけんを おねがいします"
+ },
+ {
+  "id": "car-etc",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "有 ETC 卡嗎？",
+  "japanese": "ETCカードはありますか？",
+  "reading": "イーティーシー カードは ありますか"
+ },
+ {
+  "id": "car-child-seat",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "需要兒童安全座椅。",
+  "japanese": "チャイルドシートをお願いします。",
+  "reading": "チャイルドシートを おねがいします"
+ },
+ {
+  "id": "car-navi-chinese",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "導航可以設定成中文嗎？",
+  "japanese": "ナビを中国語に設定できますか？",
+  "reading": "ナビを ちゅうごくごに せってい できますか"
+ },
+ {
+  "id": "car-scratch",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "車子有刮傷，請先確認一下。",
+  "japanese": "車に傷があります。先に確認してください。",
+  "reading": "くるまに きずが あります。さきに かくにん してください"
+ },
+ {
+  "id": "car-fuel-type",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "這台車加什麼油？",
+  "japanese": "この車のガソリンの種類は何ですか？",
+  "reading": "この くるまの ガソリンの しゅるいは なんですか"
+ },
+ {
+  "id": "car-return-where",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "還車的地方和時間？",
+  "japanese": "返却場所と返却時間を教えてください。",
+  "reading": "へんきゃくばしょと へんきゃくじかんを おしえてください"
+ },
+ {
+  "id": "car-return-full",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "還車時需要加滿油嗎？",
+  "japanese": "返却時は満タンにする必要がありますか？",
+  "reading": "へんきゃくじは まんたんに する ひつようが ありますか"
+ },
+ {
+  "id": "car-emergency-number",
+  "category": "carRental",
+  "scene": "取車",
+  "chinese": "車子有問題要打哪個電話？",
+  "japanese": "車にトラブルがあったら、どこに電話すればいいですか？",
+  "reading": "くるまに トラブルが あったら、どこに でんわすれば いいですか"
+ },
+ {
+  "id": "car-fill-up",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "請加滿，一般汽油。",
+  "japanese": "レギュラー満タンでお願いします。",
+  "reading": "レギュラー まんたんで おねがいします"
+ },
+ {
+  "id": "car-fill-amount",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "請加 3000 日圓。",
+  "japanese": "3000円分お願いします。",
+  "reading": "さんぜんえんぶん おねがいします"
+ },
+ {
+  "id": "car-pay-card",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "刷卡。",
+  "japanese": "カードで払います。",
+  "reading": "カードで はらいます"
+ },
+ {
+  "id": "car-self-service",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "自助加油要怎麼操作？",
+  "japanese": "セルフの給油の仕方を教えてください。",
+  "reading": "セルフの きゅうゆの しかたを おしえてください"
+ },
+ {
+  "id": "car-toll",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "高速公路過路費要怎麼付？",
+  "japanese": "高速道路の料金はどう払いますか？",
+  "reading": "こうそくどうろの りょうきんは どう はらいますか"
+ },
+ {
+  "id": "car-parking-pay",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "停車費要怎麼付？",
+  "japanese": "駐車料金はどこで払いますか？",
+  "reading": "ちゅうしゃりょうきんは どこで はらいますか"
+ },
+ {
+  "id": "car-parking-here",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "可以停在這裡嗎？",
+  "japanese": "ここに停めてもいいですか？",
+  "reading": "ここに とめても いいですか"
+ },
+ {
+  "id": "car-wash",
+  "category": "carRental",
+  "scene": "加油與開車",
+  "chinese": "可以洗車嗎？",
+  "japanese": "洗車できますか？",
+  "reading": "せんしゃ できますか"
+ },
+ {
+  "id": "car-breakdown",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "車子壞了，動不了。",
+  "japanese": "車が故障して動きません。",
+  "reading": "くるまが こしょうして うごきません"
+ },
+ {
+  "id": "car-flat",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "爆胎了。",
+  "japanese": "タイヤがパンクしました。",
+  "reading": "タイヤが パンク しました"
+ },
+ {
+  "id": "car-accident",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "發生車禍了，請叫警察。",
+  "japanese": "事故を起こしました。警察を呼んでください。",
+  "reading": "じこを おこしました。けいさつを よんでください"
+ },
+ {
+  "id": "car-injured",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "有人受傷，請叫救護車。",
+  "japanese": "けが人がいます。救急車を呼んでください。",
+  "reading": "けがにんが います。きゅうきゅうしゃを よんでください"
+ },
+ {
+  "id": "car-roadside",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "請叫道路救援。",
+  "japanese": "ロードサービスを呼んでください。",
+  "reading": "ロードサービスを よんでください"
+ },
+ {
+  "id": "car-locked",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "鑰匙鎖在車裡了。",
+  "japanese": "車の中にカギを閉じ込めました。",
+  "reading": "くるまの なかに カギを とじこめました"
+ },
+ {
+  "id": "car-lost-way",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "我開錯路了，請問這裡是哪裡？",
+  "japanese": "道に迷いました。ここはどこですか？",
+  "reading": "みちに まよいました。ここは どこですか"
+ },
+ {
+  "id": "car-battery",
+  "category": "carRental",
+  "scene": "遇到問題",
+  "chinese": "電瓶沒電了。",
+  "japanese": "バッテリーが上がりました。",
+  "reading": "バッテリーが あがりました"
+ },
+ {
+  "id": "car-return",
+  "category": "carRental",
+  "scene": "還車",
+  "chinese": "我要還車。",
+  "japanese": "車を返却します。",
+  "reading": "くるまを へんきゃく します"
+ },
+ {
+  "id": "car-filled",
+  "category": "carRental",
+  "scene": "還車",
+  "chinese": "油已經加滿了。",
+  "japanese": "ガソリンは満タンにしました。",
+  "reading": "ガソリンは まんたんに しました"
+ },
+ {
+  "id": "car-check-damage",
+  "category": "carRental",
+  "scene": "還車",
+  "chinese": "請檢查有沒有新的刮傷。",
+  "japanese": "傷がないか確認してください。",
+  "reading": "きずが ないか かくにん してください"
+ },
+ {
+  "id": "car-receipt",
+  "category": "carRental",
+  "scene": "還車",
+  "chinese": "請給我收據。",
+  "japanese": "領収書をお願いします。",
+  "reading": "りょうしゅうしょを おねがいします"
+ },
+ {
+  "id": "car-deposit",
+  "category": "carRental",
+  "scene": "還車",
+  "chinese": "押金什麼時候退？",
+  "japanese": "デポジットはいつ返金されますか？",
+  "reading": "デポジットは いつ へんきん されますか"
+ },
+ {
+  "id": "car-forgot",
+  "category": "carRental",
+  "scene": "還車",
+  "chinese": "我東西忘在車上了。",
+  "japanese": "車に忘れ物をしました。",
+  "reading": "くるまに わすれものを しました"
+ },
+ {
+  "id": "car-station-ride",
+  "category": "carRental",
+  "scene": "還車",
+  "chinese": "可以送我到車站嗎？",
+  "japanese": "駅まで送ってもらえますか？",
+  "reading": "えきまで おくって もらえますか"
+ },
+ {
+  "id": "rest-two-people",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "兩個人。",
+  "japanese": "二人です。",
+  "reading": "ふたりです"
+ },
+ {
+  "id": "rest-three-people",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "三個人。",
+  "japanese": "三人です。",
+  "reading": "さんにんです"
+ },
+ {
+  "id": "rest-four-people",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "四個人。",
+  "japanese": "四人です。",
+  "reading": "よにんです"
+ },
+ {
+  "id": "rest-reserved",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "我有訂位，名字是（給對方看）。",
+  "japanese": "予約しています。この名前です。",
+  "reading": "よやく しています。この なまえです"
+ },
+ {
+  "id": "rest-wait",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "要等多久？",
+  "japanese": "どのくらい待ちますか？",
+  "reading": "どのくらい まちますか"
+ },
+ {
+  "id": "rest-nonsmoking",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "請給我禁煙席。",
+  "japanese": "禁煙席をお願いします。",
+  "reading": "きんえんせきを おねがいします"
+ },
+ {
+  "id": "rest-table",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "可以坐椅子的座位嗎（不要榻榻米）？",
+  "japanese": "テーブル席にできますか？",
+  "reading": "テーブルせきに できますか"
+ },
+ {
+  "id": "rest-kids-chair",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "有兒童椅嗎？",
+  "japanese": "子ども用の椅子はありますか？",
+  "reading": "こどもようの いすは ありますか"
+ },
+ {
+  "id": "rest-hours",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "營業到幾點？最後點餐是幾點？",
+  "japanese": "何時まで営業していますか？ラストオーダーは何時ですか？",
+  "reading": "なんじまで えいぎょう していますか？ ラストオーダーは なんじですか"
+ },
+ {
+  "id": "rest-drinks-only",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "可以只點飲料嗎？",
+  "japanese": "飲み物だけでもいいですか？",
+  "reading": "のみものだけでも いいですか"
+ },
+ {
+  "id": "rest-english-menu",
+  "category": "restaurant",
+  "scene": "進店與訂位",
+  "chinese": "有中文（英文）菜單嗎？",
+  "japanese": "中国語（英語）のメニューはありますか？",
+  "reading": "ちゅうごくご（えいご）の メニューは ありますか"
+ },
+ {
+  "id": "rest-recommend",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "有推薦的嗎？",
+  "japanese": "おすすめは何ですか？",
+  "reading": "おすすめは なんですか"
+ },
+ {
+  "id": "rest-this-one",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "請給我這個。（指菜單）",
+  "japanese": "これをください。",
+  "reading": "これを ください"
+ },
+ {
+  "id": "rest-same",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "跟那個一樣的。（指別桌）",
+  "japanese": "あれと同じものをください。",
+  "reading": "あれと おなじものを ください"
+ },
+ {
+  "id": "rest-what-is",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "這是什麼？",
+  "japanese": "これは何ですか？",
+  "reading": "これは なんですか"
+ },
+ {
+  "id": "rest-how-many",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "這是幾人份？",
+  "japanese": "これは何人分ですか？",
+  "reading": "これは なんにんぶんですか"
+ },
+ {
+  "id": "rest-not-spicy",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "請不要加辣。",
+  "japanese": "辛くしないでください。",
+  "reading": "からく しないで ください"
+ },
+ {
+  "id": "rest-no-onion",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "請不要放蔥（芫荽、芥末）。",
+  "japanese": "ネギ（パクチー、わさび）抜きでお願いします。",
+  "reading": "ネギ（パクチー、わさび）ぬきで おねがいします"
+ },
+ {
+  "id": "rest-allergy",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "我對這個過敏。",
+  "japanese": "これにアレルギーがあります。",
+  "reading": "これに アレルギーが あります"
+ },
+ {
+  "id": "rest-set-or-single",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "這是單點還是套餐？",
+  "japanese": "これは単品ですか、セットですか？",
+  "reading": "これは たんぴんですか、セットですか"
+ },
+ {
+  "id": "rest-large",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "請給我大份。",
+  "japanese": "大盛りでお願いします。",
+  "reading": "おおもりで おねがいします"
+ },
+ {
+  "id": "rest-drinks-first",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "先來飲料。",
+  "japanese": "先に飲み物をお願いします。",
+  "reading": "さきに のみものを おねがいします"
+ },
+ {
+  "id": "rest-later",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "還沒決定，等一下再點。",
+  "japanese": "まだ決まっていません。後で注文します。",
+  "reading": "まだ きまっていません。あとで ちゅうもんします"
+ },
+ {
+  "id": "rest-thats-all",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "先這樣。",
+  "japanese": "以上でお願いします。",
+  "reading": "いじょうで おねがいします"
+ },
+ {
+  "id": "rest-more",
+  "category": "restaurant",
+  "scene": "點餐",
+  "chinese": "我要加點。",
+  "japanese": "追加をお願いします。",
+  "reading": "ついかを おねがいします"
+ },
+ {
+  "id": "rest-water",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "請給我水。",
+  "japanese": "お水をください。",
+  "reading": "おみずを ください"
+ },
+ {
+  "id": "rest-chopsticks",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "請給我筷子（湯匙、叉子）。",
+  "japanese": "お箸（スプーン、フォーク）をください。",
+  "reading": "おはし（スプーン、フォーク）を ください"
+ },
+ {
+  "id": "rest-wet-tissue",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "請給我濕紙巾。",
+  "japanese": "おしぼりをください。",
+  "reading": "おしぼりを ください"
+ },
+ {
+  "id": "rest-small-plate",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "請給我小盤子。",
+  "japanese": "取り皿をください。",
+  "reading": "とりざらを ください"
+ },
+ {
+  "id": "rest-kids-utensils",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "有兒童餐具嗎？",
+  "japanese": "子ども用の食器はありますか？",
+  "reading": "こどもようの しょっきは ありますか"
+ },
+ {
+  "id": "rest-toilet",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "廁所在哪裡？",
+  "japanese": "トイレはどこですか？",
+  "reading": "トイレは どこですか"
+ },
+ {
+  "id": "rest-not-arrived",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "我點的菜還沒來。",
+  "japanese": "注文した料理がまだ来ていません。",
+  "reading": "ちゅうもんした りょうりが まだ きていません"
+ },
+ {
+  "id": "rest-wrong-order",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "這不是我點的。",
+  "japanese": "これは注文していません。",
+  "reading": "これは ちゅうもん していません"
+ },
+ {
+  "id": "rest-dropped",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "筷子掉了，請再給我一副。",
+  "japanese": "お箸を落としました。新しいものをください。",
+  "reading": "おはしを おとしました。あたらしいものを ください"
+ },
+ {
+  "id": "rest-delicious",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "很好吃！",
+  "japanese": "おいしいです！",
+  "reading": "おいしいです"
+ },
+ {
+  "id": "rest-how-to-eat",
+  "category": "restaurant",
+  "scene": "用餐中",
+  "chinese": "這個要怎麼吃？",
+  "japanese": "これはどうやって食べますか？",
+  "reading": "これは どうやって たべますか"
+ },
+ {
+  "id": "rest-bill",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "請幫我結帳。",
+  "japanese": "お会計をお願いします。",
+  "reading": "おかいけいを おねがいします"
+ },
+ {
+  "id": "rest-pay-where",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "在哪裡結帳？",
+  "japanese": "お会計はどこですか？",
+  "reading": "おかいけいは どこですか"
+ },
+ {
+  "id": "rest-separate",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "可以分開結帳嗎？",
+  "japanese": "別々に会計できますか？",
+  "reading": "べつべつに かいけい できますか"
+ },
+ {
+  "id": "rest-card",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "可以刷卡嗎？",
+  "japanese": "カードは使えますか？",
+  "reading": "カードは つかえますか"
+ },
+ {
+  "id": "rest-epay",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "可以用電子支付（PayPay）嗎？",
+  "japanese": "電子マネー（PayPay）は使えますか？",
+  "reading": "でんしマネー（ペイペイ）は つかえますか"
+ },
+ {
+  "id": "rest-receipt",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "請給我收據。",
+  "japanese": "領収書をお願いします。",
+  "reading": "りょうしゅうしょを おねがいします"
+ },
+ {
+  "id": "rest-takeout",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "剩下的可以打包嗎？",
+  "japanese": "残りを持ち帰れますか？",
+  "reading": "のこりを もちかえれますか"
+ },
+ {
+  "id": "rest-thanks",
+  "category": "restaurant",
+  "scene": "結帳",
+  "chinese": "謝謝招待，很好吃。",
+  "japanese": "ごちそうさまでした。とてもおいしかったです。",
+  "reading": "ごちそうさまでした。とても おいしかったです"
+ },
+ {
+  "id": "rest-vegetarian",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "我不吃肉和魚，有可以吃的嗎？",
+  "japanese": "肉と魚が食べられません。食べられるものはありますか？",
+  "reading": "にくと さかなが たべられません。たべられるものは ありますか"
+ },
+ {
+  "id": "rest-no-pork",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "我不吃豬肉。",
+  "japanese": "豚肉は食べられません。",
+  "reading": "ぶたにくは たべられません"
+ },
+ {
+  "id": "rest-no-raw",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "我不吃生的。",
+  "japanese": "生ものは食べられません。",
+  "reading": "なまものは たべられません"
+ },
+ {
+  "id": "rest-no-seafood",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "我不能吃海鮮。",
+  "japanese": "海鮮は食べられません。",
+  "reading": "かいせんは たべられません"
+ },
+ {
+  "id": "rest-soft",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "長輩牙齒不好，有比較軟的菜嗎？",
+  "japanese": "年配の人がいます。柔らかい料理はありますか？",
+  "reading": "ねんぱいの ひとが います。やわらかい りょうりは ありますか"
+ },
+ {
+  "id": "rest-less-salt",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "可以少鹽（少油）嗎？",
+  "japanese": "塩（油）控えめにできますか？",
+  "reading": "しお（あぶら）ひかえめに できますか"
+ },
+ {
+  "id": "rest-kids-menu",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "有兒童餐嗎？",
+  "japanese": "お子様メニューはありますか？",
+  "reading": "おこさまメニューは ありますか"
+ },
+ {
+  "id": "rest-cut-small",
+  "category": "restaurant",
+  "scene": "特殊需求",
+  "chinese": "可以幫我切小塊嗎？",
+  "japanese": "小さく切ってもらえますか？",
+  "reading": "ちいさく きって もらえますか"
+ },
+ {
+  "id": "onsen-price",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "一個人多少錢？",
+  "japanese": "一人いくらですか？",
+  "reading": "ひとり いくらですか"
+ },
+ {
+  "id": "onsen-two",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "兩位大人。",
+  "japanese": "大人二人です。",
+  "reading": "おとな ふたりです"
+ },
+ {
+  "id": "onsen-towel",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "可以借（買）毛巾嗎？",
+  "japanese": "タオルは借りられますか（買えますか）？",
+  "reading": "タオルは かりられますか（かえますか）"
+ },
+ {
+  "id": "onsen-hours",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "營業到幾點？",
+  "japanese": "何時まで営業していますか？",
+  "reading": "なんじまで えいぎょう していますか"
+ },
+ {
+  "id": "onsen-tattoo",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "有刺青可以進去嗎？",
+  "japanese": "タトゥーがあっても入れますか？",
+  "reading": "タトゥーが あっても はいれますか"
+ },
+ {
+  "id": "onsen-ticket-machine",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "售票機怎麼用？",
+  "japanese": "券売機の使い方を教えてください。",
+  "reading": "けんばいきの つかいかたを おしえてください"
+ },
+ {
+  "id": "onsen-locker",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "置物櫃要怎麼用？要投錢嗎？",
+  "japanese": "ロッカーの使い方を教えてください。お金は要りますか？",
+  "reading": "ロッカーの つかいかたを おしえてください。おかねは いりますか"
+ },
+ {
+  "id": "onsen-where",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "男湯／女湯在哪裡？",
+  "japanese": "男湯・女湯はどこですか？",
+  "reading": "おとこゆ・おんなゆは どこですか"
+ },
+ {
+  "id": "onsen-private",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "有包場的家庭湯嗎？",
+  "japanese": "貸切風呂はありますか？",
+  "reading": "かしきりぶろは ありますか"
+ },
+ {
+  "id": "onsen-kids",
+  "category": "onsen",
+  "scene": "入場",
+  "chinese": "小孩可以一起進去嗎？",
+  "japanese": "子どもも一緒に入れますか？",
+  "reading": "こどもも いっしょに はいれますか"
+ },
+ {
+  "id": "onsen-wash-first",
+  "category": "onsen",
+  "scene": "泡湯規矩",
+  "chinese": "要先洗身體再進去嗎？",
+  "japanese": "先に体を洗ってから入りますか？",
+  "reading": "さきに からだを あらってから はいりますか"
+ },
+ {
+  "id": "onsen-towel-in",
+  "category": "onsen",
+  "scene": "泡湯規矩",
+  "chinese": "毛巾可以帶進浴池嗎？",
+  "japanese": "タオルは湯船に入れてもいいですか？",
+  "reading": "タオルは ゆぶねに いれても いいですか"
+ },
+ {
+  "id": "onsen-temp",
+  "category": "onsen",
+  "scene": "泡湯規矩",
+  "chinese": "水溫大概幾度？",
+  "japanese": "お湯の温度は何度くらいですか？",
+  "reading": "おゆの おんどは なんどくらいですか"
+ },
+ {
+  "id": "onsen-outdoor",
+  "category": "onsen",
+  "scene": "泡湯規矩",
+  "chinese": "露天風呂在哪裡？",
+  "japanese": "露天風呂はどこですか？",
+  "reading": "ろてんぶろは どこですか"
+ },
+ {
+  "id": "onsen-time-limit",
+  "category": "onsen",
+  "scene": "泡湯規矩",
+  "chinese": "有時間限制嗎？",
+  "japanese": "時間制限はありますか？",
+  "reading": "じかんせいげんは ありますか"
+ },
+ {
+  "id": "onsen-photo",
+  "category": "onsen",
+  "scene": "泡湯規矩",
+  "chinese": "可以拍照嗎？",
+  "japanese": "写真を撮ってもいいですか？",
+  "reading": "しゃしんを とっても いいですか"
+ },
+ {
+  "id": "onsen-sauna",
+  "category": "onsen",
+  "scene": "泡湯規矩",
+  "chinese": "三溫暖怎麼用？",
+  "japanese": "サウナの使い方を教えてください。",
+  "reading": "サウナの つかいかたを おしえてください"
+ },
+ {
+  "id": "onsen-rest-area",
+  "category": "onsen",
+  "scene": "設施",
+  "chinese": "休息室在哪裡？",
+  "japanese": "休憩室はどこですか？",
+  "reading": "きゅうけいしつは どこですか"
+ },
+ {
+  "id": "onsen-restaurant",
+  "category": "onsen",
+  "scene": "設施",
+  "chinese": "裡面有餐廳嗎？",
+  "japanese": "中に食事処はありますか？",
+  "reading": "なかに しょくじどころは ありますか"
+ },
+ {
+  "id": "onsen-massage",
+  "category": "onsen",
+  "scene": "設施",
+  "chinese": "有按摩嗎？多少錢？",
+  "japanese": "マッサージはありますか？いくらですか？",
+  "reading": "マッサージは ありますか？ いくらですか"
+ },
+ {
+  "id": "onsen-hairdryer",
+  "category": "onsen",
+  "scene": "設施",
+  "chinese": "有吹風機（化妝水）嗎？",
+  "japanese": "ドライヤー（化粧水）はありますか？",
+  "reading": "ドライヤー（けしょうすい）は ありますか"
+ },
+ {
+  "id": "onsen-drink",
+  "category": "onsen",
+  "scene": "設施",
+  "chinese": "飲料在哪裡買？",
+  "japanese": "飲み物はどこで買えますか？",
+  "reading": "のみものは どこで かえますか"
+ },
+ {
+  "id": "onsen-wristband",
+  "category": "onsen",
+  "scene": "設施",
+  "chinese": "這個手環要怎麼用？",
+  "japanese": "このリストバンドの使い方を教えてください。",
+  "reading": "この リストバンドの つかいかたを おしえてください"
+ },
+ {
+  "id": "ryokan-dinner-time",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "晚餐幾點？在哪裡吃？",
+  "japanese": "夕食は何時からですか？どこで食べますか？",
+  "reading": "ゆうしょくは なんじからですか？ どこで たべますか"
+ },
+ {
+  "id": "ryokan-room-dinner",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "晚餐是在房間吃嗎？",
+  "japanese": "夕食は部屋食ですか？",
+  "reading": "ゆうしょくは へやしょくですか"
+ },
+ {
+  "id": "ryokan-yukata",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "浴衣有大一點（小一點）的嗎？",
+  "japanese": "浴衣の大きい（小さい）サイズはありますか？",
+  "reading": "ゆかたの おおきい（ちいさい）サイズは ありますか"
+ },
+ {
+  "id": "ryokan-yukata-out",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "浴衣可以穿去外面嗎？",
+  "japanese": "浴衣で外に出てもいいですか？",
+  "reading": "ゆかたで そとに でても いいですか"
+ },
+ {
+  "id": "ryokan-futon",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "請幫我鋪床。",
+  "japanese": "布団を敷いてください。",
+  "reading": "ふとんを しいてください"
+ },
+ {
+  "id": "ryokan-breakfast",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "早餐幾點？",
+  "japanese": "朝食は何時からですか？",
+  "reading": "ちょうしょくは なんじからですか"
+ },
+ {
+  "id": "ryokan-bath-24h",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "溫泉晚上也可以泡嗎？",
+  "japanese": "温泉は夜も入れますか？",
+  "reading": "おんせんは よるも はいれますか"
+ },
+ {
+  "id": "ryokan-thanks",
+  "category": "onsen",
+  "scene": "住溫泉旅館",
+  "chinese": "料理很好吃，謝謝。",
+  "japanese": "お料理がとてもおいしかったです。ありがとうございました。",
+  "reading": "おりょうりが とても おいしかったです。ありがとうございました"
+ },
+ {
+  "id": "shop-have-this",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "請問有這個商品嗎？",
+  "japanese": "こちらの商品はありますか？",
+  "reading": "こちらの しょうひんは ありますか"
+ },
+ {
+  "id": "shop-where",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "這個在哪裡？",
+  "japanese": "これはどこにありますか？",
+  "reading": "これは どこに ありますか"
+ },
+ {
+  "id": "shop-stock",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "有庫存嗎？",
+  "japanese": "在庫はありますか？",
+  "reading": "ざいこは ありますか"
+ },
+ {
+  "id": "shop-size",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "有其他尺寸嗎？",
+  "japanese": "他のサイズはありますか？",
+  "reading": "ほかの サイズは ありますか"
+ },
+ {
+  "id": "shop-color",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "有其他顏色或款式嗎？",
+  "japanese": "他の色やデザインはありますか？",
+  "reading": "ほかの いろや デザインは ありますか"
+ },
+ {
+  "id": "shop-try-on",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "可以試穿嗎？",
+  "japanese": "試着できますか？",
+  "reading": "しちゃく できますか"
+ },
+ {
+  "id": "shop-mirror",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "鏡子在哪裡？",
+  "japanese": "鏡はどこですか？",
+  "reading": "かがみは どこですか"
+ },
+ {
+  "id": "shop-reach",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "可以幫我拿那個嗎？（指上面）",
+  "japanese": "あれを取ってもらえますか？",
+  "reading": "あれを とって もらえますか"
+ },
+ {
+  "id": "shop-new-one",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "有新的（沒拆封的）嗎？",
+  "japanese": "新しいもの（未開封）はありますか？",
+  "reading": "あたらしいもの（みかいふう）は ありますか"
+ },
+ {
+  "id": "shop-when-restock",
+  "category": "shopping",
+  "scene": "找商品",
+  "chinese": "什麼時候會補貨？",
+  "japanese": "いつ入荷しますか？",
+  "reading": "いつ にゅうか しますか"
+ },
+ {
+  "id": "shop-price",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "這個多少錢？",
+  "japanese": "これはいくらですか？",
+  "reading": "これは いくらですか"
+ },
+ {
+  "id": "shop-tax-included",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "這是含稅價嗎？",
+  "japanese": "これは税込みですか？",
+  "reading": "これは ぜいこみですか"
+ },
+ {
+  "id": "shop-discount",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "這個有折扣嗎？",
+  "japanese": "これは割引がありますか？",
+  "reading": "これは わりびきが ありますか"
+ },
+ {
+  "id": "shop-tax-free",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "可以免稅嗎？",
+  "japanese": "免税できますか？",
+  "reading": "めんぜい できますか"
+ },
+ {
+  "id": "shop-tax-free-where",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "免稅櫃台在哪裡？",
+  "japanese": "免税カウンターはどこですか？",
+  "reading": "めんぜいカウンターは どこですか"
+ },
+ {
+  "id": "shop-passport-needed",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "需要護照嗎？",
+  "japanese": "パスポートは必要ですか？",
+  "reading": "パスポートは ひつようですか"
+ },
+ {
+  "id": "shop-coupon",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "可以用這個優惠券嗎？",
+  "japanese": "このクーポンは使えますか？",
+  "reading": "この クーポンは つかえますか"
+ },
+ {
+  "id": "shop-cheaper",
+  "category": "shopping",
+  "scene": "價格與免稅",
+  "chinese": "有比較便宜的嗎？",
+  "japanese": "もっと安いものはありますか？",
+  "reading": "もっと やすいものは ありますか"
+ },
+ {
+  "id": "shop-card",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "可以刷卡嗎？",
+  "japanese": "カードは使えますか？",
+  "reading": "カードは つかえますか"
+ },
+ {
+  "id": "shop-epay",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "可以用電子支付嗎？",
+  "japanese": "電子マネーは使えますか？",
+  "reading": "でんしマネーは つかえますか"
+ },
+ {
+  "id": "shop-bag",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "請給我一個袋子。",
+  "japanese": "袋をください。",
+  "reading": "ふくろを ください"
+ },
+ {
+  "id": "shop-no-bag",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "不用袋子。",
+  "japanese": "袋は要りません。",
+  "reading": "ふくろは いりません"
+ },
+ {
+  "id": "shop-separate-bag",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "請分開裝。",
+  "japanese": "別々に入れてください。",
+  "reading": "べつべつに いれてください"
+ },
+ {
+  "id": "shop-gift-wrap",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "請幫我包裝成禮物。",
+  "japanese": "プレゼント用に包んでください。",
+  "reading": "プレゼントように つつんで ください"
+ },
+ {
+  "id": "shop-receipt",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "請給我收據。",
+  "japanese": "レシート（領収書）をください。",
+  "reading": "レシート（りょうしゅうしょ）を ください"
+ },
+ {
+  "id": "shop-return",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "可以退換貨嗎？",
+  "japanese": "返品・交換はできますか？",
+  "reading": "へんぴん・こうかんは できますか"
+ },
+ {
+  "id": "shop-ship-hotel",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "可以寄到飯店嗎？",
+  "japanese": "ホテルに配送できますか？",
+  "reading": "ホテルに はいそう できますか"
+ },
+ {
+  "id": "shop-ship-taiwan",
+  "category": "shopping",
+  "scene": "結帳",
+  "chinese": "可以寄到台灣嗎？",
+  "japanese": "台湾に送れますか？",
+  "reading": "たいわんに おくれますか"
+ },
+ {
+  "id": "drug-cold",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "有感冒藥嗎？",
+  "japanese": "風邪薬はありますか？",
+  "reading": "かぜぐすりは ありますか"
+ },
+ {
+  "id": "drug-stomach",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "有胃藥（止瀉藥）嗎？",
+  "japanese": "胃薬（下痢止め）はありますか？",
+  "reading": "いぐすり（げりどめ）は ありますか"
+ },
+ {
+  "id": "drug-painkiller",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "有止痛藥（退燒藥）嗎？",
+  "japanese": "痛み止め（解熱剤）はありますか？",
+  "reading": "いたみどめ（げねつざい）は ありますか"
+ },
+ {
+  "id": "drug-kids",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "有兒童用的嗎？",
+  "japanese": "子ども用はありますか？",
+  "reading": "こどもようは ありますか"
+ },
+ {
+  "id": "drug-how-take",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "一天吃幾次？",
+  "japanese": "一日に何回飲みますか？",
+  "reading": "いちにちに なんかい のみますか"
+ },
+ {
+  "id": "drug-bandage",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "有 OK 繃（酸痛貼布）嗎？",
+  "japanese": "絆創膏（湿布）はありますか？",
+  "reading": "ばんそうこう（しっぷ）は ありますか"
+ },
+ {
+  "id": "super-what-meat",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "這是什麼肉？",
+  "japanese": "これは何の肉ですか？",
+  "reading": "これは なんの にくですか"
+ },
+ {
+  "id": "super-expiry",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "賞味期限到什麼時候？",
+  "japanese": "賞味期限はいつまでですか？",
+  "reading": "しょうみきげんは いつまでですか"
+ },
+ {
+  "id": "super-heat",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "可以幫我加熱嗎？",
+  "japanese": "温めてもらえますか？",
+  "reading": "あたためて もらえますか"
+ },
+ {
+  "id": "super-chopsticks",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "請給我筷子（湯匙）。",
+  "japanese": "お箸（スプーン）をください。",
+  "reading": "おはし（スプーン）を ください"
+ },
+ {
+  "id": "super-microwave",
+  "category": "shopping",
+  "scene": "藥妝與超市",
+  "chinese": "這個可以微波嗎？",
+  "japanese": "これは電子レンジで温められますか？",
+  "reading": "これは でんしレンジで あたためられますか"
+ },
+ {
+  "id": "cloth-size-chart",
+  "category": "shopping",
+  "scene": "服飾與電器",
+  "chinese": "日本尺寸的 M 大概是多大？",
+  "japanese": "日本サイズのMはどのくらいですか？",
+  "reading": "にほんサイズの エムは どのくらいですか"
+ },
+ {
+  "id": "cloth-bigger",
+  "category": "shopping",
+  "scene": "服飾與電器",
+  "chinese": "有大一號的嗎？",
+  "japanese": "一つ大きいサイズはありますか？",
+  "reading": "ひとつ おおきい サイズは ありますか"
+ },
+ {
+  "id": "cloth-fitting-room",
+  "category": "shopping",
+  "scene": "服飾與電器",
+  "chinese": "試衣間在哪裡？",
+  "japanese": "試着室はどこですか？",
+  "reading": "しちゃくしつは どこですか"
+ },
+ {
+  "id": "elec-taiwan",
+  "category": "shopping",
+  "scene": "服飾與電器",
+  "chinese": "這個在台灣可以用嗎？（電壓 110V）",
+  "japanese": "これは台湾（110ボルト）で使えますか？",
+  "reading": "これは たいわん（ひゃくじゅう ボルト）で つかえますか"
+ },
+ {
+  "id": "elec-warranty",
+  "category": "shopping",
+  "scene": "服飾與電器",
+  "chinese": "有國際保固嗎？",
+  "japanese": "海外保証はありますか？",
+  "reading": "かいがい ほしょうは ありますか"
+ },
+ {
+  "id": "elec-plug",
+  "category": "shopping",
+  "scene": "服飾與電器",
+  "chinese": "需要轉接頭嗎？",
+  "japanese": "変換プラグは必要ですか？",
+  "reading": "へんかんプラグは ひつようですか"
+ },
+ {
+  "id": "elec-chinese-manual",
+  "category": "shopping",
+  "scene": "服飾與電器",
+  "chinese": "有中文說明書嗎？",
+  "japanese": "中国語の説明書はありますか？",
+  "reading": "ちゅうごくごの せつめいしょは ありますか"
+ },
+ {
+  "id": "trans-ticket",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "我要買到這裡的票。（指地圖）",
+  "japanese": "ここまでの切符をください。",
+  "reading": "ここまでの きっぷを ください"
+ },
+ {
+  "id": "trans-round-trip",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "來回票。",
+  "japanese": "往復でお願いします。",
+  "reading": "おうふくで おねがいします"
+ },
+ {
+  "id": "trans-two-adults",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "兩張大人。",
+  "japanese": "大人二枚です。",
+  "reading": "おとな にまいです"
+ },
+ {
+  "id": "trans-child",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "小孩的票多少錢？",
+  "japanese": "子ども料金はいくらですか？",
+  "reading": "こども りょうきんは いくらですか"
+ },
+ {
+  "id": "trans-reserved-seat",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "我要指定席。",
+  "japanese": "指定席をお願いします。",
+  "reading": "していせきを おねがいします"
+ },
+ {
+  "id": "trans-ic-charge",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "Suica 要在哪裡加值？",
+  "japanese": "Suicaのチャージはどこでできますか？",
+  "reading": "スイカの チャージは どこで できますか"
+ },
+ {
+  "id": "trans-machine",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "售票機怎麼用？",
+  "japanese": "券売機の使い方を教えてください。",
+  "reading": "けんばいきの つかいかたを おしえてください"
+ },
+ {
+  "id": "trans-pass",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "可以用這張周遊券嗎？",
+  "japanese": "このパスは使えますか？",
+  "reading": "この パスは つかえますか"
+ },
+ {
+  "id": "trans-how-much",
+  "category": "transport",
+  "scene": "買票",
+  "chinese": "到這裡多少錢？",
+  "japanese": "ここまでいくらですか？",
+  "reading": "ここまで いくらですか"
+ },
+ {
+  "id": "trans-this-train",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "這班車有到這裡嗎？",
+  "japanese": "この電車はここに行きますか？",
+  "reading": "この でんしゃは ここに いきますか"
+ },
+ {
+  "id": "trans-platform",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "幾號月台？",
+  "japanese": "何番ホームですか？",
+  "reading": "なんばん ホームですか"
+ },
+ {
+  "id": "trans-transfer",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "要在哪裡轉車？",
+  "japanese": "どこで乗り換えますか？",
+  "reading": "どこで のりかえますか"
+ },
+ {
+  "id": "trans-how-many-stops",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "還有幾站？",
+  "japanese": "あと何駅ですか？",
+  "reading": "あと なんえきですか"
+ },
+ {
+  "id": "trans-next-stop",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "下一站是這裡嗎？",
+  "japanese": "次はここですか？",
+  "reading": "つぎは ここですか"
+ },
+ {
+  "id": "trans-how-long",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "到這裡要多久？",
+  "japanese": "ここまでどのくらいかかりますか？",
+  "reading": "ここまで どのくらい かかりますか"
+ },
+ {
+  "id": "trans-last-train",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "最後一班車是幾點？",
+  "japanese": "終電は何時ですか？",
+  "reading": "しゅうでんは なんじですか"
+ },
+ {
+  "id": "trans-wrong-train",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "我搭錯車了，要怎麼回去？",
+  "japanese": "乗り間違えました。どう戻ればいいですか？",
+  "reading": "のりまちがえました。どう もどれば いいですか"
+ },
+ {
+  "id": "trans-luggage",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "大行李要放哪裡？",
+  "japanese": "大きい荷物はどこに置けばいいですか？",
+  "reading": "おおきい にもつは どこに おけば いいですか"
+ },
+ {
+  "id": "trans-exit",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "要從哪個出口出去？",
+  "japanese": "どの出口から出ればいいですか？",
+  "reading": "どの でぐちから でれば いいですか"
+ },
+ {
+  "id": "trans-elevator",
+  "category": "transport",
+  "scene": "搭電車",
+  "chinese": "電梯在哪裡？",
+  "japanese": "エレベーターはどこですか？",
+  "reading": "エレベーターは どこですか"
+ },
+ {
+  "id": "taxi-here",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "請到這裡。（指地址）",
+  "japanese": "ここまでお願いします。",
+  "reading": "ここまで おねがいします"
+ },
+ {
+  "id": "taxi-how-much",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "到這裡大概多少錢？",
+  "japanese": "ここまでいくらくらいですか？",
+  "reading": "ここまで いくらくらいですか"
+ },
+ {
+  "id": "taxi-how-long",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "大概要多久？",
+  "japanese": "どのくらいかかりますか？",
+  "reading": "どのくらい かかりますか"
+ },
+ {
+  "id": "taxi-card",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "可以刷卡嗎？",
+  "japanese": "カードは使えますか？",
+  "reading": "カードは つかえますか"
+ },
+ {
+  "id": "taxi-stop-here",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "請在這裡停。",
+  "japanese": "ここで止めてください。",
+  "reading": "ここで とめてください"
+ },
+ {
+  "id": "taxi-trunk",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "請開後車廂。",
+  "japanese": "トランクを開けてください。",
+  "reading": "トランクを あけてください"
+ },
+ {
+  "id": "taxi-receipt",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "請給我收據。",
+  "japanese": "領収書をお願いします。",
+  "reading": "りょうしゅうしょを おねがいします"
+ },
+ {
+  "id": "taxi-stand",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "計程車乘車處在哪裡？",
+  "japanese": "タクシー乗り場はどこですか？",
+  "reading": "タクシーのりばは どこですか"
+ },
+ {
+  "id": "taxi-wait",
+  "category": "transport",
+  "scene": "計程車",
+  "chinese": "可以在這裡等我 10 分鐘嗎？",
+  "japanese": "ここで10分待ってもらえますか？",
+  "reading": "ここで じゅっぷん まって もらえますか"
+ },
+ {
+  "id": "bus-stop",
+  "category": "transport",
+  "scene": "巴士",
+  "chinese": "巴士站在哪裡？",
+  "japanese": "バス停はどこですか？",
+  "reading": "バスていは どこですか"
+ },
+ {
+  "id": "bus-this-goes",
+  "category": "transport",
+  "scene": "巴士",
+  "chinese": "這班巴士有到這裡嗎？",
+  "japanese": "このバスはここに行きますか？",
+  "reading": "この バスは ここに いきますか"
+ },
+ {
+  "id": "bus-pay-how",
+  "category": "transport",
+  "scene": "巴士",
+  "chinese": "車資要怎麼付？上車還是下車付？",
+  "japanese": "料金はどう払いますか？乗るときですか、降りるときですか？",
+  "reading": "りょうきんは どう はらいますか？ のるときですか、おりるときですか"
+ },
+ {
+  "id": "bus-ic",
+  "category": "transport",
+  "scene": "巴士",
+  "chinese": "可以用 Suica 嗎？",
+  "japanese": "Suicaは使えますか？",
+  "reading": "スイカは つかえますか"
+ },
+ {
+  "id": "bus-tell-me",
+  "category": "transport",
+  "scene": "巴士",
+  "chinese": "到了請告訴我。",
+  "japanese": "着いたら教えてください。",
+  "reading": "ついたら おしえてください"
+ },
+ {
+  "id": "bus-next",
+  "category": "transport",
+  "scene": "巴士",
+  "chinese": "下一班幾點？",
+  "japanese": "次のバスは何時ですか？",
+  "reading": "つぎの バスは なんじですか"
+ },
+ {
+  "id": "bus-highway",
+  "category": "transport",
+  "scene": "巴士",
+  "chinese": "高速巴士的售票處在哪裡？",
+  "japanese": "高速バスのチケット売り場はどこですか？",
+  "reading": "こうそくバスの チケットうりばは どこですか"
+ },
+ {
+  "id": "air-checkin",
+  "category": "transport",
+  "scene": "行李與機場",
+  "chinese": "報到櫃台在哪裡？",
+  "japanese": "チェックインカウンターはどこですか？",
+  "reading": "チェックインカウンターは どこですか"
+ },
+ {
+  "id": "air-luggage-locker",
+  "category": "transport",
+  "scene": "行李與機場",
+  "chinese": "置物櫃在哪裡？",
+  "japanese": "コインロッカーはどこですか？",
+  "reading": "コインロッカーは どこですか"
+ },
+ {
+  "id": "air-luggage-storage",
+  "category": "transport",
+  "scene": "行李與機場",
+  "chinese": "可以寄放行李嗎？",
+  "japanese": "荷物を預けられますか？",
+  "reading": "にもつを あずけられますか"
+ },
+ {
+  "id": "air-takkyubin",
+  "category": "transport",
+  "scene": "行李與機場",
+  "chinese": "我想把行李寄到飯店（機場）。",
+  "japanese": "荷物をホテル（空港）に送りたいです。",
+  "reading": "にもつを ホテル（くうこう）に おくりたいです"
+ },
+ {
+  "id": "air-gate",
+  "category": "transport",
+  "scene": "行李與機場",
+  "chinese": "登機門在哪裡？",
+  "japanese": "搭乗ゲートはどこですか？",
+  "reading": "とうじょうゲートは どこですか"
+ },
+ {
+  "id": "air-tax-refund",
+  "category": "transport",
+  "scene": "行李與機場",
+  "chinese": "免稅品要在哪裡辦？",
+  "japanese": "免税手続きはどこでできますか？",
+  "reading": "めんぜいてつづきは どこで できますか"
+ },
+ {
+  "id": "air-airport-bus",
+  "category": "transport",
+  "scene": "行李與機場",
+  "chinese": "機場巴士在哪裡搭？",
+  "japanese": "空港バスはどこから乗れますか？",
+  "reading": "くうこうバスは どこから のれますか"
+ },
+ {
+  "id": "emergency-help",
+  "category": "emergency",
+  "scene": "求助",
+  "chinese": "我需要幫忙。",
+  "japanese": "助けてください。",
+  "reading": "たすけて ください"
+ },
+ {
+  "id": "emergency-police",
+  "category": "emergency",
+  "scene": "求助",
+  "chinese": "請幫我叫警察。",
+  "japanese": "警察を呼んでください。",
+  "reading": "けいさつを よんで ください"
+ },
+ {
+  "id": "emergency-ambulance",
+  "category": "emergency",
+  "scene": "求助",
+  "chinese": "請幫我叫救護車。",
+  "japanese": "救急車を呼んでください。",
+  "reading": "きゅうきゅうしゃを よんで ください"
+ },
+ {
+  "id": "emergency-chinese-speaker",
+  "category": "emergency",
+  "scene": "求助",
+  "chinese": "有會說中文的人嗎？",
+  "japanese": "中国語が話せる人はいますか？",
+  "reading": "ちゅうごくごが はなせる ひとは いますか"
+ },
+ {
+  "id": "emergency-no-japanese",
+  "category": "emergency",
+  "scene": "求助",
+  "chinese": "我不會說日文，請說慢一點。",
+  "japanese": "日本語が話せません。ゆっくり話してください。",
+  "reading": "にほんごが はなせません。ゆっくり はなして ください"
+ },
+ {
+  "id": "emergency-write",
+  "category": "emergency",
+  "scene": "求助",
+  "chinese": "可以寫下來給我看嗎？",
+  "japanese": "書いてもらえますか？",
+  "reading": "かいて もらえますか"
+ },
+ {
+  "id": "emergency-call-family",
+  "category": "emergency",
+  "scene": "求助",
+  "chinese": "可以幫我打這個電話嗎？",
+  "japanese": "この番号に電話してもらえますか？",
+  "reading": "この ばんごうに でんわして もらえますか"
+ },
+ {
+  "id": "sick-general",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我身體不舒服。",
+  "japanese": "気分が悪いです。",
+  "reading": "きぶんが わるいです"
+ },
+ {
+  "id": "sick-headache",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我頭痛（發燒）。",
+  "japanese": "頭が痛いです（熱があります）。",
+  "reading": "あたまが いたいです（ねつが あります）"
+ },
+ {
+  "id": "sick-stomach",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我肚子痛（拉肚子）。",
+  "japanese": "お腹が痛いです（下痢です）。",
+  "reading": "おなかが いたいです（げりです）"
+ },
+ {
+  "id": "sick-injured",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我受傷了，在流血。",
+  "japanese": "けがをしました。血が出ています。",
+  "reading": "けがを しました。ちが でています"
+ },
+ {
+  "id": "sick-dizzy",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我頭暈，站不穩。",
+  "japanese": "めまいがして、立てません。",
+  "reading": "めまいが して、たてません"
+ },
+ {
+  "id": "sick-chest",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我胸口很痛。",
+  "japanese": "胸が痛いです。",
+  "reading": "むねが いたいです"
+ },
+ {
+  "id": "sick-allergy",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我有過敏，呼吸困難。",
+  "japanese": "アレルギーで息が苦しいです。",
+  "reading": "アレルギーで いきが くるしいです"
+ },
+ {
+  "id": "sick-medicine",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我有在吃這個藥。（給對方看）",
+  "japanese": "この薬を飲んでいます。",
+  "reading": "この くすりを のんでいます"
+ },
+ {
+  "id": "sick-chronic",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我有高血壓（糖尿病、心臟病）。",
+  "japanese": "高血圧（糖尿病、心臓病）があります。",
+  "reading": "こうけつあつ（とうにょうびょう、しんぞうびょう）が あります"
+ },
+ {
+  "id": "sick-hospital",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "最近的醫院在哪裡？",
+  "japanese": "一番近い病院はどこですか？",
+  "reading": "いちばん ちかい びょういんは どこですか"
+ },
+ {
+  "id": "sick-pharmacy",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "附近有藥局嗎？",
+  "japanese": "近くに薬局はありますか？",
+  "reading": "ちかくに やっきょくは ありますか"
+ },
+ {
+  "id": "sick-insurance",
+  "category": "emergency",
+  "scene": "身體不舒服",
+  "chinese": "我有旅遊保險，請給我診斷書和收據。",
+  "japanese": "海外旅行保険があります。診断書と領収書をください。",
+  "reading": "かいがいりょこうほけんが あります。しんだんしょと りょうしゅうしょを ください"
+ },
+ {
+  "id": "lost-item",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "我的東西不見了。",
+  "japanese": "物をなくしました。",
+  "reading": "ものを なくしました"
+ },
+ {
+  "id": "lost-passport",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "我的護照不見了。",
+  "japanese": "パスポートをなくしました。",
+  "reading": "パスポートを なくしました"
+ },
+ {
+  "id": "lost-phone",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "我的手機不見了。",
+  "japanese": "携帯電話をなくしました。",
+  "reading": "けいたいでんわを なくしました"
+ },
+ {
+  "id": "lost-wallet",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "我的錢包不見了。",
+  "japanese": "財布をなくしました。",
+  "reading": "さいふを なくしました"
+ },
+ {
+  "id": "lost-where",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "可能掉在電車（計程車）上。",
+  "japanese": "電車（タクシー）の中で落としたかもしれません。",
+  "reading": "でんしゃ（タクシー）の なかで おとしたかも しれません"
+ },
+ {
+  "id": "lost-office",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "失物招領處在哪裡？",
+  "japanese": "忘れ物センターはどこですか？",
+  "reading": "わすれものセンターは どこですか"
+ },
+ {
+  "id": "lost-report",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "我要報案（遺失證明）。",
+  "japanese": "遺失届を出したいです。",
+  "reading": "いしつとどけを だしたいです"
+ },
+ {
+  "id": "lost-embassy",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "我要聯絡台灣的代表處。",
+  "japanese": "台湾の代表処（台北駐日経済文化代表処）に連絡したいです。",
+  "reading": "たいわんの だいひょうしょに れんらく したいです"
+ },
+ {
+  "id": "lost-credit-card",
+  "category": "emergency",
+  "scene": "東西掉了",
+  "chinese": "信用卡掉了，我要停卡。",
+  "japanese": "クレジットカードをなくしました。止めたいです。",
+  "reading": "クレジットカードを なくしました。とめたいです"
+ },
+ {
+  "id": "lost-way",
+  "category": "emergency",
+  "scene": "迷路",
+  "chinese": "我迷路了。",
+  "japanese": "道に迷いました。",
+  "reading": "みちに まよいました"
+ },
+ {
+  "id": "lost-go-here",
+  "category": "emergency",
+  "scene": "迷路",
+  "chinese": "我要去這裡。（指地址）",
+  "japanese": "ここに行きたいです。",
+  "reading": "ここに いきたいです"
+ },
+ {
+  "id": "lost-station",
+  "category": "emergency",
+  "scene": "迷路",
+  "chinese": "最近的車站在哪裡？",
+  "japanese": "一番近い駅はどこですか？",
+  "reading": "いちばん ちかい えきは どこですか"
+ },
+ {
+  "id": "lost-taxi",
+  "category": "emergency",
+  "scene": "迷路",
+  "chinese": "可以幫我叫計程車嗎？",
+  "japanese": "タクシーを呼んでもらえますか？",
+  "reading": "タクシーを よんで もらえますか"
+ },
+ {
+  "id": "lost-map",
+  "category": "emergency",
+  "scene": "迷路",
+  "chinese": "可以在地圖上指給我看嗎？",
+  "japanese": "地図で教えてもらえますか？",
+  "reading": "ちずで おしえて もらえますか"
+ },
+ {
+  "id": "lost-family",
+  "category": "emergency",
+  "scene": "迷路",
+  "chinese": "我和家人走散了。",
+  "japanese": "家族と離れてしまいました。",
+  "reading": "かぞくと はなれて しまいました"
+ },
+ {
+  "id": "disaster-earthquake",
+  "category": "emergency",
+  "scene": "地震颱風",
+  "chinese": "剛才是地震嗎？現在安全嗎？",
+  "japanese": "今、地震でしたか？ここは安全ですか？",
+  "reading": "いま、じしんでしたか？ ここは あんぜんですか"
+ },
+ {
+  "id": "disaster-shelter",
+  "category": "emergency",
+  "scene": "地震颱風",
+  "chinese": "避難所在哪裡？",
+  "japanese": "避難所はどこですか？",
+  "reading": "ひなんじょは どこですか"
+ },
+ {
+  "id": "disaster-train-stopped",
+  "category": "emergency",
+  "scene": "地震颱風",
+  "chinese": "電車停駛了，要怎麼回飯店？",
+  "japanese": "電車が止まっています。ホテルへはどう帰れますか？",
+  "reading": "でんしゃが とまっています。ホテルへは どう かえれますか"
+ },
+ {
+  "id": "disaster-typhoon",
+  "category": "emergency",
+  "scene": "地震颱風",
+  "chinese": "颱風的話明天還有營業嗎？",
+  "japanese": "台風でも明日は営業しますか？",
+  "reading": "たいふうでも あしたは えいぎょう しますか"
+ },
+ {
+  "id": "disaster-flight",
+  "category": "emergency",
+  "scene": "地震颱風",
+  "chinese": "飛機會停飛嗎？",
+  "japanese": "飛行機は欠航になりますか？",
+  "reading": "ひこうきは けっこうに なりますか"
+ },
+ {
+  "id": "disaster-info",
+  "category": "emergency",
+  "scene": "地震颱風",
+  "chinese": "哪裡可以看到中文的災害資訊？",
+  "japanese": "中国語の災害情報はどこで見られますか？",
+  "reading": "ちゅうごくごの さいがいじょうほうは どこで みられますか"
+ }
 ]
