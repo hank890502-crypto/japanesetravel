@@ -32,10 +32,7 @@ struct JapanTravelAssistantApp: App {
                 .environment(sessionStore)
                 .environment(settingsStore)
                 .environment(placeStore)
-                .task {
-                    DebugLaunchOptions.seedPlacesIfRequested(into: placeStore)
-                    DebugLaunchOptions.openPlaceDetailIfRequested(store: placeStore, router: router)
-                }
+                .task { DebugLaunchOptions.seedPlacesIfRequested(into: placeStore, router: router) }
                 .task { await DebugLaunchOptions.seedRoomIfRequested(dependencies: dependencies, sessionStore: sessionStore, router: router) }
                 .onOpenURL { url in
                     router.handle(url)

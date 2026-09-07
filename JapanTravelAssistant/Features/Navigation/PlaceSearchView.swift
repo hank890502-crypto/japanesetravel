@@ -2,6 +2,8 @@ import SwiftUI
 
 /// 新增地點：打關鍵字搜尋（Apple 地圖資料），點一下就存；或改成自己輸入。
 struct PlaceSearchView: View {
+    let tripId: UUID
+
     @Environment(AppRouter.self) private var router
     @Environment(PlaceStore.self) private var store
     @Environment(\.dependencies) private var dependencies
@@ -65,7 +67,7 @@ struct PlaceSearchView: View {
                         HStack(spacing: 14) {
                             Image(systemName: result.suggestedCategory.systemImage)
                                 .font(.app(.cardTitle))
-                                .foregroundStyle(PlacesView.tint(for: result.suggestedCategory))
+                                .foregroundStyle(PlaceTint.color(for: result.suggestedCategory))
                                 .frame(width: 36)
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(result.name)
@@ -94,7 +96,7 @@ struct PlaceSearchView: View {
                 }
 
                 SecondaryButton(title: "自己輸入名稱和地址", systemImage: AppIcon.edit) {
-                    router.push(.placeEditor(nil))
+                    router.push(.placeEditor(tripId: tripId, placeId: nil))
                 }
                 .padding(.top, 8)
             }
@@ -122,16 +124,19 @@ struct PlaceSearchView: View {
     }
 
     private func save(_ result: PlaceSearchResult) {
-        let place = result.toPlace()
-        store.add(place)
-        router.popOrPush(.places)
+        var place = result.toPlace()
+        place.japaneseName = result.name
+        store.add(place, to: tripId)
+        router.popOrPush(.tripPlaces(tripId))
         router.push(.placeDetail(place.id))
     }
 }
 
 #Preview {
-    NavigationStack { PlaceSearchView() }
+    let store = PlaceStore(directory: nil)
+    let trip = store.addTrip(name: "測試")
+    return NavigationStack { PlaceSearchView(tripId: trip.id) }
         .environment(AppRouter())
-        .environment(PlaceStore(directory: nil))
+        .environment(store)
         .environment(\.dependencies, .preview)
 }

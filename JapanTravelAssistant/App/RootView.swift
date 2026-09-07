@@ -51,13 +51,19 @@ struct RouteDestinationView: View {
         case .shoppingFindProduct:
             FindProductView()
         case .places:
-            PlacesView()
+            TripsView()
+        case .tripEditor(let id):
+            TripEditorView(tripId: id)
+        case .tripPlaces(let id):
+            TripPlacesView(tripId: id)
+        case .tripImport(let id):
+            TripImportView(tripId: id)
         case .placeDetail(let id):
             PlaceDetailView(placeId: id)
-        case .placeSearch:
-            PlaceSearchView()
-        case .placeEditor(let id):
-            PlaceEditorView(placeId: id)
+        case .placeSearch(let tripId):
+            PlaceSearchView(tripId: tripId)
+        case .placeEditor(let tripId, let placeId):
+            PlaceEditorView(tripId: tripId, placeId: placeId)
         case .emergency:
             EmergencyView()
         case .settings:

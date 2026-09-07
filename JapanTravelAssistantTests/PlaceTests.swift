@@ -5,20 +5,18 @@ import Testing
 
 @Suite("我要去一個地方")
 struct PlaceTests {
-    @Test("地點儲存：新增在最前面、更新、刪除、最近用過移到最前")
+    @Test("地點儲存：新增、更新、刪除")
     @MainActor
     func store() {
         let store = PlaceStore(directory: nil)
+        let trip = store.addTrip(name: "測試")
         let hotel = Place(name: "飯店", address: "東京都", category: .hotel)
         let station = Place(name: "東京駅", latitude: 35.68, longitude: 139.76, category: .station)
-        store.add(hotel)
-        store.add(station)
-        #expect(store.places.map(\.name) == ["東京駅", "飯店"])
+        store.add(hotel, to: trip.id)
+        store.add(station, to: trip.id)
+        #expect(store.places(in: trip.id).map(\.name) == ["飯店", "東京駅"])
 
-        store.markUsed(id: hotel.id)
-        #expect(store.places.first?.id == hotel.id)
-
-        var renamed = hotel
+        var renamed = store.place(id: hotel.id)!
         renamed.name = "我們的飯店"
         store.update(renamed)
         #expect(store.place(id: hotel.id)?.name == "我們的飯店")

@@ -382,3 +382,10 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
   地址組成日本習慣順序（〒郵遞區號 都道府縣 市區町村 町名番地）。`CurrentLocationProvider` 一次性取位置，沒權限就略過。
 - 畫面：`PlacesView`（列表 + 新增）、`PlaceSearchView`（搜尋 → 點一下存）、`PlaceEditorView`（自己輸入名稱／日文地址／類型／備註；改了地址會清掉舊座標，導航時重新以地址查）、
   `PlaceDetailView`（帶我去＝設定的地圖 App、地址給司機看＝StaffDisplay「ここまでお願いします」、打電話、修改、刪除）。
+
+### M6 補充：旅程分層、地圖選擇、ChatGPT 匯入行程
+- `Trip`（名稱、日期）為第一層，`Place.tripId` 掛在旅程下；`Place` 另有 `japaneseName`（給司機看）、`dayLabel`（第幾天）、`sortOrder`。
+  `PlaceStore` 同時管旅程與地點，刪旅程連帶刪地點；舊版沒有 tripId 的地點自動歸到「我的地點」。
+- 「帶我去」每次都跳出地圖選單（設定裡的預設排第一）：Apple 永遠可用；Google 沒裝改開網頁版 `google.com/maps/dir/?api=1&destination=`；Yahoo! カーナビ 需安裝且需要座標。
+- `ChatGPTTripPrompt` + `TripImportParser`：格式 `行程 | 名稱 | 開始 | 結束`、`天 | 第N天 | 日期 | 主題`、`地點 | 中文名 | 日文名 | 日文地址 | 類型 | 備註`。
+  匯入後 `TripPlacesView` 在背景用 `PlaceGeocoder`（CLGeocoder → MKLocalSearch）補座標。

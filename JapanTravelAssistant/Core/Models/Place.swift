@@ -45,9 +45,18 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
     var phone: String?
     var note: String?
     var createdAt: Date
+    /// 屬於哪一趟旅程
+    var tripId: UUID?
+    /// 日文正式名稱（給司機看、搜地圖用）；name 是給自己看的中文
+    var japaneseName: String?
+    /// 行程裡的哪一天，例如「第1天 9/12」
+    var dayLabel: String?
+    /// 在旅程裡的順序
+    var sortOrder: Int
 
     init(id: UUID = UUID(), name: String, address: String? = nil, latitude: Double? = nil, longitude: Double? = nil,
-         category: PlaceCategory = .other, phone: String? = nil, note: String? = nil, createdAt: Date = .now) {
+         category: PlaceCategory = .other, phone: String? = nil, note: String? = nil, createdAt: Date = .now,
+         tripId: UUID? = nil, japaneseName: String? = nil, dayLabel: String? = nil, sortOrder: Int = 0) {
         self.id = id
         self.name = name
         self.address = address
@@ -57,10 +66,14 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
         self.phone = phone
         self.note = note
         self.createdAt = createdAt
+        self.tripId = tripId
+        self.japaneseName = japaneseName
+        self.dayLabel = dayLabel
+        self.sortOrder = sortOrder
     }
 
     // 舊資料沒有 category 等欄位也要能讀
-    private enum CodingKeys: String, CodingKey { case id, name, address, latitude, longitude, category, phone, note, createdAt }
+    private enum CodingKeys: String, CodingKey { case id, name, address, latitude, longitude, category, phone, note, createdAt, tripId, japaneseName, dayLabel, sortOrder }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -73,7 +86,14 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
         phone = try c.decodeIfPresent(String.self, forKey: .phone)
         note = try c.decodeIfPresent(String.self, forKey: .note)
         createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? .now
+        tripId = try c.decodeIfPresent(UUID.self, forKey: .tripId)
+        japaneseName = try c.decodeIfPresent(String.self, forKey: .japaneseName)
+        dayLabel = try c.decodeIfPresent(String.self, forKey: .dayLabel)
+        sortOrder = try c.decodeIfPresent(Int.self, forKey: .sortOrder) ?? 0
     }
+
+    /// 給司機／店員看的名稱：有日文名用日文名
+    var staffName: String { japaneseName?.nilIfBlank ?? name }
 
     var hasCoordinate: Bool { latitude != nil && longitude != nil }
     var canNavigate: Bool { hasCoordinate || address?.nilIfBlank != nil }

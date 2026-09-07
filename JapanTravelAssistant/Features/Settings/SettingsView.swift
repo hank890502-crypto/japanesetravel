@@ -45,14 +45,14 @@ struct SettingsView: View {
                     }
                 }
 
-                section(title: "用哪個地圖帶路", subtitle: "「我要去一個地方」會用這個 App 導航。") {
+                section(title: "預設用哪個地圖帶路", subtitle: "按「帶我去」時會列出所有地圖讓你當下選，這裡選的排在最前面。Google 地圖沒安裝會開網頁版；Yahoo! カーナビ 要先安裝。") {
                     ForEach(availableProviders) { provider in
                         choiceCard(title: provider.displayName, subtitle: nil, systemImage: provider.systemImage, isSelected: settings.navigationProvider == provider) {
                             settings.navigationProvider = provider
                         }
                     }
-                    if availableProviders.count == 1 {
-                        Text("裝了 Google 地圖或 Yahoo! カーナビ 之後，這裡就會出現可以選。")
+                    if !availableProviders.contains(.yahooCarNavi) {
+                        Text("自駕想用 Yahoo! カーナビ：先到 App Store 安裝（免費），之後這裡就會出現。")
                             .font(.app(.caption))
                             .foregroundStyle(AppColors.secondaryText)
                     }

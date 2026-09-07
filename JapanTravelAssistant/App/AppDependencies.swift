@@ -14,6 +14,7 @@ struct AppDependencies {
     let navigation: any NavigationService
     let placeSearch: any PlaceSearchService
     let location: any CurrentLocationProvider
+    let geocoder: any PlaceGeocoder
     let supabase: any SupabaseService
     let roomRepository: any RoomRepository
     let menuRepository: any MenuRepository
@@ -39,6 +40,7 @@ struct AppDependencies {
                 navigation: LiveNavigationService(),
                 placeSearch: LocalPlaceSearchService(),
                 location: LiveCurrentLocationProvider(),
+                geocoder: LiveGeocoder(),
                 supabase: supabase,
                 roomRepository: SupabaseRoomRepository(service: supabase),
                 menuRepository: SupabaseMenuRepository(service: supabase),
@@ -56,6 +58,7 @@ struct AppDependencies {
             navigation: LiveNavigationService(),
             placeSearch: LocalPlaceSearchService(),
             location: LiveCurrentLocationProvider(),
+            geocoder: LiveGeocoder(),
             supabase: UnconfiguredSupabaseService(),
             roomRepository: InMemoryRoomRepository(currentUserId: localUserId),
             menuRepository: InMemoryMenuRepository(),
@@ -75,6 +78,7 @@ struct AppDependencies {
         navigation: MockNavigationService(),
         placeSearch: MockPlaceSearchService(),
         location: MockCurrentLocationProvider(),
+        geocoder: MockGeocoder(),
         supabase: UnconfiguredSupabaseService(),
         roomRepository: InMemoryRoomRepository(),
         menuRepository: InMemoryMenuRepository(),
