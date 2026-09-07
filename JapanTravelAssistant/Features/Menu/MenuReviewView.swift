@@ -15,7 +15,6 @@ struct MenuReviewView: View {
     @State private var translationError: UserFacingError?
     @State private var didAutoTranslate = false
     @State private var collapsedSections: Set<String> = []
-    @State private var showAIUnavailable = false
     @State private var isAIAnalyzing = false
     @State private var aiSummary: String?
 
@@ -53,12 +52,10 @@ struct MenuReviewView: View {
                     }
                 }
 
-                if !items.isEmpty || !otherLines.isEmpty {
+                // AI 沒啟用就不顯示這顆按鈕：長輩按了只會被導到自己做不了的設定頁
+                if (!items.isEmpty || !otherLines.isEmpty) && dependencies.ai.isEnabled {
                     SecondaryButton(title: isAIAnalyzing ? "AI 整理中…" : "AI 幫我整理菜單", systemImage: "wand.and.stars", isEnabled: !isAIAnalyzing) {
                         Task { await runAI() }
-                    }
-                    if showAIUnavailable {
-                        AIUnavailableBanner()
                     }
                     if let aiSummary {
                         Label(aiSummary, systemImage: AppIcon.check)
@@ -103,6 +100,7 @@ struct MenuReviewView: View {
                 store.fillMissingReadings()
                 translate()
             }
+            if DebugLaunchOptions.hasFlag("-editFirstItem"), editingItem == nil { editingItem = items.first }
         }
         .appleTranslation(
             batch: translationBatch,
@@ -122,6 +120,7 @@ struct MenuReviewView: View {
                 item: item,
                 isNew: !items.contains { $0.id == item.id },
                 availableSections: store.draft?.sectionNames ?? [],
+                sectionChineseNames: store.draft?.sectionChineseNames ?? [:],
                 onSave: { updated in
                     var saved = updated
                     if saved.reading?.nilIfBlank == nil || items.first(where: { $0.id == saved.id })?.japaneseName != saved.japaneseName {
@@ -212,11 +211,7 @@ struct MenuReviewView: View {
 
     /// 把目前的菜與其他文字交給 AI 重新整理（中文、分類、選項、拼音），結果合併進草稿。
     private func runAI() async {
-        guard dependencies.ai.isEnabled else {
-            withAnimation { showAIUnavailable = true }
-            return
-        }
-        showAIUnavailable = false
+        guard dependencies.ai.isEnabled else { return }
         aiSummary = nil
         translationError = nil
         isAIAnalyzing = true

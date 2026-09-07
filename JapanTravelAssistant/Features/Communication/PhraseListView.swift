@@ -9,6 +9,8 @@ struct PhraseListView: View {
     @State private var phrases: [Phrase] = []
     @State private var error: UserFacingError?
     @State private var selectedScene = PhraseListView.allScenes
+    /// 只有第一次載入才幫忙預選場面；之後（例如從「給店員看」回來重跑 .task）尊重使用者選的「全部」
+    @State private var didPickInitialScene = false
 
     private static let allScenes = "__all__"
 
@@ -70,9 +72,12 @@ struct PhraseListView: View {
         do {
             phrases = try await dependencies.phrases.phrases(in: category)
             error = nil
-            // 預設選第一個場面（長輩通常只需要當下那個情境）
-            if selectedScene == Self.allScenes, let first = scenes.first, scenes.count > 1 {
-                selectedScene = first
+            // 預設選第一個場面（長輩通常只需要當下那個情境）——只在第一次
+            if !didPickInitialScene {
+                didPickInitialScene = true
+                if selectedScene == Self.allScenes, let first = scenes.first, scenes.count > 1 {
+                    selectedScene = first
+                }
             }
         } catch {
             self.error = UserFacingError.from(error)

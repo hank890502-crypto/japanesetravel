@@ -3,6 +3,19 @@ import Foundation
 /// 只在 DEBUG 生效的啟動參數，讓自動化截圖／測試可以直接打開某個畫面。
 /// 用法：xcrun simctl launch <udid> com.linzihao.japantravelassistant -openRoute emergency
 enum DebugLaunchOptions {
+    /// 其他只在 DEBUG 生效的開關（截圖用）：
+    /// `-simulateAppleIntelligenceUnavailable`（首頁與「我想問問題」當成不支援 Apple 智慧）、
+    /// `-openQRScanner`（加入房間頁一進來就打開掃碼畫面）、
+    /// `-editFirstItem`（檢查菜單頁一進來就打開第一道菜的編輯）、`-showSectionPicker`（編輯頁一進來就打開分類選單）、
+    /// `-focusPrice`（編輯頁一進來就把游標放在價格欄，看數字鍵盤的「完成」鍵）。
+    static func hasFlag(_ name: String, arguments: [String] = CommandLine.arguments) -> Bool {
+        #if DEBUG
+        arguments.contains(name)
+        #else
+        false
+        #endif
+    }
+
     /// -openRoute room / orderSummary 需要單機的示範資料，不碰真正的 Supabase。
     static func forcesInMemory(arguments: [String] = CommandLine.arguments) -> Bool {
         #if DEBUG
@@ -13,13 +26,13 @@ enum DebugLaunchOptions {
         #endif
     }
 
-    /// -openRoute places / tripPlaces / placeDetail / tripImport：放一趟示範旅程方便截圖。
+    /// -openRoute places / tripPlaces / placeDetail / tripImport / tripMap / staffAddress：放一趟示範旅程方便截圖。
     @MainActor
     static func seedPlacesIfRequested(into store: PlaceStore, router: AppRouter, arguments: [String] = CommandLine.arguments) {
         #if DEBUG
         guard let index = arguments.firstIndex(of: "-openRoute"), index + 1 < arguments.count else { return }
         let route = arguments[index + 1]
-        guard ["places", "tripPlaces", "placeDetail", "tripImport", "tripMap"].contains(route) else { return }
+        guard ["places", "tripPlaces", "placeDetail", "tripImport", "tripMap", "staffAddress"].contains(route) else { return }
         let trip: Trip
         if let existing = store.sortedTrips.first(where: { !store.places(in: $0.id).isEmpty }) ?? store.sortedTrips.first {
             trip = existing
@@ -44,6 +57,12 @@ enum DebugLaunchOptions {
         case "placeDetail": if let first = store.places(in: trip.id).first { router.path = [.places, .tripPlaces(trip.id), .placeDetail(first.id)] }
         case "tripImport": router.path = [.places, .tripPlaces(trip.id), .tripImport(trip.id)]
         case "tripMap": router.path = [.places, .tripPlaces(trip.id), .tripMap(trip.id)]
+        case "staffAddress":
+            // 「地址給司機看」的全螢幕（多行、長地址）
+            if let hotel = store.places(in: trip.id).first(where: { $0.category == .hotel }) ?? store.places(in: trip.id).first {
+                router.path = [.places, .tripPlaces(trip.id), .placeDetail(hotel.id)]
+                router.showToStaff(StaffDisplayContent(japanese: "ここまでお願いします。\n\(hotel.staffName)\n\(hotel.address ?? "")", chinese: "請載我到這裡：\(hotel.name)"))
+            }
         default: break
         }
         #endif
@@ -116,6 +135,7 @@ enum DebugLaunchOptions {
         case "places": return [.places]
         case "settings": return [.settings]
         case "assistant": return [.assistant]
+        case "staffAddress": return [.places]   // 由 seedPlacesIfRequested 補上地點頁與給司機看的畫面
         case let value where value.hasPrefix("phrases:"):
             let raw = String(value.dropFirst("phrases:".count))
             if let category = PhraseCategory(rawValue: raw) { return [.communicationCategories, .phraseList(category)] }

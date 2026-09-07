@@ -14,6 +14,8 @@ struct TripImportView: View {
     @State private var error: UserFacingError?
     @State private var importedSummary: (places: Int, stops: Int, recommendations: Int)?
     @FocusState private var editorFocused: Bool
+    /// 步驟編號的圓圈跟著字體長大，超大字體時數字才不會撐出圓圈
+    @ScaledMetric(relativeTo: .title2) private var badgeSize: CGFloat = 40
 
     var body: some View {
         ScrollView {
@@ -27,6 +29,7 @@ struct TripImportView: View {
             .padding(AccessibilityMetrics.screenPadding)
         }
         .scrollDismissesKeyboard(.interactively)
+        .keyboardDoneButton { editorFocused = false }
         .elderlyScreen(title: "用 ChatGPT 匯入行程")
     }
 
@@ -92,7 +95,7 @@ struct TripImportView: View {
                 Text("\(number)")
                     .font(.app(.cardTitle))
                     .foregroundStyle(.white)
-                    .frame(width: 40, height: 40)
+                    .frame(width: badgeSize, height: badgeSize)
                     .background(AppColors.accent, in: Circle())
                     .accessibilityHidden(true)
                 Text(title).font(.app(.cardTitle))

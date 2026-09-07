@@ -76,16 +76,16 @@ struct RemoteAIService: AIService {
             (data, response) = try await session.data(for: request)
         } catch {
             throw UserFacingError.from(error) == .unknown
-                ? UserFacingError(title: "AI 伺服器沒有回應", message: "請確認網路，或到「設定」檢查伺服器網址。")
+                ? UserFacingError(title: "AI 服務沒有回應", message: "請確認手機有連上網路。一直不行的話，請家人檢查「設定」裡的 AI 服務。")
                 : UserFacingError.from(error)
         }
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
-            throw UserFacingError(title: "AI 伺服器回傳錯誤", message: "請稍後再試。如果一直失敗，請檢查伺服器設定。")
+            throw UserFacingError(title: "AI 服務出了點問題", message: "請稍後再試。如果一直失敗，請家人檢查「設定」裡的 AI 服務。")
         }
         do {
             return try JSONDecoder().decode(Response.self, from: data)
         } catch {
-            throw UserFacingError(title: "AI 回覆的格式不對", message: "伺服器回傳的內容 App 看不懂，請檢查伺服器程式。", isRetryable: false)
+            throw UserFacingError(title: "AI 回覆的格式不對", message: "AI 回傳的內容 App 看不懂。你可以自己輸入，或請家人檢查 AI 服務。", isRetryable: false)
         }
     }
 

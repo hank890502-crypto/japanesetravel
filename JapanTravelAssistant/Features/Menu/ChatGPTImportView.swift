@@ -15,6 +15,8 @@ struct ChatGPTImportView: View {
     @State private var pendingImport: [MenuImportParser.ImportedItem] = []
     @State private var askMergeOrReplace = false
     @FocusState private var editorFocused: Bool
+    /// 步驟編號的圓圈跟著字體長大，超大字體時數字才不會撐出圓圈
+    @ScaledMetric(relativeTo: .title2) private var badgeSize: CGFloat = 40
 
     private var hasExistingMenu: Bool { !(store.draft?.items.isEmpty ?? true) }
 
@@ -30,6 +32,7 @@ struct ChatGPTImportView: View {
             .padding(AccessibilityMetrics.screenPadding)
         }
         .scrollDismissesKeyboard(.interactively)
+        .keyboardDoneButton { editorFocused = false }
         .elderlyScreen(title: "用 ChatGPT 翻譯")
     }
 
@@ -136,7 +139,7 @@ struct ChatGPTImportView: View {
                 Text("\(number)")
                     .font(.app(.cardTitle))
                     .foregroundStyle(.white)
-                    .frame(width: 40, height: 40)
+                    .frame(width: badgeSize, height: badgeSize)
                     .background(AppColors.accent, in: Circle())
                     .accessibilityHidden(true)
                 Text(title)
@@ -171,7 +174,8 @@ struct ChatGPTImportView: View {
             .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AccessibilityMetrics.cornerRadius, style: .continuous))
 
             PrimaryButton(title: "檢查菜單", systemImage: AppIcon.restaurant) {
-                router.popOrPush(.menuReview)
+                // 匯入完成頁已經沒有作用：從拍菜單頁進來時用檢查頁「取代」自己，按上一頁會直接回到拍菜單頁
+                router.popOrReplace(.menuReview)
             }
         }
     }

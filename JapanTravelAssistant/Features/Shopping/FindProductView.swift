@@ -11,7 +11,6 @@ struct FindProductView: View {
     @State private var isLoadingImage = false
     @State private var questions: [Phrase] = []
     @State private var error: UserFacingError?
-    @State private var showAIUnavailable = false
     @State private var isAnalyzing = false
     @State private var analysis: ProductAnalysis?
 
@@ -37,11 +36,11 @@ struct FindProductView: View {
                         ChangePhotoLabel()
                     }
 
-                    SecondaryButton(title: isAnalyzing ? "AI 辨識中…" : "AI 幫我認這個商品", systemImage: "wand.and.stars", isEnabled: !isAnalyzing) {
-                        Task { await analyze(image) }
-                    }
-                    if showAIUnavailable {
-                        AIUnavailableBanner()
+                    // AI 沒啟用就不顯示：長輩按了只會被導到自己做不了的設定頁
+                    if dependencies.ai.isEnabled {
+                        SecondaryButton(title: isAnalyzing ? "AI 辨識中…" : "AI 幫我認這個商品", systemImage: "wand.and.stars", isEnabled: !isAnalyzing) {
+                            Task { await analyze(image) }
+                        }
                     }
                     if let analysis {
                         VStack(alignment: .leading, spacing: 6) {
@@ -100,11 +99,7 @@ struct FindProductView: View {
     }
 
     private func analyze(_ image: UIImage) async {
-        guard dependencies.ai.isEnabled else {
-            withAnimation { showAIUnavailable = true }
-            return
-        }
-        showAIUnavailable = false
+        guard dependencies.ai.isEnabled else { return }
         isAnalyzing = true
         defer { isAnalyzing = false }
         do {

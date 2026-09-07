@@ -57,6 +57,18 @@ final class AppRouter {
         }
     }
 
+    /// 回到堆疊裡某一頁；不在堆疊裡就用它「取代」目前這一頁。
+    /// 用在「完成頁」之類已經沒有作用的畫面：按上一頁時直接跳過它。
+    func popOrReplace(_ route: Route) {
+        if path.contains(route) {
+            popOrPush(route)
+        } else if path.isEmpty {
+            path.append(route)
+        } else {
+            path[path.count - 1] = route
+        }
+    }
+
     func showToStaff(_ content: StaffDisplayContent) {
         staffDisplay = content
     }

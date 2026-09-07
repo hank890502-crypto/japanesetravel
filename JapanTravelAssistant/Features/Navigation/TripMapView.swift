@@ -62,35 +62,48 @@ struct TripMapView: View {
                 .background(place.isRecommendation ? AppColors.success : AppColors.accent, in: Circle())
                 .overlay(Circle().strokeBorder(.white, lineWidth: 2))
                 .shadow(radius: 2)
+            // 地圖本身的顏色不跟 App 的深淺色走，所以地名膠囊固定「白底黑字」，深色模式也看得到
             Text(place.name)
                 .font(.system(.caption, weight: .bold))
-                .foregroundStyle(AppColors.primaryText)
+                .foregroundStyle(.black)
                 .padding(.horizontal, 6)
                 .padding(.vertical, 2)
-                .background(Color.white.opacity(0.9), in: Capsule())
+                .background(Color.white.opacity(0.92), in: Capsule())
+                .shadow(color: .black.opacity(0.25), radius: 1.5, y: 1)
                 .lineLimit(1)
         }
         .accessibilityLabel("\(place.isRecommendation ? "推薦：" : "")\(place.name)")
     }
 
+    /// 地圖上方的圖例。兩個按鈕浮在地圖上、手勢容易被地圖搶走，所以點擊區至少 44pt 高、文字用 body。
     private var legend: some View {
-        HStack(spacing: 12) {
-            Label("要去的", systemImage: "circle.fill").foregroundStyle(AppColors.accent)
+        HStack(spacing: 6) {
+            Label("要去的", systemImage: "circle.fill")
+                .foregroundStyle(AppColors.accent)
+                .padding(.horizontal, 8)
             Button {
                 withAnimation { showRecommendations.toggle() }
             } label: {
                 Label("推薦", systemImage: showRecommendations ? "checkmark.circle.fill" : "circle")
                     .foregroundStyle(AppColors.success)
+                    .legendTapTarget()
             }
             .accessibilityLabel(showRecommendations ? "隱藏推薦景點" : "顯示推薦景點")
-            Spacer()
-            Button("看全部") { fitAll() }
-                .foregroundStyle(AppColors.accent)
+            .accessibilityAddTraits(showRecommendations ? [.isButton, .isSelected] : .isButton)
+            Spacer(minLength: 0)
+            Button {
+                fitAll()
+            } label: {
+                Label("看全部", systemImage: "arrow.up.left.and.arrow.down.right")
+                    .foregroundStyle(AppColors.accent)
+                    .legendTapTarget()
+            }
+            .accessibilityLabel("看全部地點")
         }
-        .font(.system(.subheadline, weight: .semibold))
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(.regularMaterial, in: Capsule())
+        .font(.system(.body, weight: .semibold))
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .padding(12)
     }
 
@@ -136,6 +149,15 @@ struct TripMapView: View {
         let center = CLLocationCoordinate2D(latitude: (lats.min()! + lats.max()!) / 2, longitude: (lons.min()! + lons.max()!) / 2)
         let span = MKCoordinateSpan(latitudeDelta: max((lats.max()! - lats.min()!) * 1.5, 0.02), longitudeDelta: max((lons.max()! - lons.min()!) * 1.5, 0.02))
         withAnimation { position = .region(MKCoordinateRegion(center: center, span: span)) }
+    }
+}
+
+private extension View {
+    /// 圖例按鈕的可點區：至少 44pt 高、左右留白，整塊都能按。
+    func legendTapTarget() -> some View {
+        padding(.horizontal, 10)
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
     }
 }
 

@@ -14,6 +14,12 @@ enum AppleIntelligence {
     }
 
     static var availability: Availability {
+        #if DEBUG
+        // 截圖／測試用：在支援的裝置上模擬「不支援」
+        if DebugLaunchOptions.hasFlag("-simulateAppleIntelligenceUnavailable") {
+            return Availability(isAvailable: false, reason: "這台裝置不支援 Apple 智慧（需要 iPhone 15 Pro 以後、或 M 系列／A17 Pro 的 iPad）。")
+        }
+        #endif
         #if canImport(FoundationModels)
         if #available(iOS 26, *) {
             switch SystemLanguageModel.default.availability {
@@ -201,11 +207,11 @@ struct AppleIntelligenceAIService: AIService {
     }
 
     func analyzeProduct(image: UIImage) async throws -> ProductAnalysis {
-        throw UserFacingError(title: "這個功能需要看照片", message: "Apple 智慧目前只能處理文字。要辨識商品照片，請在設定選「自己的伺服器」。", isRetryable: false)
+        throw UserFacingError(title: "這個功能需要看照片", message: "Apple 智慧目前只能處理文字。要辨識商品照片，需要請家人在「設定」幫你接上 AI 服務。", isRetryable: false)
     }
 
     func analyzeReceipt(image: UIImage) async throws -> ReceiptAnalysis {
-        throw UserFacingError(title: "這個功能需要看照片", message: "Apple 智慧目前只能處理文字。要核對收據，請在設定選「自己的伺服器」。", isRetryable: false)
+        throw UserFacingError(title: "這個功能需要看照片", message: "Apple 智慧目前只能處理文字。要核對收據，需要請家人在「設定」幫你接上 AI 服務。", isRetryable: false)
     }
 
     // MARK: - Private

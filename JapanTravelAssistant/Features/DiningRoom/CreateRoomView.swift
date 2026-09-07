@@ -52,6 +52,7 @@ struct CreateRoomView: View {
             .padding(AccessibilityMetrics.screenPadding)
         }
         .scrollDismissesKeyboard(.interactively)
+        .keyboardDoneButton { focused = nil }
         .elderlyScreen(title: "建立共享菜單")
         .onAppear {
             if roomName.isEmpty { roomName = draftStore.draft?.restaurantName.nilIfBlank ?? "" }

@@ -5,6 +5,8 @@ struct MenuItemEditorView: View {
     @State private var item: MenuItemDraft
     let isNew: Bool
     let availableSections: [String]
+    /// 日文分類 → 中文，分類選單的副標
+    let sectionChineseNames: [String: String]
     let onSave: (MenuItemDraft) -> Void
     let onDelete: () -> Void
     let onCancel: () -> Void
@@ -12,23 +14,30 @@ struct MenuItemEditorView: View {
     @FocusState private var focusedField: Field?
     @State private var confirmDelete = false
     @State private var showSectionChoices = false
-    @State private var isAddingSection = false
-    @State private var newSectionName = ""
     @State private var newOption = MenuOptionDraft(groupName: "", japaneseName: "")
     @State private var isAddingOption = false
 
-    private enum Field { case japanese, chinese, price, newSection, optionGroup, optionJapanese, optionChinese, optionDelta }
+    private enum Field { case japanese, chinese, price, optionGroup, optionJapanese, optionChinese, optionDelta }
 
-    init(item: MenuItemDraft, isNew: Bool, availableSections: [String] = [], onSave: @escaping (MenuItemDraft) -> Void, onDelete: @escaping () -> Void, onCancel: @escaping () -> Void) {
+    init(item: MenuItemDraft, isNew: Bool, availableSections: [String] = [], sectionChineseNames: [String: String] = [:], onSave: @escaping (MenuItemDraft) -> Void, onDelete: @escaping () -> Void, onCancel: @escaping () -> Void) {
         _item = State(initialValue: item)
         self.isNew = isNew
         self.availableSections = availableSections
+        self.sectionChineseNames = sectionChineseNames
         self.onSave = onSave
         self.onDelete = onDelete
         self.onCancel = onCancel
     }
 
     var body: some View {
+        // 包在 NavigationStack 裡（導覽列隱藏）：鍵盤上方的「完成」工具列只有在 NavigationStack 內才會顯示
+        NavigationStack {
+            editor
+                .toolbar(.hidden, for: .navigationBar)
+        }
+    }
+
+    private var editor: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 HStack {
@@ -83,15 +92,31 @@ struct MenuItemEditorView: View {
                 }
             }
             .padding(AccessibilityMetrics.screenPadding)
+            .padding(.top, 12)   // 導覽列隱藏後內容會貼到 sheet 頂端，留一點空間給「取消」
         }
         .background(AppColors.screenBackground.ignoresSafeArea())
         .scrollDismissesKeyboard(.interactively)
+        .keyboardDoneButton { focusedField = nil }   // 數字鍵盤沒有 return 鍵，長輩要有「完成」才收得起來
         .onAppear {
             if isNew { focusedField = .japanese }
+            if DebugLaunchOptions.hasFlag("-showSectionPicker") { showSectionChoices = true }
+            if DebugLaunchOptions.hasFlag("-focusPrice") { focusedField = .price }
+        }
+        .sheet(isPresented: $showSectionChoices) {
+            MenuSectionPickerSheet(
+                sections: availableSections,
+                chineseNames: sectionChineseNames,
+                selected: item.sectionName?.nilIfBlank,
+                onSelect: { section in
+                    item.sectionName = section
+                    showSectionChoices = false
+                },
+                onClose: { showSectionChoices = false }
+            )
         }
     }
 
-    /// 分類：按一下跳出現有分類清單，或新增一個。
+    /// 分類：按一下打開 App 內的大卡片清單（可選現有分類、沒有分類、或新增一個）。
     private var sectionField: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("分類（可以不選）")
@@ -101,9 +126,16 @@ struct MenuItemEditorView: View {
                 showSectionChoices = true
             } label: {
                 HStack {
-                    Text(item.sectionName?.nilIfBlank ?? "沒有分類")
-                        .font(.app(.sectionTitle))
-                        .foregroundStyle(item.sectionName?.nilIfBlank == nil ? AppColors.secondaryText : AppColors.primaryText)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(item.sectionName?.nilIfBlank ?? "沒有分類")
+                            .font(.app(.sectionTitle))
+                            .foregroundStyle(item.sectionName?.nilIfBlank == nil ? AppColors.secondaryText : AppColors.primaryText)
+                        if let chinese = item.sectionName?.nilIfBlank.flatMap({ sectionChineseNames[$0]?.nilIfBlank }) {
+                            Text(chinese)
+                                .font(.app(.caption))
+                                .foregroundStyle(AppColors.secondaryText)
+                        }
+                    }
                     Spacer()
                     Image(systemName: "chevron.up.chevron.down")
                         .foregroundStyle(AppColors.accent)
@@ -114,34 +146,7 @@ struct MenuItemEditorView: View {
                 .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(AppColors.separator, lineWidth: 2))
             }
             .accessibilityLabel("分類，目前是 \(item.sectionName?.nilIfBlank ?? "沒有分類")")
-            .confirmationDialog("選擇分類", isPresented: $showSectionChoices, titleVisibility: .visible) {
-                ForEach(availableSections, id: \.self) { section in
-                    Button(section) { item.sectionName = section }
-                }
-                Button("新增分類…") {
-                    isAddingSection = true
-                    focusedField = .newSection
-                }
-                Button("沒有分類") { item.sectionName = nil }
-                Button("取消", role: .cancel) {}
-            }
-            if isAddingSection {
-                HStack(spacing: 8) {
-                    TextField("新分類的名稱，例如：飲料", text: $newSectionName)
-                        .font(.app(.body))
-                        .focused($focusedField, equals: .newSection)
-                        .padding(12)
-                        .frame(minHeight: AccessibilityMetrics.minimumTapTarget)
-                        .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-                    Button("確定") {
-                        if let name = newSectionName.nilIfBlank { item.sectionName = name }
-                        newSectionName = ""
-                        isAddingSection = false
-                    }
-                    .font(.app(.buttonLabel))
-                    .frame(minHeight: AccessibilityMetrics.minimumTapTarget)
-                }
-            }
+            .accessibilityHint("點一下選分類")
         }
     }
 
@@ -252,6 +257,7 @@ struct MenuItemEditorView: View {
         ]),
         isNew: false,
         availableSections: ["揚げ物", "焼き物", "ドリンク"],
+        sectionChineseNames: ["揚げ物": "炸物", "ドリンク": "飲料"],
         onSave: { _ in }, onDelete: {}, onCancel: {}
     )
 }

@@ -61,25 +61,30 @@ struct StaffDisplayView: View {
                     .accessibilityLabel("要給店員看的商品照片")
             }
 
-            Spacer(minLength: 12)
-
-            VStack(spacing: 16) {
-                Text(content.japanese)
-                    .font(.system(size: content.image == nil ? heroFontSize : heroFontSize * 0.8, weight: .heavy))
-                    .foregroundStyle(.black)
-                    .multilineTextAlignment(.center)
-                    .minimumScaleFactor(0.5)
-                    .accessibilityLabel("日文：\(content.japanese)")
-                if let reading = content.reading?.nilIfBlank {
-                    Text(reading)
-                        .font(.app(.body))
-                        .foregroundStyle(Color(white: 0.35))
-                        .multilineTextAlignment(.center)
+            // 日文放在可捲動的區塊：地址那種 5～7 行的內容、或字體開很大時，不縮小也不截斷，往下捲就看得到全部。
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(spacing: 16) {
+                        Text(content.japanese)
+                            .font(.system(size: Self.heroFontSize(base: heroFontSize, hasImage: content.image != nil, text: content.japanese), weight: .heavy))
+                            .foregroundStyle(.black)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(nil)
+                            .accessibilityLabel("日文：\(content.japanese)")
+                        if let reading = content.reading?.nilIfBlank {
+                            Text(reading)
+                                .font(.app(.body))
+                                .foregroundStyle(Color(white: 0.35))
+                                .multilineTextAlignment(.center)
+                        }
+                    }
+                    .padding(.horizontal, AccessibilityMetrics.screenPadding)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: proxy.size.height)   // 內容短的時候維持置中
                 }
+                .scrollBounceBehavior(.basedOnSize)
             }
-            .padding(.horizontal, AccessibilityMetrics.screenPadding)
-
-            Spacer(minLength: 12)
 
             VStack(spacing: 16) {
                 if let chinese = content.chinese?.nilIfBlank {
@@ -110,6 +115,18 @@ struct StaffDisplayView: View {
         await dependencies.speech.speak(content.japanese, language: .japanese)
         isSpeaking = false
     }
+
+    /// 超過這個長度（或有換行，例如「店名＋地址」）就算長內容
+    static let longTextThreshold = 20
+    /// 長內容時字級的上限：地址不需要像一句話那麼大，先放得下、看得全比較重要
+    static let longTextMaxFontSize: CGFloat = 44
+
+    /// 主要日文的字級：一句話用最大字；附照片時縮 0.8；長內容（地址）把上限壓在 44pt。
+    static func heroFontSize(base: CGFloat, hasImage: Bool, text: String) -> CGFloat {
+        let size = hasImage ? base * 0.8 : base
+        let isLong = text.contains("\n") || text.count > longTextThreshold
+        return isLong ? min(size, longTextMaxFontSize) : size
+    }
 }
 
 #Preview("句子") {
@@ -118,6 +135,18 @@ struct StaffDisplayView: View {
         onClose: {}
     )
     .environment(\.dependencies, .preview)
+}
+
+#Preview("地址給司機看") {
+    StaffDisplayView(
+        content: StaffDisplayContent(
+            japanese: "ここまでお願いします。\n東京ステーションホテル\n〒100-0005 東京都千代田区丸の内1丁目9-1",
+            chinese: "請載我到這裡：東京車站飯店"
+        ),
+        onClose: {}
+    )
+    .environment(\.dependencies, .preview)
+    .dynamicTypeSize(.accessibility3)
 }
 
 #Preview("附照片") {

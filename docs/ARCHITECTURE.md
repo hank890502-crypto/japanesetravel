@@ -286,7 +286,9 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 
 在 Xcode 的 Scheme → Run → Arguments，或用 `xcrun simctl launch`，加上 `-openRoute <名稱>` 可以直接打開某個畫面，方便截圖與測試：
 
-`communication`、`phrases:shopping`（任一分類 rawValue）、`emergency`、`understand`、`restaurant`、`menuScan`、`joinRoom`、`findProduct`、`places`
+`communication`、`phrases:shopping`（任一分類 rawValue）、`emergency`、`understand`、`restaurant`、`menuScan`、`menuReview`、`chatGPTImport`、`createRoom`、`room`、`orderSummary`、`joinRoom`、`findProduct`、`places`、`tripPlaces`、`placeDetail`、`tripImport`、`tripMap`、`staffAddress`（地址給司機看）、`settings`、`assistant`
+
+另外幾個截圖用的開關（可與 `-openRoute` 併用）：`-simulateAppleIntelligenceUnavailable`（模擬不支援 Apple 智慧）、`-openQRScanner`（加入房間頁直接開掃碼）、`-editFirstItem`（檢查菜單頁直接開第一道菜）、`-showSectionPicker`（編輯頁直接開分類選單）、`-focusPrice`（編輯頁直接把游標放在價格欄）。
 
 實作在 `Core/Utilities/DebugLaunchOptions.swift`，Release 版本完全忽略。
 
@@ -372,7 +374,7 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 - `AIService` protocol 不變；實作有 `DisabledAIService`（預設）、`MockAIService`（假資料）、`RemoteAIService`（自己的伺服器，HTTP JSON，規格見 `docs/AI_BACKEND.md`）。
 - `AIServiceRouter` 依 `SettingsStore` 的選擇即時轉發；`remoteBackend` 沒有有效網址時等同未啟用。App 內永遠沒有 AI 金鑰。
 - 設定頁（首頁右上「設定」）：AI 幫手、預設地圖 App、多人點餐與網頁版狀態。
-- 接入點：檢查菜單「AI 幫我整理菜單」（結果走 `MenuDraftStore.merge`）、找商品「AI 幫我認這個商品」。未啟用時顯示 `AIUnavailableBanner`（「AI 分析目前尚未啟用」+ 前往設定）。
+- 接入點：檢查菜單「AI 幫我整理菜單」（結果走 `MenuDraftStore.merge`）、找商品「AI 幫我認這個商品」。未啟用時這兩顆按鈕直接不顯示（長輩在設定頁沒有能自己完成的動作；設定由家人代勞）。
 - 伺服器範本：`supabase/functions/ai/index.ts`（Supabase Edge Function，預設 OpenAI，金鑰用 `supabase secrets set`）。
 
 ## 附錄 H：M6 我要去一個地方
