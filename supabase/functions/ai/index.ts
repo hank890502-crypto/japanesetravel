@@ -2,12 +2,32 @@
 // 路徑：POST /functions/v1/ai/menu/analyze、/translate、/product/analyze、/receipt/analyze
 // 金鑰只在這裡（supabase secrets set OPENAI_API_KEY=...），App 端沒有任何金鑰。
 // 預設用 OpenAI 的 Responses API（支援圖片）；要換 Gemini / Claude 只需改 callModel()。
+//
+// 呼叫者驗證：設定 APP_TOKEN（supabase secrets set APP_TOKEN=一串自己想的密碼）後，
+// 只接受 header X-App-Token 與它相同的請求；App 的「設定 → AI 幫手 → 伺服器密碼」填同一串即可。
+// 沒設定 APP_TOKEN 時任何人拿到網址都能呼叫並燒你的額度，正式部署請務必設定。
 
 const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
 const MODEL = Deno.env.get("AI_MODEL") ?? "gpt-4o-mini";
+const APP_TOKEN = Deno.env.get("APP_TOKEN");
 
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-app-token",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
 const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } });
+  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...CORS } });
+
+/// 固定時間比對，不讓人用回應時間猜密碼。
+function tokenMatches(provided: string | null, expected: string): boolean {
+  const a = new TextEncoder().encode(provided ?? "");
+  const b = new TextEncoder().encode(expected);
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  return diff === 0;
+}
 
 async function callModel(instructions: string, userText: string, imageBase64?: string): Promise<string> {
   if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY not set");
@@ -33,8 +53,14 @@ price 只寫數字（含稅價優先）；一定要分類（菜單沒有就依�
 直排菜單由右往左讀；只輸出 JSON。`;
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return json({}, 204);
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
   if (req.method !== "POST") return json({ error: "POST only" }, 405);
+
+  // 共享密鑰：有設定 APP_TOKEN 才檢查；比對失敗一律 401，不透露原因
+  if (APP_TOKEN && !tokenMatches(req.headers.get("x-app-token"), APP_TOKEN)) {
+    return json({ error: "unauthorized" }, 401);
+  }
+
   const path = new URL(req.url).pathname.replace(/^\/ai\/?/, "").replace(/^\/functions\/v1\/ai\/?/, "");
   let body: Record<string, unknown>;
   try { body = await req.json(); } catch { return json({ error: "invalid json" }, 400); }

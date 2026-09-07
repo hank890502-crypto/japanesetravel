@@ -1,4 +1,6 @@
 # 把 web/guest 部署到 GitHub Pages。每次 push 到 main 都會自動更新。
+# 第一次要先到 repo 的 Settings → Pages → Build and deployment → Source 選「GitHub Actions」（見 web/README.md），
+# 預設的 GITHUB_TOKEN 沒有權限自動開啟 Pages。
 name: Deploy Web Guest to GitHub Pages
 on:
   push:
@@ -21,8 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true   # 第一次自動啟用 GitHub Pages，不用手動到 Settings 開
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/guest

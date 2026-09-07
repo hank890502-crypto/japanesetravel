@@ -8,10 +8,12 @@
   :root { color-scheme: light; --accent:#0a7ad9; --bg:#f2f2f7; --card:#fff; --text:#111; --muted:#6b6b70; --line:#d9d9de; --red:#d0342c; }
   * { box-sizing: border-box; }
   body { margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,"PingFang TC","Noto Sans TC",system-ui,sans-serif; font-size:19px; line-height:1.4; }
-  main { max-width:720px; margin:0 auto; padding:20px 20px 140px; }
+  /* 底部固定的訂單列約 180px 高再加 Home 指示條；app.js 進房後會依實際高度再調整 */
+  main { max-width:720px; margin:0 auto; padding:20px 20px calc(200px + env(safe-area-inset-bottom)); }
   h1 { font-size:34px; margin:12px 0 8px; }
   h2 { font-size:24px; margin:20px 0 8px; }
   p.muted { color:var(--muted); margin:6px 0 14px; }
+  p.hint { color:var(--muted); font-size:16px; margin:6px 2px 0; }
   .card { background:var(--card); border-radius:20px; padding:18px 20px; margin:12px 0; }
   label { display:block; color:var(--muted); margin:14px 0 6px; }
   input { width:100%; font-size:26px; padding:14px 16px; border:2px solid var(--line); border-radius:16px; background:#fff; }
@@ -69,7 +71,8 @@
       <label for="code">房間代碼</label>
       <input id="code" class="code" maxlength="8" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" placeholder="請家人給你 6 個字的代碼">
       <label for="name">我的稱呼（家人看到的名字）</label>
-      <input id="name" placeholder="例如：媽媽、小美">
+      <input id="name" maxlength="30" autocomplete="nickname" placeholder="例如：媽媽、小美">
+      <p id="name-hint" class="hint">稱呼最多 30 個字。</p>
       <button id="join-btn" class="btn primary">加入</button>
     </div>
     <a id="open-app" class="btn secondary" href="#">有裝 App？打開 App</a>

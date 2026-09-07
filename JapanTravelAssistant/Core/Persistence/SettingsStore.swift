@@ -7,6 +7,8 @@ import Observation
 final class SettingsStore {
     var aiProvider: AIProviderKind { didSet { save(); applyAI() } }
     var aiBackendURLText: String { didSet { save(); applyAI() } }
+    /// 伺服器密碼（選填）：與伺服器環境變數 APP_TOKEN 相同的字串；沒有可以不填。
+    var aiBackendTokenText: String { didSet { save(); applyAI() } }
     var navigationProvider: NavigationProvider { didSet { save() } }
 
     private let defaults: UserDefaults
@@ -19,6 +21,7 @@ final class SettingsStore {
         aiProvider = defaults.string(forKey: Keys.aiProvider).flatMap(AIProviderKind.init(rawValue:))
             ?? (AppleIntelligence.availability.isAvailable ? .appleIntelligence : .disabled)
         aiBackendURLText = defaults.string(forKey: Keys.aiBackendURL) ?? ""
+        aiBackendTokenText = defaults.string(forKey: Keys.aiBackendToken) ?? ""
         navigationProvider = defaults.string(forKey: Keys.navigation).flatMap(NavigationProvider.init(rawValue:)) ?? .appleMaps
         applyAI()
     }
@@ -40,16 +43,18 @@ final class SettingsStore {
     private enum Keys {
         static let aiProvider = "settings.aiProvider"
         static let aiBackendURL = "settings.aiBackendURL"
+        static let aiBackendToken = "settings.aiBackendToken"
         static let navigation = "settings.navigationProvider"
     }
 
     private func save() {
         defaults.set(aiProvider.rawValue, forKey: Keys.aiProvider)
         defaults.set(aiBackendURLText, forKey: Keys.aiBackendURL)
+        defaults.set(aiBackendTokenText, forKey: Keys.aiBackendToken)
         defaults.set(navigationProvider.rawValue, forKey: Keys.navigation)
     }
 
     private func applyAI() {
-        aiRouter?.update(kind: effectiveAIProvider, backendURL: aiBackendURL)
+        aiRouter?.update(kind: effectiveAIProvider, backendURL: aiBackendURL, backendToken: aiBackendTokenText.nilIfBlank)
     }
 }

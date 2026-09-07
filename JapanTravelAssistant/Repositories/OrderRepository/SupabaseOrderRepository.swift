@@ -12,7 +12,7 @@ struct SupabaseOrderRepository: OrderRepository {
 
     func setQuantity(roomId: UUID, memberId: UUID, menuItemId: UUID, optionIds: [UUID], quantity: Int) async throws {
         let clamped = max(0, min(quantity, 99))
-        let variantKey = optionIds.map(\.uuidString).sorted().joined(separator: "+")
+        let variantKey = MenuSelection.variantKey(for: optionIds)
         do {
             try await client.from("menu_selections")
                 .upsert(
@@ -21,7 +21,7 @@ struct SupabaseOrderRepository: OrderRepository {
                 )
                 .execute()
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: UserFacingError(title: "點餐沒有送出", message: "請確認網路連線後再按一次。"))
+            throw SupabaseErrorMapper.map(error, context: .setQuantity)
         }
     }
 
@@ -33,7 +33,7 @@ struct SupabaseOrderRepository: OrderRepository {
                 .execute()
                 .value
         } catch {
-            throw SupabaseErrorMapper.map(error, fallback: .syncUnavailable)
+            throw SupabaseErrorMapper.map(error, context: .selections)
         }
     }
 

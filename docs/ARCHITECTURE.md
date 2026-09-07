@@ -342,12 +342,22 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 
 - `AppDependencies.live`：有 `SUPABASE_URL` / `SUPABASE_ANON_KEY` 就用 `LiveSupabaseService` + 三個 Supabase Repository；沒有就用 InMemory（整個流程仍可在單機上跑）。
 - `SupabaseCoding`：snake_case ↔ camelCase、Postgres 時間格式。Domain Model 直接解碼；寫入用各 Repository 內的 Row 結構（含反正規化的 `room_id`）。
-- `SupabaseRealtimeObserver`：每個房間一個 channel，監聽幾張表的 postgres_changes（filter `room_id=eq.`），任何變動或重新訂閱都整份重抓。
-- `RoomViewModel`：三條串流（成員、菜單、選擇）；串流結束 = 斷線 → 顯示「無法同步」並 3 秒後重新訂閱；+ / − 用樂觀更新，失敗還原。
-- `DiningSessionStore`：目前房間存在 UserDefaults，重開 App 可從餐廳頁「回到房間」。
+- `SupabaseRealtimeObserver`：每條串流一個 channel（名稱帶隨機 UUID，removeChannel 只會影響自己），監聽幾張表的 postgres_changes（filter `room_id=eq.`），任何變動或重新訂閱都整份重抓。
+  初次抓取失敗、`subscribeWithError()` 失敗、連上後 WebSocket 斷線 → 一律 `finish()` 串流，讓上層顯示「無法同步」並重試。
+- `RoomViewModel`：先 `restoreSession`（確認這台手機還是成員；身分變了家人會重新加入、房主會被告知要重建；房間結束會直接告知），
+  再開三條串流（成員、菜單、選擇）；串流結束 = 斷線 → 顯示「無法同步」並 3 秒後重新訂閱。
+  + / − 用樂觀更新：每個 (菜, 選項組合) 只保留一個目標值，用序列化的寫入送最新目標（連按合併），重抓時在途的 key 以本機目標為準，失敗只還原那一個 key。
+  名單裡沒有自己、房間過期 → `roomEnded`，通知持有者。
+- `RoomSessionCoordinator`（Environment）：**一個房間 session 只有一個 RoomViewModel**，點餐頁／本桌訂單／給店員看／QR Code 共用；
+  跟著 `DiningSessionStore.current` 走，只有真正離開（按離開、房間結束、session 被清）才 `stop()`。畫面不在 onAppear/onDisappear 建立或清掉 VM
+  （fullScreenCover 會讓底層收到 onDisappear）；cover 內容讀快照。
+- `DiningSessionStore`：目前房間存在 UserDefaults，重開 App 可從餐廳頁「回到房間」；沒有 Supabase 設定（InMemory）時啟動就清掉，不還原不存在的房間。
 - 畫面：`CreateRoomView`（建房 + 上傳菜單）、`JoinRoomView`（代碼）、`RoomView`（菜單 + 每人自己的數量 + 成員 + 分享）、`OptionPickerSheet`、`OrderSummaryView`（彙總 + 金額 + 給店員看 `StaffOrderView`）。
 - 設定步驟見 `docs/SUPABASE_SETUP.md`。
-- 測試用：`DebugSettings.fixedRoomCode = "0000"`（DEBUG 才生效），建房用固定代碼、加入頁預填；SQL `create_room(p_name, p_display_name, p_code)` 會關掉同代碼的舊房間。
+- 房間代碼一律由資料庫 `create_room(p_name, p_display_name)` 產生，沒有「指定代碼」（之前的測試後門讓任何人能關掉別人的房間，已在 `0002_hardening.sql` 移除）。
+  `SupabaseErrorMapper.map(_:context:)` 依 Postgres 錯誤代碼與呼叫情境（建房／加入／點餐／上傳菜單…）給不同的白話訊息。
+- 資料庫強化（`0002_hardening.sql`）：建房節流（同時 5 間、每小時 20 次）、點餐只能寫進開著且未過期的房間、`variant_key` 由 trigger 統一產生
+  （小寫 UUID 排序後以「,」連接，App 與網頁版同規則）、家人只能改翻譯欄位、成員不能改 is_host、`cleanup_expired_rooms()` + pg_cron。
 - QR：`RoomQRCodeSheet`（CoreImage 產生 `jptravel://join?code=`）、`QRCodeScannerView`（VisionKit DataScanner，只在真機可用）。
 
 ## 附錄 E：效能與 iPad
@@ -361,6 +371,7 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 ## 附錄 F：M4 房間分享與 Web Guest
 
 - `web/guest/`：純靜態網頁（index.html + app.js + config.js），用 supabase-js 直接連同一個 Supabase：匿名登入 → `join_room` → 讀 6 張表 → realtime 訂閱 → upsert `menu_selections`。
+  所有來自資料庫的字串經 `esc()` 或 DOM API 才進畫面；重開頁面時先用 `join_room` 向伺服器確認成員仍在才還原；房間過期／結束會停用 + −。
   功能與 App 對齊：分類列、每人自己的數量、選項（同群組單選）、本桌訂單與總金額、「打開 App」按鈕（`jptravel://join?code=`）。
   網址參數：`?code=XXXX`（必要）、`&name=媽媽`（選填，直接加入）。部署與本機試跑見 `web/README.md`。
 - App 設定 `WEB_GUEST_URL`（選填）：有值時 `DeepLinkParser.shareURL` 回傳 `https://…/?code=XXXX`，QR Code 與分享都用它；
@@ -374,6 +385,7 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 - 設定頁（首頁右上「設定」）：AI 幫手、預設地圖 App、多人點餐與網頁版狀態。
 - 接入點：檢查菜單「AI 幫我整理菜單」（結果走 `MenuDraftStore.merge`）、找商品「AI 幫我認這個商品」。未啟用時顯示 `AIUnavailableBanner`（「AI 分析目前尚未啟用」+ 前往設定）。
 - 伺服器範本：`supabase/functions/ai/index.ts`（Supabase Edge Function，預設 OpenAI，金鑰用 `supabase secrets set`）。
+  共享密鑰：伺服器環境變數 `APP_TOKEN` ↔ App 設定頁「伺服器密碼」（`RemoteAIService.appToken`，header `X-App-Token`），不符回 401。
 
 ## 附錄 H：M6 我要去一個地方
 

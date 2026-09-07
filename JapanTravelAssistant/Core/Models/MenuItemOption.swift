@@ -44,8 +44,8 @@ extension Array where Element == MenuItemOption {
         return order.map { ($0, map[$0] ?? []) }
     }
 
-    /// 選項組合的識別字串（排序後的 id），用來區分「同一道菜的不同組合」。
+    /// 選項組合的識別字串（排序後的 id），用來區分「同一道菜的不同組合」。規則見 `MenuSelection.variantKey(for:)`。
     var variantKey: String {
-        map(\.id.uuidString).sorted().joined(separator: "+")
+        MenuSelection.variantKey(for: map(\.id))
     }
 }

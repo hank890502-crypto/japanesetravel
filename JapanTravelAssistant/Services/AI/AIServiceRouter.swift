@@ -7,18 +7,20 @@ final class AIServiceRouter: AIService, @unchecked Sendable {
     private struct Selection {
         var kind: AIProviderKind
         var backendURL: URL?
+        /// 自己的伺服器的密碼（選填，見 RemoteAIService.appToken）
+        var backendToken: String?
     }
 
-    private let lock = OSAllocatedUnfairLock(initialState: Selection(kind: .disabled, backendURL: nil))
+    private let lock = OSAllocatedUnfairLock(initialState: Selection(kind: .disabled, backendURL: nil, backendToken: nil))
     private let disabled = DisabledAIService()
     private let mock = MockAIService()
 
-    init(kind: AIProviderKind = .disabled, backendURL: URL? = nil) {
-        lock.withLock { $0 = Selection(kind: kind, backendURL: backendURL) }
+    init(kind: AIProviderKind = .disabled, backendURL: URL? = nil, backendToken: String? = nil) {
+        lock.withLock { $0 = Selection(kind: kind, backendURL: backendURL, backendToken: backendToken) }
     }
 
-    func update(kind: AIProviderKind, backendURL: URL?) {
-        lock.withLock { $0 = Selection(kind: kind, backendURL: backendURL) }
+    func update(kind: AIProviderKind, backendURL: URL?, backendToken: String? = nil) {
+        lock.withLock { $0 = Selection(kind: kind, backendURL: backendURL, backendToken: backendToken) }
     }
 
     var currentKind: AIProviderKind { lock.withLock { $0.kind } }
@@ -37,7 +39,7 @@ final class AIServiceRouter: AIService, @unchecked Sendable {
             return disabled
         case .remoteBackend:
             guard let url = selection.backendURL else { return disabled }
-            return RemoteAIService(baseURL: url)
+            return RemoteAIService(baseURL: url, appToken: selection.backendToken)
         }
     }
 

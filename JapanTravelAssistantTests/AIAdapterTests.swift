@@ -109,4 +109,40 @@ struct AIAdapterTests {
             #expect(error.title == "AI 回覆的格式不對")
         }
     }
+
+    @Test("伺服器密碼：有填就放在 X-App-Token；沒填不送；伺服器回 401 給白話提示")
+    func remoteServiceToken() async throws {
+        let config = URLSessionConfiguration.ephemeral
+        config.protocolClasses = [StubURLProtocol.self]
+        let session = URLSession(configuration: config)
+        let base = URL(string: "https://example.supabase.co/functions/v1/ai")!
+
+        StubURLProtocol.handler = { request in
+            guard request.value(forHTTPHeaderField: "X-App-Token") == "secret-123" else { return (401, Data("{\"error\":\"unauthorized\"}".utf8)) }
+            return (200, Data("{\"translated\":\"雞翅\",\"reading\":\"tebasaki\"}".utf8))
+        }
+        let withToken = RemoteAIService(baseURL: base, appToken: "secret-123", session: session)
+        #expect(try await withToken.translate("手羽先", to: .traditionalChinese).translated == "雞翅")
+
+        let withoutToken = RemoteAIService(baseURL: base, session: session)
+        do {
+            _ = try await withoutToken.translate("手羽先", to: .traditionalChinese)
+            Issue.record("沒有密碼應該被擋")
+        } catch let error as UserFacingError {
+            #expect(error.title == "AI 伺服器不接受這個密碼")
+            #expect(!error.isRetryable)
+        }
+
+        // 設定頁的密碼會透過 Router 帶到 RemoteAIService
+        let router = AIServiceRouter()
+        let defaults = UserDefaults(suiteName: "AIAdapterTests.token")!
+        defaults.removePersistentDomain(forName: "AIAdapterTests.token")
+        let settings = await MainActor.run { SettingsStore(defaults: defaults, aiRouter: router) }
+        await MainActor.run {
+            settings.aiProvider = .remoteBackend
+            settings.aiBackendURLText = base.absoluteString
+            settings.aiBackendTokenText = "secret-123"
+        }
+        #expect(await MainActor.run { SettingsStore(defaults: defaults).aiBackendTokenText } == "secret-123")
+    }
 }

@@ -80,10 +80,12 @@ struct RouteDestinationView: View {
 }
 
 #Preview {
+    let sessionStore = DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!)
     RootView()
         .environment(AppRouter())
         .environment(MenuDraftStore(directory: nil))
-        .environment(DiningSessionStore(defaults: UserDefaults(suiteName: "preview")!))
+        .environment(sessionStore)
+        .environment(RoomSessionCoordinator.preview(sessionStore: sessionStore))
         .environment(SettingsStore(defaults: UserDefaults(suiteName: "preview")!))
         .environment(PlaceStore(directory: nil))
         .environment(\.dependencies, .preview)
