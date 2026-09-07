@@ -18,6 +18,7 @@ enum Route: Hashable {
     case tripEditor(UUID?)
     case tripPlaces(UUID)
     case tripImport(UUID)
+    case tripMap(UUID)
     case placeDetail(UUID)
     case placeSearch(tripId: UUID)
     case placeEditor(tripId: UUID, placeId: UUID?)
@@ -32,6 +33,8 @@ enum Route: Hashable {
 final class AppRouter {
     var path: [Route] = []
     var staffDisplay: StaffDisplayContent?
+    /// 收到別人分享的旅程檔，等使用者確認匯入
+    var receivedTrip: TripPackage?
 
     func push(_ route: Route) {
         path.append(route)
@@ -58,8 +61,16 @@ final class AppRouter {
         staffDisplay = content
     }
 
-    /// 處理 jptravel:// 等連結。
+    /// 處理 jptravel:// 連結，以及別人分享的 .jptrip 旅程檔。
     func handle(_ url: URL) {
+        if url.isFileURL, url.pathExtension.lowercased() == TripPackage.fileExtension {
+            let accessed = url.startAccessingSecurityScopedResource()
+            defer { if accessed { url.stopAccessingSecurityScopedResource() } }
+            if let data = try? Data(contentsOf: url), let package = try? TripPackage.decode(data) {
+                receivedTrip = package
+            }
+            return
+        }
         guard let link = DeepLinkParser.parse(url) else { return }
         switch link {
         case .joinRoom(let code):

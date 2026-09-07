@@ -6,6 +6,19 @@
 	<string>zh-Hant</string>
 	<key>CFBundleDisplayName</key>
 	<string>日本旅遊助手</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>日本旅遊助手 旅程</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.linzihao.japantravelassistant.trip</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,10 +52,12 @@
 		<string>yjcarnavi</string>
 		<string>chatgpt</string>
 	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>需要使用相機來拍攝菜單、商品和價牌。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>用來讓「找地點」的結果優先顯示你附近的地方。不會記錄你的位置。</string>
+	<string>用來在地圖上顯示你現在的位置，以及讓「找地點」優先顯示附近的地方。不會記錄你的位置。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要讀取相簿，讓你選擇菜單或商品的照片。</string>
 	<key>SUPABASE_ANON_KEY</key>
@@ -61,6 +76,30 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>日本旅遊助手 旅程</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.linzihao.japantravelassistant.trip</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>jptrip</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/json</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	<key>WEB_GUEST_URL</key>
 	<string>$(WEB_GUEST_URL)</string>

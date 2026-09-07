@@ -12,14 +12,14 @@ struct TripImportView: View {
     @State private var showPrompt = false
     @State private var pastedText = ""
     @State private var error: UserFacingError?
-    @State private var importedCount: Int?
+    @State private var importedSummary: (places: Int, stops: Int, recommendations: Int)?
     @FocusState private var editorFocused: Bool
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                if let importedCount {
-                    doneView(importedCount)
+                if let importedSummary {
+                    doneView(importedSummary)
                 } else {
                     stepsView
                 }
@@ -32,7 +32,7 @@ struct TripImportView: View {
 
     private var stepsView: some View {
         Group {
-            Text("把之前和 ChatGPT 討論好的行程，一次變成這趟旅程的地點清單。")
+            Text("把之前和 ChatGPT 討論好的行程，一次變成這趟的時間表、地點清單和推薦景點。同一個地方（例如飯店）每天出現也只會存一份。")
                 .font(.app(.body))
                 .foregroundStyle(AppColors.secondaryText)
 
@@ -104,13 +104,14 @@ struct TripImportView: View {
         .background(AppColors.cardBackground, in: RoundedRectangle(cornerRadius: AccessibilityMetrics.cornerRadius, style: .continuous))
     }
 
-    private func doneView(_ count: Int) -> some View {
+    private func doneView(_ summary: (places: Int, stops: Int, recommendations: Int)) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 12) {
                 Image(systemName: AppIcon.check).font(.system(size: 44)).foregroundStyle(AppColors.success)
                 VStack(alignment: .leading, spacing: 4) {
                     Text("匯入完成").font(.app(.sectionTitle))
-                    Text("加入了 \(count) 個地點。App 會在背景幫它們找座標。").font(.app(.body)).foregroundStyle(AppColors.secondaryText)
+                    Text("時間表 \(summary.stops) 站、會去的地點新增 \(summary.places) 個、推薦景點 \(summary.recommendations) 個。App 會在背景幫它們找座標。")
+                        .font(.app(.body)).foregroundStyle(AppColors.secondaryText)
                 }
             }
             .padding(AccessibilityMetrics.screenPadding)
@@ -134,11 +135,13 @@ struct TripImportView: View {
             if trip.endDate == nil { trip.endDate = result.endDate }
             store.updateTrip(trip)
         }
-        let places = result.places.map { p in
-            Place(name: p.name, address: p.address, category: p.category, note: p.note, japaneseName: p.japaneseName, dayLabel: p.dayLabel)
+        let stops = result.itinerary.map { p in
+            (place: Place(name: p.name, address: p.address, category: p.category, note: p.note, japaneseName: p.japaneseName), dayLabel: p.dayLabel)
         }
-        store.addMany(places, to: tripId)
-        importedCount = places.count
+        let recommendations = result.recommendations.map { p in
+            Place(name: p.name, address: p.address, category: p.category, japaneseName: p.japaneseName, isRecommendation: true, recommendationReason: p.note)
+        }
+        importedSummary = store.importItinerary(stops: stops, recommendations: recommendations, into: tripId)
     }
 
     private func openChatGPT() {

@@ -404,3 +404,11 @@ extension EnvironmentValues { @Entry var dependencies: AppDependencies = .previe
 - 「我想問問題」（首頁第五張卡）：`AssistantChat` 用 `LanguageModelSession` 多輪對話，角色設定在 `AppleIntelligence.travelAssistantInstructions`（日本旅遊／商品助手、對長輩說話、短句、沒連網要提醒）。
   對話太長（`exceededContextWindowSize`）自動重開一段。回答可用 `SpeechService` 唸出（zh-TW）。
 - 側滑返回：`SwipeBackEnabler.swift` 讓 `UINavigationController` 在隱藏系統導覽列時仍可用 interactivePopGesture。
+
+## 附錄 K：旅程的時間表／地點／推薦／地圖／分享
+
+- `ItineraryStop`（哪一天、哪個地點）與 `Place` 分開：同一地點多天出現只存一份。`PlaceStore.importItinerary` 依 `dedupeKey`（日文名優先）合併；舊資料自動遷移。
+- `Place.isRecommendation` + `recommendationReason`：ChatGPT 提示文字新增「推薦 | …」行（行程外、附近值得去的 5–10 個）；`addRecommendationToItinerary` 可加進行程。
+- `TripPlacesView` 上方分類列：時間表／會去的地點／推薦景點；「看地圖」→ `TripMapView`（SwiftUI `Map`，Apple MapKit，免金鑰）：我的位置、要去的（藍）、推薦（綠）、點大頭針 → 地點頁。
+- 分享：`TripPackage`（旅程＋地點＋站點 JSON，副檔名 .jptrip，UTType `com.linzihao.japantravelassistant.trip`）。`ShareLink` 走 AirDrop／LINE；收到檔案由 `AppRouter.handle(url)` 解析 → `TripReceiveView` 確認 → `importPackage`（同 id 更新、否則新增）。
+- App icon：`Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png`（單一 1024 尺寸、無透明）。

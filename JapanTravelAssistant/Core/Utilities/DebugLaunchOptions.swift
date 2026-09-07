@@ -19,25 +19,31 @@ enum DebugLaunchOptions {
         #if DEBUG
         guard let index = arguments.firstIndex(of: "-openRoute"), index + 1 < arguments.count else { return }
         let route = arguments[index + 1]
-        guard ["places", "tripPlaces", "placeDetail", "tripImport"].contains(route) else { return }
+        guard ["places", "tripPlaces", "placeDetail", "tripImport", "tripMap"].contains(route) else { return }
         let trip: Trip
         if let existing = store.sortedTrips.first(where: { !store.places(in: $0.id).isEmpty }) ?? store.sortedTrips.first {
             trip = existing
         } else {
             let start = Calendar.current.date(from: DateComponents(year: 2026, month: 9, day: 12))!
             trip = store.addTrip(name: "9 月名古屋", startDate: start, endDate: Calendar.current.date(byAdding: .day, value: 4, to: start))
-            store.addMany([
-                Place(name: "我們的飯店", address: "〒450-0002 愛知県名古屋市中村区名駅4丁目", latitude: 35.1706, longitude: 136.8853, category: .hotel, phone: "+81-52-000-0000", note: "退房 11:00", japaneseName: "ドーミーイン名古屋", dayLabel: "第1天 9/12 名古屋"),
-                Place(name: "名古屋車站", address: "〒450-0002 愛知県名古屋市中村区名駅1丁目", latitude: 35.1709, longitude: 136.8815, category: .station, japaneseName: "名古屋駅", dayLabel: "第1天 9/12 名古屋"),
-                Place(name: "酒津屋（晚餐）", address: "〒460-0008 愛知県名古屋市中区栄3丁目", latitude: 35.1681, longitude: 136.9086, category: .restaurant, japaneseName: "酒津屋", dayLabel: "第1天 9/12 名古屋"),
-                Place(name: "名古屋城", address: "〒460-0031 愛知県名古屋市中区本丸1-1", latitude: 35.1856, longitude: 136.8998, category: .sight, note: "9:00–16:30", japaneseName: "名古屋城", dayLabel: "第2天 9/13 名古屋"),
-            ], to: trip.id)
+            let hotel = Place(name: "我們的飯店", address: "〒450-0002 愛知県名古屋市中村区名駅4丁目", latitude: 35.1706, longitude: 136.8853, category: .hotel, phone: "+81-52-000-0000", note: "退房 11:00", japaneseName: "ドーミーイン名古屋")
+            store.importItinerary(stops: [
+                (Place(name: "名古屋車站", address: "〒450-0002 愛知県名古屋市中村区名駅1丁目", latitude: 35.1709, longitude: 136.8815, category: .station, japaneseName: "名古屋駅"), "第1天 9/12 名古屋"),
+                (hotel, "第1天 9/12 名古屋"),
+                (Place(name: "酒津屋（晚餐）", address: "〒460-0008 愛知県名古屋市中区栄3丁目", latitude: 35.1681, longitude: 136.9086, category: .restaurant, japaneseName: "酒津屋"), "第1天 9/12 名古屋"),
+                (Place(name: "名古屋城", address: "〒460-0031 愛知県名古屋市中区本丸1-1", latitude: 35.1856, longitude: 136.8998, category: .sight, note: "9:00–16:30", japaneseName: "名古屋城"), "第2天 9/13 名古屋"),
+                (hotel, "第2天 9/13 名古屋"),
+            ], recommendations: [
+                Place(name: "大須商店街", address: "〒460-0011 愛知県名古屋市中区大須3丁目", latitude: 35.159, longitude: 136.903, category: .shopping, japaneseName: "大須商店街", recommendationReason: "好逛好吃，離榮很近"),
+                Place(name: "熱田神宮", address: "〒456-8585 愛知県名古屋市熱田区神宮1丁目1-1", latitude: 35.1278, longitude: 136.9086, category: .sight, japaneseName: "熱田神宮", recommendationReason: "平坦好走，適合長輩"),
+            ], into: trip.id)
             store.addTrip(name: "12 月東京", startDate: Calendar.current.date(from: DateComponents(year: 2026, month: 12, day: 20)))
         }
         switch route {
         case "tripPlaces": router.path = [.places, .tripPlaces(trip.id)]
         case "placeDetail": if let first = store.places(in: trip.id).first { router.path = [.places, .tripPlaces(trip.id), .placeDetail(first.id)] }
         case "tripImport": router.path = [.places, .tripPlaces(trip.id), .tripImport(trip.id)]
+        case "tripMap": router.path = [.places, .tripPlaces(trip.id), .tripMap(trip.id)]
         default: break
         }
         #endif

@@ -9,6 +9,7 @@ enum TripImportParser {
         var category: PlaceCategory
         var note: String?
         var dayLabel: String?
+        var isRecommendation: Bool = false
     }
 
     struct Result: Hashable, Sendable {
@@ -16,9 +17,13 @@ enum TripImportParser {
         var startDate: Date?
         var endDate: Date?
         var places: [ImportedPlace]
+
+        var itinerary: [ImportedPlace] { places.filter { !$0.isRecommendation } }
+        var recommendations: [ImportedPlace] { places.filter { $0.isRecommendation } }
     }
 
-    private static let placeMarkers: Set<String> = ["地點", "地点", "place", "スポット"]
+    private static let placeMarkers: Set<String> = ["地點", "地点", "place", "スポット", "去"]
+    private static let recommendationMarkers: Set<String> = ["推薦", "推荐", "recommend", "recommendation", "おすすめ"]
     private static let dayMarkers: Set<String> = ["天", "day", "第", "日"]
     private static let tripMarkers: Set<String> = ["行程", "trip", "旅程"]
 
@@ -57,15 +62,17 @@ enum TripImportParser {
                 currentDay = [label.nilIfBlank, date.map(shortDate), theme].compactMap { $0 }.joined(separator: " ")
                 continue
             }
-            if placeMarkers.contains(marker) {
+            if placeMarkers.contains(marker) || recommendationMarkers.contains(marker) {
                 guard fields.count >= 2, let name = fields[1].nilIfBlank else { continue }
+                let isRecommendation = recommendationMarkers.contains(marker)
                 result.places.append(ImportedPlace(
                     name: name,
                     japaneseName: fields.count > 2 ? fields[2].nilIfBlank : nil,
                     address: fields.count > 3 ? fields[3].nilIfBlank : nil,
                     category: fields.count > 4 ? category(from: fields[4]) : .other,
                     note: fields.count > 5 ? fields[5].nilIfBlank : nil,
-                    dayLabel: currentDay
+                    dayLabel: isRecommendation ? nil : currentDay,
+                    isRecommendation: isRecommendation
                 ))
                 continue
             }

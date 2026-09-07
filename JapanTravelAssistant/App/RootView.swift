@@ -17,6 +17,9 @@ struct RootView: View {
                 router.staffDisplay = nil
             }
         }
+        .sheet(item: $router.receivedTrip) { package in
+            TripReceiveView(package: package)
+        }
     }
 }
 
@@ -58,6 +61,8 @@ struct RouteDestinationView: View {
             TripPlacesView(tripId: id)
         case .tripImport(let id):
             TripImportView(tripId: id)
+        case .tripMap(let id):
+            TripMapView(tripId: id)
         case .placeDetail(let id):
             PlaceDetailView(placeId: id)
         case .placeSearch(let tripId):

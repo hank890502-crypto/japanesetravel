@@ -74,7 +74,7 @@ struct PlaceEditorView: View {
                 name = place.name
                 japaneseName = place.japaneseName ?? ""
                 address = place.address ?? ""
-                dayLabel = place.dayLabel ?? ""
+                dayLabel = store.dayLabels(of: place.id).first ?? ""
                 note = place.note ?? ""
                 category = place.category
             } else {
@@ -105,9 +105,9 @@ struct PlaceEditorView: View {
             place.name = name.trimmingCharacters(in: .whitespaces)
             place.japaneseName = japaneseName.nilIfBlank
             place.address = address.nilIfBlank
-            place.dayLabel = dayLabel.nilIfBlank
             place.note = note.nilIfBlank
             place.category = category
+            store.setDayLabel(dayLabel.nilIfBlank, for: place.id)
             if addressChanged {
                 place.latitude = nil   // 地址改了，舊座標不算數；導航時會重新用地址查
                 place.longitude = nil

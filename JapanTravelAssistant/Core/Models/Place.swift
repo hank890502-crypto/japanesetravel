@@ -53,10 +53,15 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
     var dayLabel: String?
     /// 在旅程裡的順序
     var sortOrder: Int
+    /// ChatGPT 推薦、但不在行程裡的景點
+    var isRecommendation: Bool
+    /// 為什麼推薦（來自 ChatGPT）
+    var recommendationReason: String?
 
     init(id: UUID = UUID(), name: String, address: String? = nil, latitude: Double? = nil, longitude: Double? = nil,
          category: PlaceCategory = .other, phone: String? = nil, note: String? = nil, createdAt: Date = .now,
-         tripId: UUID? = nil, japaneseName: String? = nil, dayLabel: String? = nil, sortOrder: Int = 0) {
+         tripId: UUID? = nil, japaneseName: String? = nil, dayLabel: String? = nil, sortOrder: Int = 0,
+         isRecommendation: Bool = false, recommendationReason: String? = nil) {
         self.id = id
         self.name = name
         self.address = address
@@ -70,10 +75,12 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
         self.japaneseName = japaneseName
         self.dayLabel = dayLabel
         self.sortOrder = sortOrder
+        self.isRecommendation = isRecommendation
+        self.recommendationReason = recommendationReason
     }
 
     // 舊資料沒有 category 等欄位也要能讀
-    private enum CodingKeys: String, CodingKey { case id, name, address, latitude, longitude, category, phone, note, createdAt, tripId, japaneseName, dayLabel, sortOrder }
+    private enum CodingKeys: String, CodingKey { case id, name, address, latitude, longitude, category, phone, note, createdAt, tripId, japaneseName, dayLabel, sortOrder, isRecommendation, recommendationReason }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -90,10 +97,17 @@ struct Place: Codable, Identifiable, Hashable, Sendable {
         japaneseName = try c.decodeIfPresent(String.self, forKey: .japaneseName)
         dayLabel = try c.decodeIfPresent(String.self, forKey: .dayLabel)
         sortOrder = try c.decodeIfPresent(Int.self, forKey: .sortOrder) ?? 0
+        isRecommendation = try c.decodeIfPresent(Bool.self, forKey: .isRecommendation) ?? false
+        recommendationReason = try c.decodeIfPresent(String.self, forKey: .recommendationReason)
     }
 
     /// 給司機／店員看的名稱：有日文名用日文名
     var staffName: String { japaneseName?.nilIfBlank ?? name }
+
+    /// 用來判斷「同一個地點」的鍵：日文名優先，去空白、統一大小寫
+    var dedupeKey: String {
+        (japaneseName?.nilIfBlank ?? name).replacingOccurrences(of: " ", with: "").lowercased()
+    }
 
     var hasCoordinate: Bool { latitude != nil && longitude != nil }
     var canNavigate: Bool { hasCoordinate || address?.nilIfBlank != nil }

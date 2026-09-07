@@ -39,7 +39,7 @@ struct PlaceDetailView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Label([place.category.displayName, place.dayLabel].compactMap { $0 }.joined(separator: "・"), systemImage: place.category.systemImage)
+                    Label(([place.category.displayName] + (place.isRecommendation ? ["推薦景點"] : store.dayLabels(of: place.id))).joined(separator: "・"), systemImage: place.category.systemImage)
                         .font(.app(.caption))
                         .foregroundStyle(PlaceTint.color(for: place.category))
                     if let japanese = place.japaneseName?.nilIfBlank, japanese != place.name {
@@ -56,6 +56,11 @@ struct PlaceDetailView: View {
                             .font(.app(.caption))
                             .foregroundStyle(AppColors.secondaryText)
                     }
+                    if let reason = place.recommendationReason?.nilIfBlank {
+                        Label(reason, systemImage: "hand.thumbsup.fill")
+                            .font(.app(.caption))
+                            .foregroundStyle(AppColors.success)
+                    }
                 }
                 .padding(AccessibilityMetrics.screenPadding)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -71,6 +76,12 @@ struct PlaceDetailView: View {
                     Button("取消", role: .cancel) {}
                 } message: {
                     Text(place.hasCoordinate ? "自駕建議用 Yahoo! カーナビ 或 Google 地圖；走路、搭車用 Apple 地圖也很方便。" : "這個地點還沒有座標，Apple 地圖會用地址找；其他地圖可能找不到。")
+                }
+
+                if place.isRecommendation {
+                    SecondaryButton(title: "加到這趟行程", systemImage: AppIcon.add) {
+                        store.addRecommendationToItinerary(placeId: place.id)
+                    }
                 }
 
                 SecondaryButton(title: "地址給司機看", systemImage: AppIcon.showToStaff, isEnabled: place.address?.nilIfBlank != nil || place.japaneseName?.nilIfBlank != nil) {
