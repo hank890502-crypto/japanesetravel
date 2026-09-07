@@ -129,7 +129,7 @@ struct AIAdapterTests {
             _ = try await withoutToken.translate("手羽先", to: .traditionalChinese)
             Issue.record("沒有密碼應該被擋")
         } catch let error as UserFacingError {
-            #expect(error.title == "AI 伺服器不接受這個密碼")
+            #expect(error.title == "AI 服務不接受這個密碼")
             #expect(!error.isRetryable)
         }
 
